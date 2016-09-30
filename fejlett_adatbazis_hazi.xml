@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<universe>
+	<galaxies>
+		<galaxy name="Milky Way">
+			<solarSystems>
+				<solarSystem>
+					<star name="Sirius" type="binary">
+						
+					</star>
+					<planets>
+						<planet name="">
+							<diameter unit="km"></diatemer>
+							<orbitalPeriod unit="day"></orbitalPeriod>
+							<rotationVelocity unit="kph"></rotationVelocity>
+							<orbitalSpeed unit="kps"></orbitalSpeed>
+							<axialTilt></axialTilt>
+							<moons>
+								<moon name="">
+								</moon>
+							</moons>
+							
+						</planet>
+						
+					</planets>
+					
+					<comets>
+						<comet name="">
+							<orbitalPeriod></orbitalPeriod>
+							<diameter></diatemer>
+							<minerals>
+								<mineral elementName="">
+									<quantity></quantity>
+								</mineral>
+							</minerals>
+						</comet>
+				
+					</comets>
+				</solarSystem>
+			
+			</solarSystems>
+			
+			
+		</galaxy>
+	</galaxies>
+
+
+
+
+
+</universe>
