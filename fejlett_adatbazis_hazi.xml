@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<universe>
+<universe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="universe.xsd">
 	<galaxies>
 		<galaxy name="Milky Way">
 			<solarSystems>
@@ -22,11 +23,11 @@
 					<comets>
 						<comet name="Comet Halley">
 							<orbitalPeriod unit="day">2.2</orbitalPeriod>
-							<!-- <minerals> -->
-							<!-- <mineral elementName=""> -->
-							<!-- <quantity></quantity> -->
-							<!-- </mineral> -->
-							<!-- </minerals> -->
+							<minerals>
+								<mineral elementName="Helium">
+									<quantity unit="g">1500</quantity>
+								</mineral>
+							</minerals>
 						</comet>
 					</comets>
 				</solarSystem>

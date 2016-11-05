@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="universe">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="galaxies" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="galaxy" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="solarSystems" minOccurs="1"
+											maxOccurs="1">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="solarSystem" minOccurs="0"
+														maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="star" minOccurs="1"
+																	maxOccurs="1">
+																	<xs:complexType>
+																		<xs:simpleContent>
+																			<xs:extension base="xs:string">
+																				<xs:attribute type="xs:string" name="name"
+																					use="required" />
+																				<xs:attribute name="type">
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:enumeration value="unary" />
+																							<xs:enumeration value="binary" />
+																							<xs:enumeration value="ternary" />
+																							<xs:enumeration value="multiple" />
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:attribute>
+
+																			</xs:extension>
+																		</xs:simpleContent>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="planets" minOccurs="1"
+																	maxOccurs="1">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="planet" minOccurs="0"
+																				maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="meanRadius"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="m" />
+																													<xs:enumeration value="km" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="orbitalPeriod"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="day" />
+																													<xs:enumeration value="year" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="rotationVelocity"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="kph" />
+																													<xs:enumeration value="mps" />
+																													<xs:enumeration value="kps" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="orbitalSpeed"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="kph" />
+																													<xs:enumeration value="mps" />
+																													<xs:enumeration value="kps" />
+
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="axialTilt" minOccurs="1"
+																							maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="degree" />
+																													<xs:enumeration value="radian" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="moons" minOccurs="1"
+																							maxOccurs="1">
+																							<xs:complexType>
+																								<xs:sequence>
+																									<xs:element name="moon" minOccurs="0"
+																										maxOccurs="unbounded">
+																										<xs:complexType>
+																											<xs:sequence>
+																												<xs:element name="meanRadius"
+																													minOccurs="1" maxOccurs="1">
+																													<xs:complexType>
+																														<xs:simpleContent>
+																															<xs:extension base="xs:double">
+																																<xs:attribute name="unit">
+																																	<xs:simpleType>
+																																		<xs:restriction base="xs:string">
+																																			<xs:enumeration value="m" />
+																																			<xs:enumeration value="km" />
+																																		</xs:restriction>
+																																	</xs:simpleType>
+																																</xs:attribute>
+																															</xs:extension>
+																														</xs:simpleContent>
+																													</xs:complexType>
+																												</xs:element>
+																											</xs:sequence>
+																											<xs:attribute type="xs:string"
+																												name="name" use="required" />
+																										</xs:complexType>
+																									</xs:element>
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																					<xs:attribute type="xs:string" name="name"
+																						use="required" />
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="comets" minOccurs="1"
+																	maxOccurs="1">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="comet" minOccurs="0"
+																				maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="orbitalPeriod"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="day" />
+																													<xs:enumeration value="year" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="minerals" minOccurs="1"
+																							maxOccurs="1">
+																							<xs:complexType>
+																								<xs:sequence>
+																									<xs:element name="mineral"
+																										minOccurs="0" maxOccurs="unbounded">
+																										<xs:complexType>
+																											<xs:sequence>
+																												<xs:element name="quantity">
+																													<xs:complexType>
+																														<xs:simpleContent>
+																															<xs:extension base="xs:string">
+																																<xs:attribute name="unit">
+																																	<xs:simpleType>
+																																		<xs:restriction base="xs:string">
+																																			<xs:enumeration value="kg" />
+																																			<xs:enumeration value="g" />
+																																		</xs:restriction>
+																																	</xs:simpleType>
+																																</xs:attribute>
+																															</xs:extension>
+																														</xs:simpleContent>
+																													</xs:complexType>
+																												</xs:element>
+																											</xs:sequence>
+																											<xs:attribute type="xs:string"
+																												name="elementName" />
+																										</xs:complexType>
+																									</xs:element>
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																					<xs:attribute type="xs:string" name="name"
+																						use="required" />
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute type="xs:string" name="name"
+																use="required" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute type="xs:string" name="name" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:key name="galaxy-key">
+			<xs:selector xpath="galaxies/galaxy"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+		<xs:key name="solarSystem-key">
+			<xs:selector xpath="galaxies/galaxy/solarSystems/solarSystem"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+		<xs:key name="star-key">
+			<xs:selector xpath="galaxies/galaxy/solarSystems/solarSystem/star"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+		<xs:key name="planet-key">
+			<xs:selector
+				xpath="galaxies/galaxy/solarSystems/solarSystem/planets/planet"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+		<xs:key name="moon-key">
+			<xs:selector
+				xpath="galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+		<xs:key name="comet-key">
+			<xs:selector xpath="galaxies/galaxy/solarSystems/solarSystem/comets/comet"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+	</xs:element>
+</xs:schema>
