@@ -1,7 +1,10 @@
 package hu.unideb.inf.jaxb;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,15 +21,11 @@ public class JAXBUtil {
 	 * @throws JAXBException on any error
 	 */
 	public static void toXML(Object o, OutputStream os) throws JAXBException {
-		try {
-			JAXBContext	context = JAXBContext.newInstance(o.getClass());
-			Marshaller	marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.marshal(o, os);
-		} catch(JAXBException e) {
-			throw e;
-		}
+		JAXBContext context = JAXBContext.newInstance(o.getClass());
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.marshal(o, os);
 	}
 
 	/**
@@ -34,17 +33,22 @@ public class JAXBUtil {
 	 *
 	 * @param clazz the class of the object
 	 * @param is the {@link InputStream} to read from
-	 * @return the resulting object 
+	 * @return the resulting object
 	 * @throws JAXBException on any error
 	 */
 	public static <T> T fromXML(Class<T> clazz, InputStream is) throws JAXBException {
-		try {
-			JAXBContext	context = JAXBContext.newInstance(clazz);
-			Unmarshaller	unmarshaller = context.createUnmarshaller();
-			return (T) unmarshaller.unmarshal(is);
-		} catch(JAXBException e) {
-			throw e;
-		}
+		JAXBContext context = JAXBContext.newInstance(clazz);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		return clazz.cast(unmarshaller.unmarshal(is));
+	}
+	
+	public static <T> T fromXML(Class<T> clazz, String xml) throws JAXBException {
+		return fromXML(clazz, xml, StandardCharsets.UTF_8);
+	}
+	
+	public static <T> T fromXML(Class<T> clazz, String xml, Charset charset) throws JAXBException {
+		InputStream is = new ByteArrayInputStream(xml.getBytes(charset));
+		return fromXML(clazz, is);
 	}
 
 }
