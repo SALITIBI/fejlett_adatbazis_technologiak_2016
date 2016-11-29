@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<universe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="universe.xsd">
+	<galaxies>
+		<galaxy name="Milky Way">
+			<solarSystems>
+				<solarSystem name="Solar system">
+					<star name="Sun" type="unary" />
+					<planets>
+						<planet name="Earth">
+							<meanRadius unit="km">6371</meanRadius>
+							<orbitalPeriod unit="day">365.256363004</orbitalPeriod>
+							<rotationVelocity unit="kph">1674.4</rotationVelocity>
+							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
+							<axialTilt unit="degree">23.439281</axialTilt>
+							<moons>
+								<moon name="Moon">
+									<meanRadius unit="km">1737.1</meanRadius>
+								</moon>
+							</moons>
+						</planet>
+					</planets>
+					<comets>
+						<comet name="Comet Halley">
+							<orbitalPeriod unit="day">2.2</orbitalPeriod>
+							<minerals>
+								<mineral elementName="Helium">
+									<quantity unit="g">1500</quantity>
+								</mineral>
+							</minerals>
+						</comet>
+					</comets>
+				</solarSystem>
+			</solarSystems>
+		</galaxy>
+	</galaxies>
+</universe>
