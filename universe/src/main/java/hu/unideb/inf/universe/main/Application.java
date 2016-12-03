@@ -3,6 +3,7 @@ package hu.unideb.inf.universe.main;
 import javax.xml.xquery.XQConnection;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
+import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.SolarSystem;
@@ -29,6 +30,9 @@ public class Application {
 		
 		List<Planet> planets = us.findAllPlanetsInSolarSystem(solarSystems.get(0));
 		System.out.println("planets: " + planets);
+		
+		List<Comet> comets = us.findAllCometsInSolarSystem(solarSystems.get(0));
+		System.out.println("comets: " + comets);
 
 		xqc.close();
 	}

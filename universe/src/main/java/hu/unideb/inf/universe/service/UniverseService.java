@@ -11,6 +11,7 @@ import javax.xml.xquery.XQResultSequence;
 
 import hu.unideb.inf.jaxb.JAXBUtil;
 import hu.unideb.inf.universe.main.Application;
+import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.SolarSystem;
@@ -104,6 +105,24 @@ public class UniverseService {
 		}
 
 		return planets;
+	}
+	
+	public List<Comet> findAllCometsInSolarSystem(SolarSystem solarSystem) throws XQException, JAXBException {
+		List<Comet> comets = new LinkedList<>();
+
+		XQPreparedExpression expr = xqc.prepareExpression(
+			"declare variable $name external;"
+			+ " for $comet in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet"
+			+ " return $comet");
+		expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		XQResultSequence rs = expr.executeQuery();
+
+		while (rs.next()) {
+			Comet comet = JAXBUtil.fromXML(Comet.class, rs.getItemAsString(null));
+			comets.add(comet);
+		}
+
+		return comets;
 	}
 
 	public void doSomething() throws XQException {
