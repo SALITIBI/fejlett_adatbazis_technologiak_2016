@@ -197,14 +197,6 @@ public class UniverseService {
 		expr.executeQuery();
 	}
 	
-	public void deleteStar(String starName) throws XQException, JAXBException {
-		XQPreparedExpression expr = xqc.prepareExpression(
-				"declare variable $name external;"
-						+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/star[@name=$name]");
-		expr.bindString(new QName("name"), starName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-		expr.executeQuery();
-	}
-	
 	public void deleteSolarSystem(String solarSystemName) throws XQException, JAXBException {
 		XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $name external;"
