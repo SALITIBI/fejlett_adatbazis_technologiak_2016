@@ -3,7 +3,6 @@ package hu.unideb.inf.universe.service;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import hu.unideb.inf.universe.exception.UniverseException;
