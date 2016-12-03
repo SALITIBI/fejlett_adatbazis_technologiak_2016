@@ -12,6 +12,10 @@ import javax.xml.xquery.XQResultSequence;
 import hu.unideb.inf.jaxb.JAXBUtil;
 import hu.unideb.inf.universe.main.Application;
 import hu.unideb.inf.universe.model.Galaxy;
+import hu.unideb.inf.universe.model.SolarSystem;
+import javax.xml.namespace.QName;
+import javax.xml.xquery.XQItemType;
+import javax.xml.xquery.XQPreparedExpression;
 
 public class UniverseService {
 
@@ -47,6 +51,21 @@ public class UniverseService {
 		}
 
 		return galaxies;
+	}
+
+	public List<SolarSystem> findAllSolarSystemsInGalaxy(Galaxy galaxy) throws XQException, JAXBException {
+		List<SolarSystem> solarSystems = new LinkedList<>();
+
+		XQPreparedExpression expr = xqc.prepareExpression("declare variable $name external; for $solarSystem in db:open('universe')//galaxies/galaxy[@name=$name]/solarSystems/* return $solarSystem");
+		expr.bindString(new QName("name"), galaxy.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		XQResultSequence rs = expr.executeQuery();
+
+		while (rs.next()) {
+			SolarSystem solarSystem = JAXBUtil.fromXML(SolarSystem.class, rs.getItemAsString(null));
+			solarSystems.add(solarSystem);
+		}
+
+		return solarSystems;
 	}
 
 	public void doSomething() throws XQException {

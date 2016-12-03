@@ -3,7 +3,9 @@ package hu.unideb.inf.universe.main;
 import javax.xml.xquery.XQConnection;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
+import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.service.UniverseService;
+import java.util.List;
 
 public class Application {
 
@@ -12,8 +14,10 @@ public class Application {
 		UniverseService us = new UniverseService(xqc);
 
 		// us.doSomething();
-		System.out.println("galaxies: " + us.findAllGalaxies());
+		List<Galaxy> galaxies = us.findAllGalaxies();
+		System.out.println("galaxies: " + galaxies);
 		System.out.println("validate: " + us.validate());
+		System.out.println("solar system: " + us.findAllSolarSystemsInGalaxy(galaxies.get(0)));
 
 		xqc.close();
 	}
