@@ -13,6 +13,7 @@ import hu.unideb.inf.jaxb.JAXBUtil;
 import hu.unideb.inf.universe.main.Application;
 import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.SolarSystem;
+import hu.unideb.inf.universe.model.Star;
 import javax.xml.namespace.QName;
 import javax.xml.xquery.XQItemType;
 import javax.xml.xquery.XQPreparedExpression;
@@ -56,7 +57,10 @@ public class UniverseService {
 	public List<SolarSystem> findAllSolarSystemsInGalaxy(Galaxy galaxy) throws XQException, JAXBException {
 		List<SolarSystem> solarSystems = new LinkedList<>();
 
-		XQPreparedExpression expr = xqc.prepareExpression("declare variable $name external; for $solarSystem in db:open('universe')//galaxies/galaxy[@name=$name]/solarSystems/* return $solarSystem");
+		XQPreparedExpression expr = xqc.prepareExpression(
+			"declare variable $name external;"
+			+ " for $solarSystem in db:open('universe')//galaxies/galaxy[@name=$name]/solarSystems/*"
+			+ " return $solarSystem");
 		expr.bindString(new QName("name"), galaxy.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 		XQResultSequence rs = expr.executeQuery();
 
@@ -66,6 +70,21 @@ public class UniverseService {
 		}
 
 		return solarSystems;
+	}
+
+	public Star findStarInSolarSystem(SolarSystem solarSystem) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+			"declare variable $name external;"
+			+ " for $star in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star"
+			+ " return $star");
+		expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		XQResultSequence rs = expr.executeQuery();
+
+		if (rs.next()) {
+			return JAXBUtil.fromXML(Star.class, rs.getItemAsString(null));
+		}
+
+		return null;
 	}
 
 	public void doSomething() throws XQException {
