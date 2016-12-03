@@ -22,24 +22,24 @@ public class JAXBUtil {
 	 * @param os the {@link OutputStream} to write to
 	 * @throws JAXBException on any error
 	 */
-	public static void toXML(Object o, OutputStream os) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(o.getClass());
+	public static <T> void toXML(T t, OutputStream os) throws JAXBException {
+		JAXBContext context = JAXBContext.newInstance(t.getClass());
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		marshaller.marshal(o, os);
+		marshaller.marshal(t, os);
 	}
 	
-	public static String toXMLFragment(Object o) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(o.getClass());
+	public static <T> String toXMLFragment(T t) throws JAXBException {
+		JAXBContext context = JAXBContext.newInstance(t.getClass());
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
 		
-		StringWriter sw = new StringWriter();
-		marshaller.marshal(o, sw);
-		return sw.toString();
+		Writer writer = new StringWriter();
+		marshaller.marshal(t, writer);
+		return writer.toString();
 	}
 	
 	/**
