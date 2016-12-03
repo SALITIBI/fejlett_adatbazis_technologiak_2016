@@ -13,6 +13,7 @@ import hu.unideb.inf.jaxb.JAXBUtil;
 import hu.unideb.inf.universe.main.Application;
 import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
+import hu.unideb.inf.universe.model.Mineral;
 import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.SolarSystem;
@@ -142,6 +143,24 @@ public class UniverseService {
 		}
 
 		return moons;
+	}
+	
+	public List<Mineral> findAllMineralsInComet(Comet comet) throws XQException, JAXBException {
+		List<Mineral> minerals = new LinkedList<>();
+
+		XQPreparedExpression expr = xqc.prepareExpression(
+			"declare variable $name external;"
+			+ " for $mineral in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral"
+			+ " return $mineral");
+		expr.bindString(new QName("name"), comet.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		XQResultSequence rs = expr.executeQuery();
+
+		while (rs.next()) {
+			Mineral mineral = JAXBUtil.fromXML(Mineral.class, rs.getItemAsString(null));
+			minerals.add(mineral);
+		}
+
+		return minerals;
 	}
 	
 	public void doSomething() throws XQException {
