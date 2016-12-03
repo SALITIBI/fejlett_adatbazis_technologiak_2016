@@ -163,11 +163,53 @@ public class UniverseService {
 		return minerals;
 	}
 	
-	public void deleteMineral(String mineralName) throws XQException, JAXBException {
+	public void deleteMineralOnComet(String cometName, String mineralName) throws XQException, JAXBException {
 		XQPreparedExpression expr = xqc.prepareExpression(
-			"declare variable $name external;"
-			+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet/minerals/mineral[@elementName=$name]");
-		expr.bindString(new QName("name"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			"declare variable $cometName external;"
+			+ " declare variable $mineralName external;"
+			+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]");
+		expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
+	public void deleteComet(String cometName) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+						+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]");
+		expr.bindString(new QName("name"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
+	public void deleteMoon(String moonName) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+						+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]");
+		expr.bindString(new QName("name"), moonName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
+	public void deletePlanet(String planetName) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+						+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]");
+		expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
+	public void deleteSolarSystem(String solarSystemName) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+						+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem[@name=$name]");
+		expr.bindString(new QName("name"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
+	public void deleteGalaxy(String galaxyName) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+						+ " delete nodes db:open('universe')//galaxies/galaxy[@name=$name]");
+		expr.bindString(new QName("name"), galaxyName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 		expr.executeQuery();
 	}
 	

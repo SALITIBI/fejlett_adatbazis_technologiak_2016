@@ -28,6 +28,9 @@
 								<mineral elementName="Helium">
 									<quantity unit="g">1500</quantity>
 								</mineral>
+								<mineral elementName="Hidrogen">
+									<quantity unit="g">150000000</quantity>
+								</mineral>
 							</minerals>
 						</comet>
 					</comets>
