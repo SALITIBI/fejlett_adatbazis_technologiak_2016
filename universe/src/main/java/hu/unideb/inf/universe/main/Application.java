@@ -41,7 +41,13 @@ public class Application {
 		
 		List<Mineral> minerals = us.findAllMineralsInComet(comets.get(0));
 		System.out.println("minerals: " + minerals);
-
+		
+		System.out.println("Deleting mineral: " + minerals.get(0));
+		us.deleteMineral(minerals.get(0).getElementName());
+		
+		minerals = us.findAllMineralsInComet(comets.get(0));
+		System.out.println("minerals: " + minerals);
+		
 		xqc.close();
 	}
 

@@ -163,6 +163,14 @@ public class UniverseService {
 		return minerals;
 	}
 	
+	public void deleteMineral(String mineralName) throws XQException, JAXBException {
+		XQPreparedExpression expr = xqc.prepareExpression(
+			"declare variable $name external;"
+			+ " delete nodes db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet/minerals/mineral[@elementName=$name]");
+		expr.bindString(new QName("name"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
 	public void doSomething() throws XQException {
 		XQExpression xqe = xqc.createExpression();
 		XQResultSequence rs = xqe.executeQuery("for $x in db:open('universe')//* return data($x)");
