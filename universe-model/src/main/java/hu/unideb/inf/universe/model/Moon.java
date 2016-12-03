@@ -17,10 +17,10 @@ public class Moon{
 	public Moon() {
 		super();
 	}
-	public Moon(String name, Property meanRadius) {
+	public Moon(String name, Property radius) {
 		super();
 		this.name = name;
-		this.radius = meanRadius;
+		this.radius = radius;
 	}
 	public String getName() {
 		return name;
@@ -34,9 +34,10 @@ public class Moon{
 	public void setRadius(Property radius) {
 		this.radius = radius;
 	}
+
 	@Override
 	public String toString() {
-		return "Moon [name=" + name + ", meanRadius=" + radius + "]";
+		return "Moon{" + "name=" + name + ", radius=" + radius + '}';
 	}
 	
 }
