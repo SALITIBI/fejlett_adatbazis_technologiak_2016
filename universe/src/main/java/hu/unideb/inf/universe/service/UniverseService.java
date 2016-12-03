@@ -13,6 +13,7 @@ import hu.unideb.inf.jaxb.JAXBUtil;
 import hu.unideb.inf.universe.main.Application;
 import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
+import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.SolarSystem;
 import hu.unideb.inf.universe.model.Star;
@@ -125,6 +126,24 @@ public class UniverseService {
 		return comets;
 	}
 
+	public List<Moon> findAllMoonsAroundPlanet(Planet planet) throws XQException, JAXBException {
+		List<Moon> moons = new LinkedList<>();
+
+		XQPreparedExpression expr = xqc.prepareExpression(
+			"declare variable $name external;"
+			+ " for $moon in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon"
+			+ " return $moon");
+		expr.bindString(new QName("name"), planet.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		XQResultSequence rs = expr.executeQuery();
+
+		while (rs.next()) {
+			Moon moon = JAXBUtil.fromXML(Moon.class, rs.getItemAsString(null));
+			moons.add(moon);
+		}
+
+		return moons;
+	}
+	
 	public void doSomething() throws XQException {
 		XQExpression xqe = xqc.createExpression();
 		XQResultSequence rs = xqe.executeQuery("for $x in db:open('universe')//* return data($x)");

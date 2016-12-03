@@ -5,6 +5,7 @@ import javax.xml.xquery.XQConnection;
 import hu.unideb.inf.universe.connection.ConnectionUtil;
 import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
+import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.SolarSystem;
 import hu.unideb.inf.universe.model.Star;
@@ -33,6 +34,9 @@ public class Application {
 		
 		List<Comet> comets = us.findAllCometsInSolarSystem(solarSystems.get(0));
 		System.out.println("comets: " + comets);
+		
+		List<Moon> moons = us.findAllMoonsAroundPlanet(planets.get(0));
+		System.out.println("moons: " + moons);
 
 		xqc.close();
 	}
