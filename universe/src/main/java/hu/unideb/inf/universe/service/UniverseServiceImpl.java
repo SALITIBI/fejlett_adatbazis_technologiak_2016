@@ -88,6 +88,28 @@ public class UniverseServiceImpl implements UniverseService {
 
 		return solarSystems;
 	}
+	
+	@Override
+	public Comet findCometByName(String cometName) throws UniverseException {
+		Comet comet = null;
+		
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+				+ " for $comet in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]"
+				+ " return $comet");
+			expr.bindString(new QName("name"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			XQResultSequence rs = expr.executeQuery();
+	
+			if (rs.next()) {
+				comet = JAXBUtil.fromXML(Comet.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+		
+		return comet;
+	}
 
 	@Override
 	public Star findStarInSolarSystem(SolarSystem solarSystem) throws UniverseException {
@@ -331,6 +353,29 @@ public class UniverseServiceImpl implements UniverseService {
 		}
 	}
 	
+	@Override
+	public void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriod) throws UniverseException {
+		try {
+			Comet comet = findCometByName(cometName);
+			System.out.println("cucc: " + comet);
+			comet.setOrbitalPeriod(newOrbitalPeriod);
+			
+			String newComet = JAXBUtil.toXMLFragment(comet);
+			
+			XQPreparedExpression expr = xqc.prepareExpression(
+					"declare variable $cometName external;"
+					+ " declare variable $newComet external;"
+					+ " replace node db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet");
+			
+			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindDocument(new QName("newComet"), newComet, null, null);
+			
+			expr.executeQuery();
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+	}
+
 	@Override
 	public void doSomething() throws UniverseException {
 		try {

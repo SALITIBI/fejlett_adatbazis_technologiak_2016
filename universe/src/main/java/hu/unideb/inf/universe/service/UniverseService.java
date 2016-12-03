@@ -30,6 +30,8 @@ public interface UniverseService {
 
 	List<Mineral> findAllMineralsInComet(Comet comet) throws UniverseException;
 
+	Comet findCometByName(String cometName) throws UniverseException;
+
 	Mineral findMineralByComet(String cometName, String mineralName) throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;
@@ -45,6 +47,8 @@ public interface UniverseService {
 	void deleteGalaxy(String galaxyName) throws UniverseException;
 
 	void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
+
+	void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriodProperty) throws UniverseException;
 
 	void doSomething() throws UniverseException;
 
