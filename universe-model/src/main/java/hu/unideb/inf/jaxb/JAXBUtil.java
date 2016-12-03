@@ -3,6 +3,7 @@ package hu.unideb.inf.jaxb;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -29,15 +30,18 @@ public class JAXBUtil {
 		marshaller.marshal(o, os);
 	}
 	
-	public static void toXMLFragment(Object o, Writer writer) throws JAXBException {
+	public static String toXMLFragment(Object o) throws JAXBException {
 		JAXBContext context = JAXBContext.newInstance(o.getClass());
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-		marshaller.marshal(o, writer);
+		
+		StringWriter sw = new StringWriter();
+		marshaller.marshal(o, sw);
+		return sw.toString();
 	}
-
+	
 	/**
 	 * Deserializes an object from XML.
 	 *

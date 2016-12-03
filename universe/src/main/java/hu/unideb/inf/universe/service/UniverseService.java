@@ -1,6 +1,5 @@
 package hu.unideb.inf.universe.service;
 
-import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -234,29 +233,23 @@ public class UniverseService {
 		expr.executeQuery();
 	}
 	
-//	public void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws XQException, JAXBException {
-//		Mineral mineral = findMineralByComet(cometName, mineralName);
-//		System.out.println("Mineral to update: " + mineral);
-//		
-//		mineral.setQuantity(newQuantity);
-//		
-//		StringWriter sw = new StringWriter();
-//		JAXBUtil.toXMLFragment(mineral, sw);
-//		String string = sw.toString();
-//		System.out.println("cucc: " + string);
-//		
-//		XQPreparedExpression expr = xqc.prepareExpression(
-//				"declare variable $cometName external;"
-//				+ " declare variable $mineralName external;"
-//				+ " declare variable $newMineral external;"
-//						+ "replace value of node db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral");
-//		expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-//		expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-//		expr.bindString(new QName("newMineral"), string, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-//		
-//		System.out.println("cucc: " + expr.);
-//		expr.executeQuery();
-//	}
+	public void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws XQException, JAXBException {
+		Mineral mineral = findMineralByComet(cometName, mineralName);
+		mineral.setQuantity(newQuantity);
+		
+		String newMineral = JAXBUtil.toXMLFragment(mineral);
+		
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $cometName external;"
+				+ " declare variable $mineralName external;"
+				+ " declare variable $newMineral external;"
+						+ "replace node db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral");
+		expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.bindDocument(new QName("newMineral"), newMineral, null, null);
+		
+		expr.executeQuery();
+	}
 	
 	public void doSomething() throws XQException {
 		XQExpression xqe = xqc.createExpression();
