@@ -4,6 +4,7 @@ import javax.xml.xquery.XQConnection;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
 import hu.unideb.inf.universe.model.Galaxy;
+import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.SolarSystem;
 import hu.unideb.inf.universe.model.Star;
 import hu.unideb.inf.universe.service.UniverseService;
@@ -25,6 +26,9 @@ public class Application {
 		
 		Star star = us.findStarInSolarSystem(solarSystems.get(0));
 		System.out.println("star: " + star);
+		
+		List<Planet> planets = us.findAllPlanetsInSolarSystem(solarSystems.get(0));
+		System.out.println("planets: " + planets);
 
 		xqc.close();
 	}
