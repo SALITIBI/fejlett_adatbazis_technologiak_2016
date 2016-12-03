@@ -8,14 +8,15 @@
 					<star name="Sun" type="unary" />
 					<planets>
 						<planet name="Earth">
-							<meanRadius unit="km">6371</meanRadius>
+							<radius unit="km">6371</radius>
 							<orbitalPeriod unit="day">365.256363004</orbitalPeriod>
-							<rotationVelocity unit="kph">1674.4</rotationVelocity>
 							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
-							<axialTilt unit="degree">23.439281</axialTilt>
+							<eccentricity>0.25</eccentricity>
+							<semiMajorAxis unit="AU">1.099</semiMajorAxis>
+							<mass unit="JupiterMass">2.18</mass>
 							<moons>
 								<moon name="Moon">
-									<meanRadius unit="km">1737.1</meanRadius>
+									<radius unit="km">1737.1</radius>
 								</moon>
 							</moons>
 						</planet>

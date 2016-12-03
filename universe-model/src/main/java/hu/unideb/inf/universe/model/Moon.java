@@ -12,7 +12,7 @@ public class Moon{
 	@XmlAttribute
 	private String name;
 	@XmlElement
-	private Property meanRadius;
+	private Property radius;
 	
 	public Moon() {
 		super();
@@ -20,7 +20,7 @@ public class Moon{
 	public Moon(String name, Property meanRadius) {
 		super();
 		this.name = name;
-		this.meanRadius = meanRadius;
+		this.radius = meanRadius;
 	}
 	public String getName() {
 		return name;
@@ -28,15 +28,15 @@ public class Moon{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Property getMeanRadius() {
-		return meanRadius;
+	public Property getRadius() {
+		return radius;
 	}
-	public void setMeanRadius(Property meanRadius) {
-		this.meanRadius = meanRadius;
+	public void setRadius(Property radius) {
+		this.radius = radius;
 	}
 	@Override
 	public String toString() {
-		return "Moon [name=" + name + ", meanRadius=" + meanRadius + "]";
+		return "Moon [name=" + name + ", meanRadius=" + radius + "]";
 	}
 	
 }

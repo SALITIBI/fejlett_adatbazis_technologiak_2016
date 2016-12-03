@@ -48,7 +48,7 @@
 																				maxOccurs="unbounded">
 																				<xs:complexType>
 																					<xs:sequence>
-																						<xs:element name="meanRadius"
+																						<xs:element name="radius"
 																							minOccurs="1" maxOccurs="1">
 																							<xs:complexType>
 																								<xs:simpleContent>
@@ -58,6 +58,7 @@
 																												<xs:restriction base="xs:string">
 																													<xs:enumeration value="m" />
 																													<xs:enumeration value="km" />
+																													<xs:enumeration value="SolarRadius" />
 																												</xs:restriction>
 																											</xs:simpleType>
 																										</xs:attribute>
@@ -82,24 +83,7 @@
 																								</xs:simpleContent>
 																							</xs:complexType>
 																						</xs:element>
-																						<xs:element name="rotationVelocity"
-																							minOccurs="1" maxOccurs="1">
-																							<xs:complexType>
-																								<xs:simpleContent>
-																									<xs:extension base="xs:double">
-																										<xs:attribute name="unit">
-																											<xs:simpleType>
-																												<xs:restriction base="xs:string">
-																													<xs:enumeration value="kph" />
-																													<xs:enumeration value="mps" />
-																													<xs:enumeration value="kps" />
-																												</xs:restriction>
-																											</xs:simpleType>
-																										</xs:attribute>
-																									</xs:extension>
-																								</xs:simpleContent>
-																							</xs:complexType>
-																						</xs:element>
+																						
 																						<xs:element name="orbitalSpeed"
 																							minOccurs="1" maxOccurs="1">
 																							<xs:complexType>
@@ -111,7 +95,6 @@
 																													<xs:enumeration value="kph" />
 																													<xs:enumeration value="mps" />
 																													<xs:enumeration value="kps" />
-
 																												</xs:restriction>
 																											</xs:simpleType>
 																										</xs:attribute>
@@ -119,16 +102,51 @@
 																								</xs:simpleContent>
 																							</xs:complexType>
 																						</xs:element>
-																						<xs:element name="axialTilt" minOccurs="1"
-																							maxOccurs="1">
+																						<xs:element name="eccentricity"
+																							minOccurs="1" maxOccurs="1">
 																							<xs:complexType>
 																								<xs:simpleContent>
 																									<xs:extension base="xs:double">
 																										<xs:attribute name="unit">
 																											<xs:simpleType>
 																												<xs:restriction base="xs:string">
-																													<xs:enumeration value="degree" />
-																													<xs:enumeration value="radian" />
+																													<xs:enumeration value="day" />
+																													<xs:enumeration value="year" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="semiMajorAxis"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="AU" />
+																												</xs:restriction>
+																											</xs:simpleType>
+																										</xs:attribute>
+																									</xs:extension>
+																								</xs:simpleContent>
+																							</xs:complexType>
+																						</xs:element>
+																						<xs:element name="mass"
+																							minOccurs="1" maxOccurs="1">
+																							<xs:complexType>
+																								<xs:simpleContent>
+																									<xs:extension base="xs:double">
+																										<xs:attribute name="unit">
+																											<xs:simpleType>
+																												<xs:restriction base="xs:string">
+																													<xs:enumeration value="JupiterMass" />
+																													<xs:enumeration value="SolarMass" />
+																													<xs:enumeration value="kg" />
+																													
 																												</xs:restriction>
 																											</xs:simpleType>
 																										</xs:attribute>
@@ -144,7 +162,7 @@
 																										maxOccurs="unbounded">
 																										<xs:complexType>
 																											<xs:sequence>
-																												<xs:element name="meanRadius"
+																												<xs:element name="radius"
 																													minOccurs="1" maxOccurs="1">
 																													<xs:complexType>
 																														<xs:simpleContent>
@@ -154,6 +172,7 @@
 																																		<xs:restriction base="xs:string">
 																																			<xs:enumeration value="m" />
 																																			<xs:enumeration value="km" />
+																																			<xs:enumeration value="SolarRadius" />
 																																		</xs:restriction>
 																																	</xs:simpleType>
 																																</xs:attribute>

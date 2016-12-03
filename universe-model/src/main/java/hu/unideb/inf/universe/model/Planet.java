@@ -12,98 +12,113 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(
-		propOrder = {
-			"meanRadius",
-			"orbitalPeriod",
-			"rotationVelocity",
-			"orbitalSpeed",
-			"axialTilt",
-			"moons"
-		}
-	)
+
+@XmlType(propOrder = { "radius", "orbitalPeriod", "orbitalSpeed", "eccentricity", "semiMajorAxis", "mass", "moons" })
 public class Planet {
 	@XmlAttribute
 	private String name;
-	@XmlElementWrapper(name="moons")
-	@XmlElement(name="moon")	
+	@XmlElementWrapper(name = "moons")
+	@XmlElement(name = "moon")
 	private List<Moon> moons;
 	@XmlElement
-	private Property meanRadius;
-	@XmlElement
-	private Property rotationVelocity;
-	@XmlElement
-	private Property orbitalSpeed;
+	private Property radius;
 	@XmlElement
 	private Property orbitalPeriod;
 	@XmlElement
-	private Property axialTilt;
-	
-	
-	
-	
+	private Property orbitalSpeed;
+	@XmlElement
+	private Property eccentricity;
+	@XmlElement
+	private Property semiMajorAxis;
+	@XmlElement
+	private Property mass;;
+
+	public Planet(String name, List<Moon> moons, Property radius, Property orbitalPeriod, Property orbitalSpeed,
+			Property eccentricity, Property semiMajorAxis, Property mass) {
+		super();
+		this.name = name;
+		this.moons = moons;
+		this.radius = radius;
+		this.orbitalPeriod = orbitalPeriod;
+		this.orbitalSpeed = orbitalSpeed;
+		this.eccentricity = eccentricity;
+		this.semiMajorAxis = semiMajorAxis;
+		this.mass = mass;
+	}
+
 	public Planet() {
 		super();
 	}
-	public Planet(String name, List<Moon> moons, Property meanRadius, Property rotationVelocity, Property orbitalSpeed,
-			Property orbitalPeriod, Property axialTilt) {
-		super();
-		this.name = name;
-		this.moons = moons;
-		this.meanRadius = meanRadius;
-		this.rotationVelocity = rotationVelocity;
-		this.orbitalSpeed = orbitalSpeed;
-		this.orbitalPeriod = orbitalPeriod;
-		this.axialTilt = axialTilt;
-	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public List<Moon> getMoons() {
 		return moons;
 	}
+
 	public void setMoons(List<Moon> moons) {
 		this.moons = moons;
 	}
-	public Property getMeanRadius() {
-		return meanRadius;
+
+	public Property getRadius() {
+		return radius;
 	}
-	public void setMeanRadius(Property meanRadius) {
-		this.meanRadius = meanRadius;
+
+	public void setRadius(Property radius) {
+		this.radius = radius;
 	}
-	public Property getRotationVelocity() {
-		return rotationVelocity;
-	}
-	public void setRotationVelocity(Property rotationVelocity) {
-		this.rotationVelocity = rotationVelocity;
-	}
-	public Property getOrbitalSpeed() {
-		return orbitalSpeed;
-	}
-	public void setOrbitalSpeed(Property orbitalSpeed) {
-		this.orbitalSpeed = orbitalSpeed;
-	}
+
 	public Property getOrbitalPeriod() {
 		return orbitalPeriod;
 	}
+
 	public void setOrbitalPeriod(Property orbitalPeriod) {
 		this.orbitalPeriod = orbitalPeriod;
 	}
-	public Property getAxialTilt() {
-		return axialTilt;
-	}
-	public void setAxialTilt(Property axialTilt) {
-		this.axialTilt = axialTilt;
-	}
-	@Override
-	public String toString() {
-		return "Planet [name=" + name + ", moons=" + moons + ", meanRadius=" + meanRadius + ", rotationVelocity=" + rotationVelocity
-				+ ", orbitalSpeed=" + orbitalSpeed + ", orbitalPeriod=" + orbitalPeriod + ", axialTilt=" + axialTilt + "]";
+
+	public Property getOrbitalSpeed() {
+		return orbitalSpeed;
 	}
 
-	
+	public void setOrbitalSpeed(Property orbitalSpeed) {
+		this.orbitalSpeed = orbitalSpeed;
+	}
+
+	public Property getEccentricity() {
+		return eccentricity;
+	}
+
+	public void setEccentricity(Property eccentricity) {
+		this.eccentricity = eccentricity;
+	}
+
+	public Property getSemiMajorAxis() {
+		return semiMajorAxis;
+	}
+
+	public void setSemiMajorAxis(Property semiMajorAxis) {
+		this.semiMajorAxis = semiMajorAxis;
+	}
+
+	public Property getMass() {
+		return mass;
+	}
+
+	public void setMass(Property mass) {
+		this.mass = mass;
+	}
+
+	@Override
+	public String toString() {
+		return "Planet [name=" + name + ", moons=" + moons + ", radius=" + radius + ", orbitalPeriod=" + orbitalPeriod
+				+ ", orbitalSpeed=" + orbitalSpeed + ", eccentricity=" + eccentricity + ", semiMajorAxis="
+				+ semiMajorAxis + ", mass=" + mass + "]";
+	}
 
 }
