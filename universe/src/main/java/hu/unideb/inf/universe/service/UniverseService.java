@@ -1,12 +1,16 @@
 package hu.unideb.inf.universe.service;
 
+import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQExpression;
+import javax.xml.xquery.XQItemType;
+import javax.xml.xquery.XQPreparedExpression;
 import javax.xml.xquery.XQResultSequence;
 
 import hu.unideb.inf.jaxb.JAXBUtil;
@@ -16,11 +20,9 @@ import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Mineral;
 import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
+import hu.unideb.inf.universe.model.Property;
 import hu.unideb.inf.universe.model.SolarSystem;
 import hu.unideb.inf.universe.model.Star;
-import javax.xml.namespace.QName;
-import javax.xml.xquery.XQItemType;
-import javax.xml.xquery.XQPreparedExpression;
 
 public class UniverseService {
 
@@ -163,6 +165,25 @@ public class UniverseService {
 		return minerals;
 	}
 	
+	public Mineral findMineralByComet(String cometName, String mineralName) throws XQException, JAXBException {
+		Mineral mineral = null;
+		
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $cometName external;"
+				+ " declare variable $mineralName external;"
+				+ " for $mineral in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]"
+				+ " return $mineral");
+		expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		XQResultSequence rs = expr.executeQuery();
+		
+		if (rs.next()) {
+			mineral = JAXBUtil.fromXML(Mineral.class, rs.getItemAsString(null));
+		}
+		
+		return mineral;
+	}
+	
 	public void deleteMineralOnComet(String cometName, String mineralName) throws XQException, JAXBException {
 		XQPreparedExpression expr = xqc.prepareExpression(
 			"declare variable $cometName external;"
@@ -210,6 +231,30 @@ public class UniverseService {
 				"declare variable $name external;"
 						+ " delete nodes db:open('universe')//galaxies/galaxy[@name=$name]");
 		expr.bindString(new QName("name"), galaxyName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.executeQuery();
+	}
+	
+	public void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws XQException, JAXBException {
+		Mineral mineral = findMineralByComet(cometName, mineralName);
+		System.out.println("Mineral to update: " + mineral);
+		
+		mineral.setQuantity(newQuantity);
+		
+		StringWriter sw = new StringWriter();
+		JAXBUtil.toXMLFragment(mineral, sw);
+		String string = sw.toString();
+		System.out.println("cucc: " + string);
+		
+		XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $cometName external;"
+				+ " declare variable $mineralName external;"
+				+ " declare variable $newMineral external;"
+						+ "replace value of node db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral");
+		expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		expr.bindString(new QName("newMineral"), string, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+		
+		System.out.println("cucc: " + expr.toString());
 		expr.executeQuery();
 	}
 	

@@ -10,6 +10,7 @@ import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Mineral;
 import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
+import hu.unideb.inf.universe.model.Property;
 import hu.unideb.inf.universe.model.SolarSystem;
 import hu.unideb.inf.universe.model.Star;
 import hu.unideb.inf.universe.service.UniverseService;
@@ -79,7 +80,13 @@ public class Application {
 
 		galaxies = us.findAllGalaxies();
 		System.out.println("galaxies: " + galaxies);
-
+		
+//		Property newQuantity = new Property("kg", 555555.55);
+//		us.updateMineralOnComet(comets.get(0).getName(), minerals.get(0).getElementName(), newQuantity);
+//		
+//		minerals = us.findAllMineralsInComet(comets.get(0));
+//		System.out.println("minerals: " + minerals);
+		
 		xqc.close();
 	}
 
