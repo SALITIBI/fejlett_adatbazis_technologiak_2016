@@ -68,6 +68,12 @@ public class Application {
 		planets = us.findAllPlanetsInSolarSystem(solarSystems.get(0));
 		System.out.println("planets: " + planets);
 
+		System.out.println("Deleting star: " + star);
+		us.deleteStar(star.getName());
+
+		star = us.findStarInSolarSystem(solarSystems.get(0));
+		System.out.println("star: " + star);
+
 		System.out.println("Deleting solar system: " + solarSystems.get(0));
 		us.deleteSolarSystem(solarSystems.get(0).getName());
 
