@@ -61,6 +61,12 @@ public class Application {
 		Property orbitalPeriod = new Property("year", 2520);
 		us.addCometToSolarSystem(solarSystems.get(0).getName(), "Hale–Bopp", orbitalPeriod);
 		
+		Property radius = new Property("km", 2048.1024);
+		us.addMoonToPlanet(planets.get(0).getName(), "Moon-Moon", radius);
+		
+		moons = us.findAllMoonsAroundPlanet(planets.get(0));
+		System.out.println("moons: " + moons);
+		
 		comets = us.findAllCometsInSolarSystem(solarSystems.get(0));
 		System.out.println("comets: " + comets);
 		

@@ -31,11 +31,11 @@ public interface UniverseService {
 	List<Mineral> findAllMineralsInComet(Comet comet) throws UniverseException;
 
 	Moon findMoonByName(String moonName) throws UniverseException;
-	
+
 	Comet findCometByName(String cometName) throws UniverseException;
 
 	Mineral findMineralByComet(String cometName, String mineralName) throws UniverseException;
-	
+
 	Comet findCometBySolarSystem(String solarSystemName, String cometName) throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;
@@ -51,14 +51,16 @@ public interface UniverseService {
 	void deleteGalaxy(String galaxyName) throws UniverseException;
 
 	void updateMoonRadius(String moonName, Property newRadius) throws UniverseException;
-	
+
 	void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
 
 	void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriodProperty) throws UniverseException;
-	
+
 	void addMineralToComet(String cometName, String mineralName, Property quantity) throws UniverseException;
-	
+
 	void addCometToSolarSystem(String solarSystemName, String cometName, Property orbitalPeriod) throws UniverseException;
+
+	void addMoonToPlanet(String planetName, String moonName, Property radius) throws UniverseException;
 
 	void doSomething() throws UniverseException;
 

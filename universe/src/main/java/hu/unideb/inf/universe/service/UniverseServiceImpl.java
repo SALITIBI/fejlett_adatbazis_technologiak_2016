@@ -401,6 +401,29 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public void addMoonToPlanet(String planetName, String moonName, Property radius) throws UniverseException {
+		if (findMoonByName(moonName) == null) {
+			try {
+				Moon moon = new Moon(moonName, radius);
+
+				String newMoon = JAXBUtil.toXMLFragment(moon);
+
+				XQPreparedExpression expr = xqc.prepareExpression(
+					"declare variable $planetName external;"
+					+ " declare variable $newMoon external;"
+					+ " insert node ($newMoon) into db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons");
+
+				expr.bindString(new QName("planetName"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+				expr.bindDocument(new QName("newMoon"), newMoon, null, null);
+
+				expr.executeQuery();
+			} catch (XQException | JAXBException e) {
+				throw new UniverseException(e);
+			}
+		}
+	}
+	
+	@Override
 	public void addMineralToComet(String cometName, String mineralName, Property quantity) throws UniverseException {
 		if (findMineralByComet(cometName, mineralName) == null) {
 			try {
@@ -425,7 +448,7 @@ public class UniverseServiceImpl implements UniverseService {
 	
 	@Override
 	public void addCometToSolarSystem(String solarSystemName, String cometName, Property orbitalPeriod) throws UniverseException {
-		if (findCometBySolarSystem(solarSystemName, cometName) == null) {
+		if (findCometByName(cometName) == null) {
 			try {
 				Comet comet = new Comet(cometName, orbitalPeriod, new LinkedList<>());
 
@@ -474,7 +497,6 @@ public class UniverseServiceImpl implements UniverseService {
 	public void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriod) throws UniverseException {
 		try {
 			Comet comet = findCometByName(cometName);
-			System.out.println("cucc: " + comet);
 			comet.setOrbitalPeriod(newOrbitalPeriod);
 
 			String newComet = JAXBUtil.toXMLFragment(comet);
