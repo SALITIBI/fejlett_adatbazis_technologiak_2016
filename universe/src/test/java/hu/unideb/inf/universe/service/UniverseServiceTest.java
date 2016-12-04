@@ -2,6 +2,8 @@ package hu.unideb.inf.universe.service;
 
 import java.util.List;
 
+import javax.xml.xquery.XQException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,9 +26,8 @@ public class UniverseServiceTest extends AbstractTest {
 	private List<Moon> moons;
 
 	@Override
-	public void setUp() throws UniverseException {
+	public void setUp() throws UniverseException, XQException {
 		super.setUp();
-
 		galaxies = us.findAllGalaxies();
 		solarSystems = us.findAllSolarSystemsInGalaxy(galaxies.get(0));
 		comets = us.findAllCometsInSolarSystem(solarSystems.get(0));
@@ -86,6 +87,15 @@ public class UniverseServiceTest extends AbstractTest {
 		Planet planet = us.findPlanetByName(planetName);
 		Assert.assertEquals(newRadius.getUnit(), planet.getRadius().getUnit());
 		Assert.assertEquals(newRadius.getValue(), planet.getRadius().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testGalaxyDelete() throws UniverseException {
+		for (Galaxy galaxy : galaxies) {
+			us.deleteGalaxy(galaxy.getName());
+		}
+		galaxies = us.findAllGalaxies();
+		Assert.assertTrue(galaxies.isEmpty());
 	}
 
 }

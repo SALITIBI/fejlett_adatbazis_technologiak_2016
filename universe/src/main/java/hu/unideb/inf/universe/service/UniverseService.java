@@ -66,6 +66,4 @@ public interface UniverseService {
 
 	void addMoonToPlanet(String planetName, String moonName, Property radius) throws UniverseException;
 
-	void doSomething() throws UniverseException;
-
 }
