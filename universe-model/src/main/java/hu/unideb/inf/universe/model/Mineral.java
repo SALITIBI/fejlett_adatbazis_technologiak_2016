@@ -8,10 +8,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Mineral {
+
 	@XmlAttribute
 	private String elementName;
 	@javax.xml.bind.annotation.XmlElement
 	private Property quantity;
+
+	public Mineral() {
+	}
+
+	public Mineral(String elementName, Property quantity) {
+		this.elementName = elementName;
+		this.quantity = quantity;
+	}
 
 	public String getElementName() {
 		return elementName;
