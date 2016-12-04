@@ -53,6 +53,8 @@ public interface UniverseService {
 	void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
 
 	void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriodProperty) throws UniverseException;
+	
+	void addMineralToComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
 
 	void doSomething() throws UniverseException;
 

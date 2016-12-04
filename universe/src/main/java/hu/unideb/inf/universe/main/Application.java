@@ -48,6 +48,9 @@ public class Application {
 
 		Property newQuantity = new Property("kg", 555555.55);
 		us.updateMineralOnComet(comets.get(0).getName(), minerals.get(0).getElementName(), newQuantity);
+		
+		Property quantity = new Property("g", 1024.1024);
+		us.addMineralToComet(comets.get(0).getName(), "Element Zero", quantity);
 
 		minerals = us.findAllMineralsInComet(comets.get(0));
 		System.out.println("minerals: " + minerals);
