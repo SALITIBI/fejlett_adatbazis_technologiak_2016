@@ -74,4 +74,18 @@ public class UniverseServiceTest extends AbstractTest {
 		Assert.assertNull(moon);
 	}
 
+	@Test
+	public void testPlanetUpdate() throws UniverseException {
+		Assert.assertFalse(planets.isEmpty());
+
+		Property newRadius = new Property("km", 150000.0);
+		String planetName = planets.get(0).getName();
+
+		us.updatePlanetRadius(planetName, newRadius);
+
+		Planet planet = us.findPlanetByName(planetName);
+		Assert.assertEquals(newRadius.getUnit(), planet.getRadius().getUnit());
+		Assert.assertEquals(newRadius.getValue(), planet.getRadius().getValue(), EPSILON);
+	}
+
 }

@@ -92,6 +92,28 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public Planet findPlanetByName(String planetName) throws UniverseException {
+		Planet planet = null;
+		
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+				+ " for $planet in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]"
+				+ " return $planet");
+			expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			XQResultSequence rs = expr.executeQuery();
+
+			if (rs.next()) {
+				planet = JAXBUtil.fromXML(Planet.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+		
+		return planet;
+	}
+	
+	@Override
 	public Moon findMoonByName(String moonName) throws UniverseException {
 		Moon moon = null;
 
@@ -378,6 +400,28 @@ public class UniverseServiceImpl implements UniverseService {
 		}
 	}
 
+	@Override
+	public void updatePlanetRadius(String planetName, Property newRadius) throws UniverseException {
+		try {
+			Planet planet = findPlanetByName(planetName);
+			planet.setRadius(newRadius);
+
+			String newPlanet = JAXBUtil.toXMLFragment(planet);
+			
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $planetName external;"
+				+ " declare variable $newPlanet external;"
+				+ " replace node db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet");
+
+			expr.bindString(new QName("planetName"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindDocument(new QName("newPlanet"), newPlanet, null, null);
+
+			expr.executeQuery();
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+	}
+	
 	@Override
 	public void updateMoonRadius(String moonName, Property newRadius) throws UniverseException {
 		try {
