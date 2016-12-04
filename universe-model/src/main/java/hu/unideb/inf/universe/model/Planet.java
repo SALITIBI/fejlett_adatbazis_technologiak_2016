@@ -121,4 +121,72 @@ public class Planet {
 				+ semiMajorAxis + ", mass=" + mass + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((eccentricity == null) ? 0 : eccentricity.hashCode());
+		result = prime * result + ((mass == null) ? 0 : mass.hashCode());
+		result = prime * result + ((moons == null) ? 0 : moons.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((orbitalPeriod == null) ? 0 : orbitalPeriod.hashCode());
+		result = prime * result + ((orbitalSpeed == null) ? 0 : orbitalSpeed.hashCode());
+		result = prime * result + ((radius == null) ? 0 : radius.hashCode());
+		result = prime * result + ((semiMajorAxis == null) ? 0 : semiMajorAxis.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Planet other = (Planet) obj;
+		if (eccentricity == null) {
+			if (other.eccentricity != null)
+				return false;
+		} else if (!eccentricity.equals(other.eccentricity))
+			return false;
+		if (mass == null) {
+			if (other.mass != null)
+				return false;
+		} else if (!mass.equals(other.mass))
+			return false;
+		if (moons == null) {
+			if (other.moons != null)
+				return false;
+		} else if (!moons.equals(other.moons))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (orbitalPeriod == null) {
+			if (other.orbitalPeriod != null)
+				return false;
+		} else if (!orbitalPeriod.equals(other.orbitalPeriod))
+			return false;
+		if (orbitalSpeed == null) {
+			if (other.orbitalSpeed != null)
+				return false;
+		} else if (!orbitalSpeed.equals(other.orbitalSpeed))
+			return false;
+		if (radius == null) {
+			if (other.radius != null)
+				return false;
+		} else if (!radius.equals(other.radius))
+			return false;
+		if (semiMajorAxis == null) {
+			if (other.semiMajorAxis != null)
+				return false;
+		} else if (!semiMajorAxis.equals(other.semiMajorAxis))
+			return false;
+		return true;
+	}
+
+	
 }

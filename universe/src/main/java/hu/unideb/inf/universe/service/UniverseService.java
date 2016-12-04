@@ -27,7 +27,7 @@ public interface UniverseService {
 	List<Moon> findAllMoonsAroundPlanet(Planet planet) throws UniverseException;
 
 	List<Mineral> findAllMineralsInComet(Comet comet) throws UniverseException;
-	
+
 	Planet findPlanetByName(String planetName) throws UniverseException;
 
 	Moon findMoonByName(String moonName) throws UniverseException;
@@ -35,10 +35,14 @@ public interface UniverseService {
 	Comet findCometByName(String cometName) throws UniverseException;
 
 	Star findStarInSolarSystem(SolarSystem solarSystem) throws UniverseException;
-	
+
 	Mineral findMineralByComet(String cometName, String mineralName) throws UniverseException;
 
 	Comet findCometBySolarSystem(String solarSystemName, String cometName) throws UniverseException;
+
+	SolarSystem findSolarSystemByName(String solarSystemName) throws UniverseException;
+	
+	Galaxy findGalaxyByName(String galaxyName) throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;
 
@@ -53,7 +57,7 @@ public interface UniverseService {
 	void deleteGalaxy(String galaxyName) throws UniverseException;
 
 	void updatePlanetRadius(String planetName, Property newRadius) throws UniverseException;
-	
+
 	void updateMoonRadius(String moonName, Property newRadius) throws UniverseException;
 
 	void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
@@ -65,8 +69,12 @@ public interface UniverseService {
 	void addCometToSolarSystem(String solarSystemName, String cometName, Property orbitalPeriod) throws UniverseException;
 
 	void addMoonToPlanet(String planetName, String moonName, Property radius) throws UniverseException;
-	
+
 	void addPlanetToSolarSystem(String solarSystemName, String planetName, Property radius, Property orbitalPeriod, Property orbitalSpeed,
 			Property eccentricity, Property semiMajorAxis, Property mass) throws UniverseException;
+
+	void addSolarSystemToGalaxy(String galaxyName, String solarSystemName, String starName, String starType) throws UniverseException;
+
+	void addGalaxyToUniverse(String galaxyName) throws UniverseException;
 
 }

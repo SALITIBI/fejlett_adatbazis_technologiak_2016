@@ -78,6 +78,49 @@ public class SolarSystem {
 	public String toString() {
 		return "SolarSystem [name=" + name + ", comets=" + comets + ", planets=" + planets + ", star=" + star + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comets == null) ? 0 : comets.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((planets == null) ? 0 : planets.hashCode());
+		result = prime * result + ((star == null) ? 0 : star.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SolarSystem other = (SolarSystem) obj;
+		if (comets == null) {
+			if (other.comets != null)
+				return false;
+		} else if (!comets.equals(other.comets))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (planets == null) {
+			if (other.planets != null)
+				return false;
+		} else if (!planets.equals(other.planets))
+			return false;
+		if (star == null) {
+			if (other.star != null)
+				return false;
+		} else if (!star.equals(other.star))
+			return false;
+		return true;
+	}
 	
 	
 	

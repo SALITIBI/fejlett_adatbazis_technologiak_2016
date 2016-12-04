@@ -1,3 +1,4 @@
+
 package hu.unideb.inf.universe.service;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class UniverseServiceTest extends AbstractTest {
 	public void testFindPlanetByName() throws UniverseException {
 		Planet expectedPlanet = planets.get(0);
 		Planet actualPlanet = us.findPlanetByName(expectedPlanet.getName());
-		
+
 		Assert.assertNotNull(actualPlanet);
 		Assert.assertEquals(expectedPlanet.getName(), actualPlanet.getName());
 
@@ -63,70 +64,97 @@ public class UniverseServiceTest extends AbstractTest {
 		Assert.assertEquals(expectedPlanet.getMass().getUnit(), actualPlanet.getMass().getUnit());
 		Assert.assertEquals(expectedPlanet.getMass().getValue(), actualPlanet.getMass().getValue(), EPSILON);
 	}
-	
+
 	@Test
 	public void testFindMoonByName() throws UniverseException {
 		Moon expectedMoon = moons.get(0);
 		Moon actualMoon = us.findMoonByName(expectedMoon.getName());
-		
+
 		Assert.assertNotNull(actualMoon);
-		
+
 		Assert.assertEquals(expectedMoon.getName(), actualMoon.getName());
 		Assert.assertEquals(expectedMoon.getRadius().getUnit(), actualMoon.getRadius().getUnit());
 		Assert.assertEquals(expectedMoon.getRadius().getValue(), actualMoon.getRadius().getValue(), EPSILON);
 	}
-	
+
 	@Test
 	public void testFindCometByName() throws UniverseException {
 		Comet expectedComet = comets.get(0);
 		Comet actualComet = us.findCometByName(expectedComet.getName());
-		
+
 		Assert.assertNotNull(actualComet);
-		
+
 		Assert.assertEquals(expectedComet.getName(), actualComet.getName());
 		Assert.assertEquals(expectedComet.getOrbitalPeriod().getUnit(), actualComet.getOrbitalPeriod().getUnit());
 		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(), EPSILON);
 		Assert.assertEquals(expectedComet.getMinerals().size(), actualComet.getMinerals().size());
 	}
-	
+
 	@Test
 	public void testFindStarInSolarSystem() throws UniverseException {
 		SolarSystem solarSystem = solarSystems.get(0);
-		
+
 		Star star = us.findStarInSolarSystem(solarSystem);
-		
+
 		Assert.assertNotNull(star);
 	}
-	
+
 	@Test
 	public void testFindMineralByComet() throws UniverseException {
 		Comet comet = comets.get(0);
-		
+
 		Mineral expectedMineral = minerals.get(0);
 		Mineral actualMineral = us.findMineralByComet(comet.getName(), expectedMineral.getElementName());
-		
+
 		Assert.assertNotNull(actualMineral);
-		
+
 		Assert.assertEquals(expectedMineral.getElementName(), actualMineral.getElementName());
 		Assert.assertEquals(expectedMineral.getQuantity().getUnit(), actualMineral.getQuantity().getUnit());
 		Assert.assertEquals(expectedMineral.getQuantity().getValue(), actualMineral.getQuantity().getValue(), EPSILON);
 	}
-	
+
 	@Test
 	public void testFindCometBySolarSystem() throws UniverseException {
 		SolarSystem solarSystem = solarSystems.get(0);
-		
+
 		Comet expectedComet = comets.get(0);
 		Comet actualComet = us.findCometBySolarSystem(solarSystem.getName(), expectedComet.getName());
-		
+
 		Assert.assertNotNull(actualComet);
-		
+
 		Assert.assertEquals(expectedComet.getName(), actualComet.getName());
 		Assert.assertEquals(expectedComet.getOrbitalPeriod().getUnit(), actualComet.getOrbitalPeriod().getUnit());
 		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(), EPSILON);
 		Assert.assertEquals(expectedComet.getMinerals().size(), actualComet.getMinerals().size());
 	}
-	
+
+	@Test
+	public void testFindSolarSystemByName() throws UniverseException {
+		SolarSystem expectedSolarSystem = solarSystems.get(0);
+		SolarSystem actualSolarSystem = us.findSolarSystemByName(expectedSolarSystem.getName());
+
+		Assert.assertNotNull(actualSolarSystem);
+
+		Assert.assertEquals(expectedSolarSystem.getName(), actualSolarSystem.getName());
+		Assert.assertEquals(expectedSolarSystem.getComets(), actualSolarSystem.getComets());
+		Assert.assertEquals(expectedSolarSystem.getPlanets(), actualSolarSystem.getPlanets());
+		Assert.assertEquals(expectedSolarSystem.getStar(), actualSolarSystem.getStar());
+
+	}
+
+	@Test
+	public void testFindGalaxyByName() throws UniverseException {
+
+		Galaxy expectedGalaxy = galaxies.get(0);
+		Galaxy actualGalaxy = us.findGalaxyByName(expectedGalaxy.getName());
+
+		Assert.assertNotNull(actualGalaxy);
+		
+		Assert.assertEquals(expectedGalaxy.getName(), actualGalaxy.getName());
+		Assert.assertEquals(expectedGalaxy.getSolarsystems(), actualGalaxy.getSolarsystems());
+
+	}
+
 	@Test
 	public void deleteMineralOnComet() throws UniverseException {
 		Comet comet = comets.get(0);
@@ -312,8 +340,8 @@ public class UniverseServiceTest extends AbstractTest {
 		Property semiMajorAxis = new Property("AU", 1.3);
 		Property mass = new Property("JupiterMass", 1.5);
 
-		us.addPlanetToSolarSystem(solarSystem.getName(), planetName, radius, orbitalPeriod, orbitalSpeed, eccentricity,
-				semiMajorAxis, mass);
+		us.addPlanetToSolarSystem(solarSystem.getName(), planetName, radius, orbitalPeriod, orbitalSpeed, eccentricity, semiMajorAxis,
+				mass);
 
 		Planet planet = us.findPlanetByName(planetName);
 
@@ -340,4 +368,35 @@ public class UniverseServiceTest extends AbstractTest {
 		Assert.assertEquals(mass.getValue(), planet.getMass().getValue(), EPSILON);
 	}
 
+	@Test
+	public void testAddSolarSystemToGalaxy() throws UniverseException {
+		Galaxy galaxy = galaxies.get(0);
+		String solarSystemName = "Another System";
+		String starName = "Sun-alike";
+		String starType = "unary";
+		
+		us.addSolarSystemToGalaxy(galaxy.getName(), solarSystemName, starName, starType);
+		
+		SolarSystem solarSystem = us.findSolarSystemByName(solarSystemName);
+
+		Assert.assertNotNull(solarSystem);
+		Assert.assertEquals(solarSystemName, solarSystem.getName());
+		Assert.assertEquals(starName, solarSystem.getStar().getName());
+		Assert.assertEquals(starType, solarSystem.getStar().getType());
+
+	}
+	@Test
+	public void testAddGalaxyToUniverse() throws UniverseException {
+		String galaxyName = "My Own Galaxy";
+		
+		us.addGalaxyToUniverse(galaxyName);
+		
+		Galaxy galaxy = us.findGalaxyByName(galaxyName);
+
+		Assert.assertNotNull(galaxy);
+		Assert.assertEquals(galaxyName, galaxy.getName());
+
+	}
+	
+	
 }
