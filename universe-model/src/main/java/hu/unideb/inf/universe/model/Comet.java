@@ -8,16 +8,27 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Comet {
+
 	@XmlAttribute
 	private String name;
 	@XmlElement
 	private Property orbitalPeriod;
-	@XmlElementWrapper(name="minerals")
-	@XmlElement(name="mineral")	
+	@XmlElementWrapper(name = "minerals")
+	@XmlElement(name = "mineral")
 	private List<Mineral> minerals;
+
+	public Comet() {
+	}
+
+	public Comet(String name, Property orbitalPeriod, List<Mineral> minerals) {
+		this.name = name;
+		this.orbitalPeriod = orbitalPeriod;
+		this.minerals = minerals;
+	}
 
 	public String getName() {
 		return name;
