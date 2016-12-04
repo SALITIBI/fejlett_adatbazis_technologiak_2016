@@ -135,6 +135,7 @@ public class UniverseServiceTest extends AbstractTest {
 		Mineral mineral = comet.getMinerals().get(0);
 
 		Property newQuantity = new Property("g", 3000.0);
+
 		us.updateMineralOnComet(comet.getName(), mineral.getElementName(), newQuantity);
 
 		mineral = us.findMineralByComet(comet.getName(), mineral.getElementName());
@@ -148,12 +149,104 @@ public class UniverseServiceTest extends AbstractTest {
 		Comet comet = comets.get(0);
 
 		Property newOrbitalPeriod = new Property("day", 7.0);
+
 		us.updateCometOrbitalPeriod(comet.getName(), newOrbitalPeriod);
 
 		comet = us.findCometByName(comet.getName());
 
 		Assert.assertEquals(newOrbitalPeriod.getUnit(), comet.getOrbitalPeriod().getUnit());
 		Assert.assertEquals(newOrbitalPeriod.getValue(), comet.getOrbitalPeriod().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testAddMineralToComet() throws UniverseException {
+		Comet comet = comets.get(0);
+
+		String mineralName = "Oxygen";
+		Property mineralQuantity = new Property("g", 500000.0);
+
+		us.addMineralToComet(comet.getName(), mineralName, mineralQuantity);
+
+		Mineral mineral = us.findMineralByComet(comet.getName(), mineralName);
+
+		Assert.assertNotNull(mineral);
+		Assert.assertEquals(mineralName, mineral.getElementName());
+		Assert.assertEquals(mineralQuantity.getUnit(), mineral.getQuantity().getUnit());
+		Assert.assertEquals(mineralQuantity.getValue(), mineral.getQuantity().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testAddCometToSolarSystem() throws UniverseException {
+		SolarSystem solarSystem = solarSystems.get(0);
+
+		String cometName = "KillerComet-1024";
+		Property orbitalPeriod = new Property("day", 14.5);
+
+		us.addCometToSolarSystem(solarSystem.getName(), cometName, orbitalPeriod);
+
+		Comet comet = us.findCometByName(cometName);
+
+		Assert.assertNotNull(comet);
+		Assert.assertEquals(cometName, comet.getName());
+		Assert.assertEquals(orbitalPeriod.getUnit(), comet.getOrbitalPeriod().getUnit());
+		Assert.assertEquals(orbitalPeriod.getValue(), comet.getOrbitalPeriod().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testAddMoonToPlanet() throws UniverseException {
+		Planet planet = planets.get(0);
+
+		String moonName = "DeathStar-1024";
+		Property radius = new Property("km", 12345.67);
+
+		us.addMoonToPlanet(planet.getName(), moonName, radius);
+
+		Moon moon = us.findMoonByName(moonName);
+
+		Assert.assertNotNull(moon);
+		Assert.assertEquals(moonName, moon.getName());
+		Assert.assertEquals(radius.getUnit(), moon.getRadius().getUnit());
+		Assert.assertEquals(radius.getValue(), moon.getRadius().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testAddPlanetToSolarSystem() throws UniverseException {
+		SolarSystem solarSystem = solarSystems.get(0);
+
+		String planetName = "Pluto";
+		Property radius = new Property("km", 98765.4321);
+		Property orbitalPeriod = new Property("day", 720.1);
+		Property orbitalSpeed = new Property("kps", 2.19);
+		Property eccentricity = new Property(null, 0.5);
+		Property semiMajorAxis = new Property("AU", 1.3);
+		Property mass = new Property("JupiterMass", 1.5);
+
+		us.addPlanetToSolarSystem(solarSystem.getName(), planetName, radius, orbitalPeriod, orbitalSpeed, eccentricity,
+				semiMajorAxis, mass);
+
+		Planet planet = us.findPlanetByName(planetName);
+
+		Assert.assertNotNull(planet);
+
+		Assert.assertEquals(planetName, planet.getName());
+
+		Assert.assertEquals(radius.getUnit(), planet.getRadius().getUnit());
+		Assert.assertEquals(radius.getValue(), planet.getRadius().getValue(), EPSILON);
+
+		Assert.assertEquals(orbitalPeriod.getUnit(), planet.getOrbitalPeriod().getUnit());
+		Assert.assertEquals(orbitalPeriod.getValue(), planet.getOrbitalPeriod().getValue(), EPSILON);
+
+		Assert.assertEquals(orbitalSpeed.getUnit(), planet.getOrbitalSpeed().getUnit());
+		Assert.assertEquals(orbitalSpeed.getValue(), planet.getOrbitalSpeed().getValue(), EPSILON);
+
+		Assert.assertEquals(eccentricity.getUnit(), planet.getEccentricity().getUnit());
+		Assert.assertEquals(eccentricity.getValue(), planet.getEccentricity().getValue(), EPSILON);
+
+		Assert.assertEquals(semiMajorAxis.getUnit(), planet.getSemiMajorAxis().getUnit());
+		Assert.assertEquals(semiMajorAxis.getValue(), planet.getSemiMajorAxis().getValue(), EPSILON);
+
+		Assert.assertEquals(mass.getUnit(), planet.getMass().getUnit());
+		Assert.assertEquals(mass.getValue(), planet.getMass().getValue(), EPSILON);
 	}
 
 }

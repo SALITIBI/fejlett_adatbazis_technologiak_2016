@@ -12,10 +12,8 @@ import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQExpression;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
 import hu.unideb.inf.universe.exception.UniverseException;
@@ -65,11 +63,6 @@ public class AbstractTest {
 	private void initDatabase(String dbName) throws XQException {
 		XQExpression expr = xqc.createExpression();
 		expr.executeCommand("CREATE DB " + dbName + " " + TEST_UNIVERSE);
-	}
-
-	@Test
-	public void test() {
-		Assert.assertTrue(true);
 	}
 
 	@AfterClass
