@@ -22,7 +22,6 @@ public class Application {
 		XQConnection xqc = ConnectionUtil.getConnection("localhost", "1984", "admin", "admin");
 		UniverseService us = new UniverseServiceImpl(xqc, "universe");
 
-		// us.doSomething();
 		System.out.println("validate: " + us.validate());
 
 		List<Galaxy> galaxies = us.findAllGalaxies();

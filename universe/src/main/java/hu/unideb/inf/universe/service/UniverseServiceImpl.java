@@ -671,16 +671,4 @@ public class UniverseServiceImpl implements UniverseService {
 		}
 	}
 
-//	@Override
-//	public void doSomething() throws UniverseException {
-//		try {
-//			XQExpression xqe = xqc.createExpression();
-//			XQResultSequence rs = xqe.executeQuery("for $x in db:open($dbName)//* return data($x)");
-//			rs.writeSequence(System.out, null);
-//			System.out.println();
-//		} catch (XQException e) {
-//			throw new UniverseException(e);
-//		}
-//	}
-
 }
