@@ -37,56 +37,59 @@ public class UniverseServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testCometUpdateAndDelete() throws UniverseException {
-		Assert.assertFalse(minerals.isEmpty());
+	public void deleteMineralOnComet() throws UniverseException {
+		Comet comet = comets.get(0);
+		for (Mineral mineral : minerals) {
+			us.deleteMineralOnComet(comet.getName(), mineral.getElementName());
+		}
 
-		Property newQuantity = new Property("kg", 25.55);
-		String cometName = comets.get(0).getName();
-		String mineralName = minerals.get(0).getElementName();
+		minerals = us.findAllMineralsInComet(comet);
 
-		us.updateMineralOnComet(cometName, mineralName, newQuantity);
-
-		Mineral mineral = us.findMineralByComet(cometName, mineralName);
-		Assert.assertEquals(newQuantity.getUnit(), mineral.getQuantity().getUnit());
-		Assert.assertEquals(newQuantity.getValue(), mineral.getQuantity().getValue(), EPSILON);
-
-		us.deleteMineralOnComet(cometName, mineralName);
-
-		mineral = us.findMineralByComet(cometName, mineralName);
-		Assert.assertNull(mineral);
+		Assert.assertTrue(minerals.isEmpty());
 	}
 
 	@Test
-	public void testMoonUpdateAndDelete() throws UniverseException {
-		Assert.assertFalse(moons.isEmpty());
+	public void deleteComet() throws UniverseException {
+		for (Comet comet : comets) {
+			us.deleteComet(comet.getName());
+		}
 
-		Property newRadius = new Property("km", 500.0);
-		String moonName = moons.get(0).getName();
+		comets = us.findAllCometsInSolarSystem(solarSystems.get(0));
 
-		us.updateMoonRadius(moonName, newRadius);
-
-		Moon moon = us.findMoonByName(moonName);
-		Assert.assertEquals(newRadius.getUnit(), moon.getRadius().getUnit());
-		Assert.assertEquals(newRadius.getValue(), moon.getRadius().getValue(), EPSILON);
-
-		us.deleteMoon(moonName);
-
-		moon = us.findMoonByName(moonName);
-		Assert.assertNull(moon);
+		Assert.assertTrue(comets.isEmpty());
 	}
 
 	@Test
-	public void testPlanetUpdate() throws UniverseException {
-		Assert.assertFalse(planets.isEmpty());
+	public void testDeleteMoon() throws UniverseException {
+		for (Moon moon : moons) {
+			us.deleteMoon(moon.getName());
+		}
 
-		Property newRadius = new Property("km", 150000.0);
-		String planetName = planets.get(0).getName();
+		moons = us.findAllMoonsAroundPlanet(planets.get(0));
 
-		us.updatePlanetRadius(planetName, newRadius);
+		Assert.assertTrue(moons.isEmpty());
+	}
 
-		Planet planet = us.findPlanetByName(planetName);
-		Assert.assertEquals(newRadius.getUnit(), planet.getRadius().getUnit());
-		Assert.assertEquals(newRadius.getValue(), planet.getRadius().getValue(), EPSILON);
+	@Test
+	public void testDeletePlanet() throws UniverseException {
+		for (Planet planet : planets) {
+			us.deletePlanet(planet.getName());
+		}
+
+		planets = us.findAllPlanetsInSolarSystem(solarSystems.get(0));
+
+		Assert.assertTrue(planets.isEmpty());
+	}
+
+	@Test
+	public void testDeleteSolarSystem() throws UniverseException {
+		for (SolarSystem solarSystem : solarSystems) {
+			us.deleteSolarSystem(solarSystem.getName());
+		}
+
+		solarSystems = us.findAllSolarSystemsInGalaxy(galaxies.get(0));
+
+		Assert.assertTrue(solarSystems.isEmpty());
 	}
 
 	@Test
@@ -94,8 +97,63 @@ public class UniverseServiceTest extends AbstractTest {
 		for (Galaxy galaxy : galaxies) {
 			us.deleteGalaxy(galaxy.getName());
 		}
+
 		galaxies = us.findAllGalaxies();
+
 		Assert.assertTrue(galaxies.isEmpty());
+	}
+
+	@Test
+	public void testUpdatePlanetRadius() throws UniverseException {
+		Planet planet = planets.get(0);
+
+		Property newRadius = new Property("km", 25000.0);
+		us.updatePlanetRadius(planet.getName(), newRadius);
+
+		planet = us.findPlanetByName(planet.getName());
+
+		Assert.assertEquals(newRadius.getUnit(), planet.getRadius().getUnit());
+		Assert.assertEquals(newRadius.getValue(), planet.getRadius().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testUpdateMoonRadius() throws UniverseException {
+		Moon moon = moons.get(0);
+
+		Property newRadius = new Property("km", 5000.0);
+		us.updateMoonRadius(moon.getName(), newRadius);
+
+		moon = us.findMoonByName(moon.getName());
+
+		Assert.assertEquals(newRadius.getUnit(), moon.getRadius().getUnit());
+		Assert.assertEquals(newRadius.getValue(), moon.getRadius().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testUpdateMineralOnComet() throws UniverseException {
+		Comet comet = comets.get(0);
+		Mineral mineral = comet.getMinerals().get(0);
+
+		Property newQuantity = new Property("g", 3000.0);
+		us.updateMineralOnComet(comet.getName(), mineral.getElementName(), newQuantity);
+
+		mineral = us.findMineralByComet(comet.getName(), mineral.getElementName());
+
+		Assert.assertEquals(newQuantity.getUnit(), mineral.getQuantity().getUnit());
+		Assert.assertEquals(newQuantity.getValue(), mineral.getQuantity().getValue(), EPSILON);
+	}
+
+	@Test
+	public void testUpdateCometOrbitalPeriod() throws UniverseException {
+		Comet comet = comets.get(0);
+
+		Property newOrbitalPeriod = new Property("day", 7.0);
+		us.updateCometOrbitalPeriod(comet.getName(), newOrbitalPeriod);
+
+		comet = us.findCometByName(comet.getName());
+
+		Assert.assertEquals(newOrbitalPeriod.getUnit(), comet.getOrbitalPeriod().getUnit());
+		Assert.assertEquals(newOrbitalPeriod.getValue(), comet.getOrbitalPeriod().getValue(), EPSILON);
 	}
 
 }
