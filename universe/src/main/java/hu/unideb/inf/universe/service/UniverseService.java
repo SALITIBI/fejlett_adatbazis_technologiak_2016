@@ -52,6 +52,8 @@ public interface UniverseService {
 
 	void deleteGalaxy(String galaxyName) throws UniverseException;
 
+	void updatePlanetRadius(String planetName, Property newRadius) throws UniverseException;
+	
 	void updateMoonRadius(String moonName, Property newRadius) throws UniverseException;
 
 	void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
