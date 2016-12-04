@@ -92,6 +92,28 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public Planet findPlanetByName(String planetName) throws UniverseException {
+		Planet planet = null;
+
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $name external;"
+				+ " for $moon in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]"
+				+ " return $moon");
+			expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			XQResultSequence rs = expr.executeQuery();
+
+			if (rs.next()) {
+				planet = JAXBUtil.fromXML(Planet.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return planet;
+	}
+	
+	@Override
 	public Moon findMoonByName(String moonName) throws UniverseException {
 		Moon moon = null;
 
@@ -400,6 +422,30 @@ public class UniverseServiceImpl implements UniverseService {
 		}
 	}
 
+	@Override
+	public void addPlanetToSolarSystem(String solarSystemName, String planetName, Property radius, Property orbitalPeriod, Property orbitalSpeed,
+			Property eccentricity, Property semiMajorAxis, Property mass) throws UniverseException {
+		if (findPlanetByName(planetName) == null) {
+			try {
+				Planet planet = new Planet(planetName, new LinkedList<>(), radius, orbitalPeriod, orbitalSpeed, eccentricity, semiMajorAxis, mass);
+
+				String newPlanet = JAXBUtil.toXMLFragment(planet);
+
+				XQPreparedExpression expr = xqc.prepareExpression(
+					"declare variable $solarSystemName external;"
+					+ " declare variable $newPlanet external;"
+					+ " insert node ($newPlanet) into db:open('universe')//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/planets");
+
+				expr.bindString(new QName("solarSystemName"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+				expr.bindDocument(new QName("newPlanet"), newPlanet, null, null);
+
+				expr.executeQuery();
+			} catch (XQException | JAXBException e) {
+				throw new UniverseException(e);
+			}
+		}
+	}
+	
 	@Override
 	public void addMoonToPlanet(String planetName, String moonName, Property radius) throws UniverseException {
 		if (findMoonByName(moonName) == null) {
