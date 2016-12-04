@@ -15,6 +15,7 @@ import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
 import hu.unideb.inf.universe.model.Property;
 import hu.unideb.inf.universe.model.SolarSystem;
+import hu.unideb.inf.universe.model.Star;
 
 public class UniverseServiceTest extends AbstractTest {
 
@@ -36,6 +37,96 @@ public class UniverseServiceTest extends AbstractTest {
 		moons = us.findAllMoonsAroundPlanet(planets.get(0));
 	}
 
+	@Test
+	public void testFindPlanetByName() throws UniverseException {
+		Planet expectedPlanet = planets.get(0);
+		Planet actualPlanet = us.findPlanetByName(expectedPlanet.getName());
+		
+		Assert.assertNotNull(actualPlanet);
+		Assert.assertEquals(expectedPlanet.getName(), actualPlanet.getName());
+
+		Assert.assertEquals(expectedPlanet.getRadius().getUnit(), actualPlanet.getRadius().getUnit());
+		Assert.assertEquals(expectedPlanet.getRadius().getValue(), actualPlanet.getRadius().getValue(), EPSILON);
+
+		Assert.assertEquals(expectedPlanet.getOrbitalPeriod().getUnit(), actualPlanet.getOrbitalPeriod().getUnit());
+		Assert.assertEquals(expectedPlanet.getOrbitalPeriod().getValue(), actualPlanet.getOrbitalPeriod().getValue(), EPSILON);
+
+		Assert.assertEquals(expectedPlanet.getOrbitalSpeed().getUnit(), actualPlanet.getOrbitalSpeed().getUnit());
+		Assert.assertEquals(expectedPlanet.getOrbitalSpeed().getValue(), actualPlanet.getOrbitalSpeed().getValue(), EPSILON);
+
+		Assert.assertEquals(expectedPlanet.getEccentricity().getUnit(), actualPlanet.getEccentricity().getUnit());
+		Assert.assertEquals(expectedPlanet.getEccentricity().getValue(), actualPlanet.getEccentricity().getValue(), EPSILON);
+
+		Assert.assertEquals(expectedPlanet.getSemiMajorAxis().getUnit(), actualPlanet.getSemiMajorAxis().getUnit());
+		Assert.assertEquals(expectedPlanet.getSemiMajorAxis().getValue(), actualPlanet.getSemiMajorAxis().getValue(), EPSILON);
+
+		Assert.assertEquals(expectedPlanet.getMass().getUnit(), actualPlanet.getMass().getUnit());
+		Assert.assertEquals(expectedPlanet.getMass().getValue(), actualPlanet.getMass().getValue(), EPSILON);
+	}
+	
+	@Test
+	public void testFindMoonByName() throws UniverseException {
+		Moon expectedMoon = moons.get(0);
+		Moon actualMoon = us.findMoonByName(expectedMoon.getName());
+		
+		Assert.assertNotNull(actualMoon);
+		
+		Assert.assertEquals(expectedMoon.getName(), actualMoon.getName());
+		Assert.assertEquals(expectedMoon.getRadius().getUnit(), actualMoon.getRadius().getUnit());
+		Assert.assertEquals(expectedMoon.getRadius().getValue(), actualMoon.getRadius().getValue(), EPSILON);
+	}
+	
+	@Test
+	public void testFindCometByName() throws UniverseException {
+		Comet expectedComet = comets.get(0);
+		Comet actualComet = us.findCometByName(expectedComet.getName());
+		
+		Assert.assertNotNull(actualComet);
+		
+		Assert.assertEquals(expectedComet.getName(), actualComet.getName());
+		Assert.assertEquals(expectedComet.getOrbitalPeriod().getUnit(), actualComet.getOrbitalPeriod().getUnit());
+		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(), EPSILON);
+		Assert.assertEquals(expectedComet.getMinerals().size(), actualComet.getMinerals().size());
+	}
+	
+	@Test
+	public void testFindStarInSolarSystem() throws UniverseException {
+		SolarSystem solarSystem = solarSystems.get(0);
+		
+		Star star = us.findStarInSolarSystem(solarSystem);
+		
+		Assert.assertNotNull(star);
+	}
+	
+	@Test
+	public void testFindMineralByComet() throws UniverseException {
+		Comet comet = comets.get(0);
+		
+		Mineral expectedMineral = minerals.get(0);
+		Mineral actualMineral = us.findMineralByComet(comet.getName(), expectedMineral.getElementName());
+		
+		Assert.assertNotNull(actualMineral);
+		
+		Assert.assertEquals(expectedMineral.getElementName(), actualMineral.getElementName());
+		Assert.assertEquals(expectedMineral.getQuantity().getUnit(), actualMineral.getQuantity().getUnit());
+		Assert.assertEquals(expectedMineral.getQuantity().getValue(), actualMineral.getQuantity().getValue(), EPSILON);
+	}
+	
+	@Test
+	public void testFindCometBySolarSystem() throws UniverseException {
+		SolarSystem solarSystem = solarSystems.get(0);
+		
+		Comet expectedComet = comets.get(0);
+		Comet actualComet = us.findCometBySolarSystem(solarSystem.getName(), expectedComet.getName());
+		
+		Assert.assertNotNull(actualComet);
+		
+		Assert.assertEquals(expectedComet.getName(), actualComet.getName());
+		Assert.assertEquals(expectedComet.getOrbitalPeriod().getUnit(), actualComet.getOrbitalPeriod().getUnit());
+		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(), EPSILON);
+		Assert.assertEquals(expectedComet.getMinerals().size(), actualComet.getMinerals().size());
+	}
+	
 	@Test
 	public void deleteMineralOnComet() throws UniverseException {
 		Comet comet = comets.get(0);

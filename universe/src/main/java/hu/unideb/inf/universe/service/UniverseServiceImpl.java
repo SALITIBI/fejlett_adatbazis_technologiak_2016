@@ -103,110 +103,6 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
-	public Planet findPlanetByName(String planetName) throws UniverseException {
-		Planet planet = null;
-		
-		try {
-			XQPreparedExpression expr = xqc.prepareExpression(
-				"declare variable $dbName external;"
-				+ " declare variable $name external;"
-				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]"
-				+ " return $planet");
-			
-			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-			expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-
-			XQResultSequence rs = expr.executeQuery();
-			
-			if (rs.next()) {
-				planet = JAXBUtil.fromXML(Planet.class, rs.getItemAsString(null));
-			}
-		} catch (XQException | JAXBException e) {
-			throw new UniverseException(e);
-		}
-		
-		return planet;
-	}
-	
-	@Override
-	public Moon findMoonByName(String moonName) throws UniverseException {
-		Moon moon = null;
-
-		try {
-			XQPreparedExpression expr = xqc.prepareExpression(
-				"declare variable $dbName external;"
-				+ " declare variable $name external;"
-				+ " for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]"
-				+ " return $moon");
-			
-			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-			expr.bindString(new QName("name"), moonName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-
-			XQResultSequence rs = expr.executeQuery();
-			
-			if (rs.next()) {
-				moon = JAXBUtil.fromXML(Moon.class, rs.getItemAsString(null));
-			}
-		} catch (XQException | JAXBException e) {
-			throw new UniverseException(e);
-		}
-
-		return moon;
-	}
-
-	@Override
-	public Comet findCometByName(String cometName) throws UniverseException {
-		Comet comet = null;
-
-		try {
-			XQPreparedExpression expr = xqc.prepareExpression(
-				"declare variable $dbName external;"
-				+ " declare variable $name external;"
-				+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]"
-				+ " return $comet");
-			
-			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-			expr.bindString(new QName("name"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-
-			XQResultSequence rs = expr.executeQuery();
-			
-			if (rs.next()) {
-				comet = JAXBUtil.fromXML(Comet.class, rs.getItemAsString(null));
-			}
-		} catch (XQException | JAXBException e) {
-			throw new UniverseException(e);
-		}
-
-		return comet;
-	}
-
-	@Override
-	public Star findStarInSolarSystem(SolarSystem solarSystem) throws UniverseException {
-		Star star = null;
-
-		try {
-			XQPreparedExpression expr = xqc.prepareExpression(
-				"declare variable $dbName external;"
-				+ " declare variable $name external;"
-				+ " for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star"
-				+ " return $star");
-			
-			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-			expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-
-			XQResultSequence rs = expr.executeQuery();
-			
-			if (rs.next()) {
-				star = JAXBUtil.fromXML(Star.class, rs.getItemAsString(null));
-			}
-		} catch (XQException | JAXBException e) {
-			throw new UniverseException(e);
-		}
-
-		return star;
-	}
-
-	@Override
 	public List<Planet> findAllPlanetsInSolarSystem(SolarSystem solarSystem) throws UniverseException {
 		List<Planet> planets = new LinkedList<>();
 
@@ -315,6 +211,110 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public Planet findPlanetByName(String planetName) throws UniverseException {
+		Planet planet = null;
+		
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]"
+				+ " return $planet");
+			
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+			
+			if (rs.next()) {
+				planet = JAXBUtil.fromXML(Planet.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+		
+		return planet;
+	}
+	
+	@Override
+	public Moon findMoonByName(String moonName) throws UniverseException {
+		Moon moon = null;
+
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]"
+				+ " return $moon");
+			
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindString(new QName("name"), moonName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+			
+			if (rs.next()) {
+				moon = JAXBUtil.fromXML(Moon.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return moon;
+	}
+
+	@Override
+	public Comet findCometByName(String cometName) throws UniverseException {
+		Comet comet = null;
+
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]"
+				+ " return $comet");
+			
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindString(new QName("name"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+			
+			if (rs.next()) {
+				comet = JAXBUtil.fromXML(Comet.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return comet;
+	}
+
+	@Override
+	public Star findStarInSolarSystem(SolarSystem solarSystem) throws UniverseException {
+		Star star = null;
+
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star"
+				+ " return $star");
+			
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+			
+			if (rs.next()) {
+				star = JAXBUtil.fromXML(Star.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return star;
+	}
+	
+	@Override
 	public Mineral findMineralByComet(String cometName, String mineralName) throws UniverseException {
 		Mineral mineral = null;
 
@@ -369,7 +369,7 @@ public class UniverseServiceImpl implements UniverseService {
 
 		return comet;
 	}
-
+	
 	@Override
 	public void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException {
 		try {

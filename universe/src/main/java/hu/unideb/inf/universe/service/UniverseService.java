@@ -20,8 +20,6 @@ public interface UniverseService {
 
 	List<SolarSystem> findAllSolarSystemsInGalaxy(Galaxy galaxy) throws UniverseException;
 
-	Star findStarInSolarSystem(SolarSystem solarSystem) throws UniverseException;
-
 	List<Planet> findAllPlanetsInSolarSystem(SolarSystem solarSystem) throws UniverseException;
 
 	List<Comet> findAllCometsInSolarSystem(SolarSystem solarSystem) throws UniverseException;
@@ -36,6 +34,8 @@ public interface UniverseService {
 
 	Comet findCometByName(String cometName) throws UniverseException;
 
+	Star findStarInSolarSystem(SolarSystem solarSystem) throws UniverseException;
+	
 	Mineral findMineralByComet(String cometName, String mineralName) throws UniverseException;
 
 	Comet findCometBySolarSystem(String solarSystemName, String cometName) throws UniverseException;
