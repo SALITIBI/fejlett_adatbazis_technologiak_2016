@@ -272,6 +272,31 @@ public class UniverseServiceImpl implements UniverseService {
 
 		return mineral;
 	}
+	
+	@Override
+	public Comet findCometBySolarSystem(String solarSystemName, String cometName) throws UniverseException {
+		Comet comet = null;
+
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $solarSystemName external;"
+				+ " declare variable $cometName external;"
+				+ " for $mineral in db:open('universe')//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]"
+				+ " return $mineral");
+			expr.bindString(new QName("solarSystemName"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			
+			XQResultSequence rs = expr.executeQuery();
+
+			if (rs.next()) {
+				comet = JAXBUtil.fromXML(Comet.class, rs.getItemAsString(null));
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return comet;
+	}
 
 	@Override
 	public void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException {
@@ -376,24 +401,43 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
-	public void addMineralToComet(String cometName, String mineralName, Property newQuantity) throws UniverseException {
+	public void addMineralToComet(String cometName, String mineralName, Property quantity) throws UniverseException {
 		if (findMineralByComet(cometName, mineralName) == null) {
 			try {
-				Mineral mineral = new Mineral(mineralName, newQuantity);
-
-				mineral.setQuantity(newQuantity);
+				Mineral mineral = new Mineral(mineralName, quantity);
 
 				String newMineral = JAXBUtil.toXMLFragment(mineral);
 
 				XQPreparedExpression expr = xqc.prepareExpression(
 					"declare variable $cometName external;"
-					+ " declare variable $mineralName external;"
 					+ " declare variable $newMineral external;"
 					+ " insert node ($newMineral) into db:open('universe')//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals");
 
 				expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-				expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindDocument(new QName("newMineral"), newMineral, null, null);
+
+				expr.executeQuery();
+			} catch (XQException | JAXBException e) {
+				throw new UniverseException(e);
+			}
+		}
+	}
+	
+	@Override
+	public void addCometToSolarSystem(String solarSystemName, String cometName, Property orbitalPeriod) throws UniverseException {
+		if (findCometBySolarSystem(solarSystemName, cometName) == null) {
+			try {
+				Comet comet = new Comet(cometName, orbitalPeriod, new LinkedList<>());
+
+				String newComet = JAXBUtil.toXMLFragment(comet);
+
+				XQPreparedExpression expr = xqc.prepareExpression(
+					"declare variable $solarSystemName external;"
+					+ " declare variable $newComet external;"
+					+ " insert node ($newComet) into db:open('universe')//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets");
+
+				expr.bindString(new QName("solarSystemName"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+				expr.bindDocument(new QName("newComet"), newComet, null, null);
 
 				expr.executeQuery();
 			} catch (XQException | JAXBException e) {

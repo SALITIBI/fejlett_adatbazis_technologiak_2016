@@ -35,6 +35,8 @@ public interface UniverseService {
 	Comet findCometByName(String cometName) throws UniverseException;
 
 	Mineral findMineralByComet(String cometName, String mineralName) throws UniverseException;
+	
+	Comet findCometBySolarSystem(String solarSystemName, String cometName) throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;
 
@@ -54,7 +56,9 @@ public interface UniverseService {
 
 	void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriodProperty) throws UniverseException;
 	
-	void addMineralToComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
+	void addMineralToComet(String cometName, String mineralName, Property quantity) throws UniverseException;
+	
+	void addCometToSolarSystem(String solarSystemName, String cometName, Property orbitalPeriod) throws UniverseException;
 
 	void doSomething() throws UniverseException;
 

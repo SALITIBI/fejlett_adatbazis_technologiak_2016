@@ -58,6 +58,9 @@ public class Application {
 		Property newOrbitalPeriodProperty = new Property("day", 7.0);
 		us.updateCometOrbitalPeriod(comets.get(0).getName(), newOrbitalPeriodProperty);
 		
+		Property orbitalPeriod = new Property("year", 2520);
+		us.addCometToSolarSystem(solarSystems.get(0).getName(), "Hale–Bopp", orbitalPeriod);
+		
 		comets = us.findAllCometsInSolarSystem(solarSystems.get(0));
 		System.out.println("comets: " + comets);
 		
