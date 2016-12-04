@@ -31,7 +31,7 @@ public class Planet {
 	@XmlElement
 	private Property semiMajorAxis;
 	@XmlElement
-	private Property mass;;
+	private Property mass;
 
 	public Planet(String name, List<Moon> moons, Property radius, Property orbitalPeriod, Property orbitalSpeed,
 			Property eccentricity, Property semiMajorAxis, Property mass) {

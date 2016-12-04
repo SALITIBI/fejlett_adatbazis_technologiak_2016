@@ -64,6 +64,17 @@ public class Application {
 		Property radius = new Property("km", 2048.1024);
 		us.addMoonToPlanet(planets.get(0).getName(), "Moon-Moon", radius);
 		
+		us.addPlanetToSolarSystem(solarSystems.get(0).getName(), "Mercury", 
+			new Property("km", 2439.7),
+			new Property("day", 87.969),
+			new Property("kps", 47.3621),
+			new Property(null, 0.205630),
+			new Property("AU", 0.387098),
+			new Property("kg", 3.3011 * Math.pow(10, 23)));
+		
+		planets = us.findAllPlanetsInSolarSystem(solarSystems.get(0));
+		System.out.println("planets: " + planets);
+		
 		moons = us.findAllMoonsAroundPlanet(planets.get(0));
 		System.out.println("moons: " + moons);
 		

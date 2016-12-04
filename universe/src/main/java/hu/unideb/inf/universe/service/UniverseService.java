@@ -29,9 +29,9 @@ public interface UniverseService {
 	List<Moon> findAllMoonsAroundPlanet(Planet planet) throws UniverseException;
 
 	List<Mineral> findAllMineralsInComet(Comet comet) throws UniverseException;
-
-	Planet findPlanetByName(String planetName) throws UniverseException;
 	
+	Planet findPlanetByName(String planetName) throws UniverseException;
+
 	Moon findMoonByName(String moonName) throws UniverseException;
 
 	Comet findCometByName(String cometName) throws UniverseException;
@@ -65,5 +65,8 @@ public interface UniverseService {
 	void addCometToSolarSystem(String solarSystemName, String cometName, Property orbitalPeriod) throws UniverseException;
 
 	void addMoonToPlanet(String planetName, String moonName, Property radius) throws UniverseException;
+	
+	void addPlanetToSolarSystem(String solarSystemName, String planetName, Property radius, Property orbitalPeriod, Property orbitalSpeed,
+			Property eccentricity, Property semiMajorAxis, Property mass) throws UniverseException;
 
 }
