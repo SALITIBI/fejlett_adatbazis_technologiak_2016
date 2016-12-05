@@ -239,6 +239,7 @@ public class UniverseServiceImpl implements UniverseService {
 	@Override
 	public Moon findMoonByName(String moonName) throws UniverseException {
 		Moon moon = null;
+		
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
 					"declare variable $dbName external;"
@@ -396,7 +397,6 @@ public class UniverseServiceImpl implements UniverseService {
 
 	@Override
 	public Galaxy findGalaxyByName(String galaxyName) throws UniverseException {
-
 		Galaxy galaxy = null;
 
 		try {
@@ -766,7 +766,6 @@ public class UniverseServiceImpl implements UniverseService {
 				throw new UniverseException(e);
 			}
 		}
-
 	}
 
 }

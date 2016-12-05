@@ -383,8 +383,8 @@ public class UniverseServiceTest extends AbstractTest {
 		Assert.assertEquals(solarSystemName, solarSystem.getName());
 		Assert.assertEquals(starName, solarSystem.getStar().getName());
 		Assert.assertEquals(starType, solarSystem.getStar().getType());
-
 	}
+
 	@Test
 	public void testAddGalaxyToUniverse() throws UniverseException {
 		String galaxyName = "My Own Galaxy";
@@ -395,8 +395,6 @@ public class UniverseServiceTest extends AbstractTest {
 
 		Assert.assertNotNull(galaxy);
 		Assert.assertEquals(galaxyName, galaxy.getName());
-
 	}
-	
 	
 }
