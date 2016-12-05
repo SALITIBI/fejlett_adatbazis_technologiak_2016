@@ -75,6 +75,10 @@ public interface UniverseService {
 	void updatePlanet(String planetName, Planet planet) throws UniverseException;
 
 	void updateMoonForPlanet(String moonName, String planetName, Moon moon) throws UniverseException;
+	
+	void updateGalaxy(String galaxyName, Galaxy galaxy) throws UniverseException;
+	
+	void updateGalaxyName(String oldGalaxyName, String newGalaxyName) throws UniverseException;
 
 	void addMineralToComet(String cometName, String mineralName, Property quantity) throws UniverseException;
 
@@ -88,5 +92,4 @@ public interface UniverseService {
 	void addSolarSystemToGalaxy(String galaxyName, String solarSystemName, String starName, String starType) throws UniverseException;
 
 	void addGalaxyToUniverse(String galaxyName) throws UniverseException;
-
 }

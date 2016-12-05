@@ -459,7 +459,6 @@ public class UniverseServiceTest extends AbstractTest {
 	@Test
 	public void testUpdateStarInSolarSystem() throws UniverseException{
 		SolarSystem solarSystem = solarSystems.get(0);
-		Star star = solarSystem.getStar();
 		
 		String newName = "New Sun";
 		String newType = "binary";
@@ -471,5 +470,32 @@ public class UniverseServiceTest extends AbstractTest {
 		Star expectedStar = newStar;
 		Assert.assertEquals(expectedStar, actualStar);
 
+	}
+	
+	@Test
+	public void testUpdateGalaxy() throws UniverseException{
+		Galaxy galaxy = galaxies.get(0);
+		String newName = "New Galaxy";
+		List<SolarSystem> newSolarSystems = new LinkedList<>();
+		newSolarSystems.add(new SolarSystem("Naboo System",new LinkedList<>(),new LinkedList<>(),new Star("Star of Naboo", "multiple")));
+		Galaxy newGalaxy = new Galaxy(newName,newSolarSystems);
+		us.updateGalaxy(galaxy.getName(), newGalaxy);
+		Galaxy actualGalaxy = us.findGalaxyByName(newName);
+		Galaxy expectedGalaxy = newGalaxy;
+		
+		Assert.assertNotNull(actualGalaxy);
+		Assert.assertEquals(expectedGalaxy, actualGalaxy);
+	}
+	
+	@Test
+	public void testUpdateGalaxyName() throws UniverseException{
+		Galaxy galaxy = galaxies.get(0);
+		String newName = "Another galaxy";
+		us.updateGalaxyName(galaxy.getName(), newName);
+		Galaxy actualGalaxy = us.findGalaxyByName(newName);
+		
+		Assert.assertNotNull(actualGalaxy);
+		Assert.assertEquals(newName, actualGalaxy.getName());
+		
 	}
 }
