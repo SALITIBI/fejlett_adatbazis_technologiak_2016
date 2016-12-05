@@ -6,23 +6,30 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
+import hu.unideb.inf.universe.exception.UniverseException;
 import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Mineral;
@@ -34,6 +41,14 @@ import hu.unideb.inf.universe.service.UniverseService;
 import hu.unideb.inf.universe.service.UniverseServiceImpl;
 
 public class Application {
+
+	private static JComboBox<Galaxy> galaxiesComboBox;
+	private static JComboBox<SolarSystem> solarSystemsComboBox;
+	private static JComboBox<Star> starComboBox;
+	private static JComboBox<Planet> planetsComboBox;
+	private static JComboBox<Moon> moonsComboBox;
+	private static JComboBox<Comet> cometsComboBox;
+	private static JComboBox<Mineral> mineralsComboBox;
 
 	public static void main(String[] args) throws Exception {
 		XQConnection xqc = ConnectionUtil.getConnection("localhost", "1984", "admin", "admin");
@@ -85,16 +100,29 @@ public class Application {
 		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
 		Mineral[] minerals = us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]);
 
-		JComboBox<Galaxy> galaxiesComboBox = new JComboBox<>(galaxies);
+		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		// galaxiesComboBox.setRenderer(new ListCellRenderer<Galaxy>() {
-		// @Override
-		// public Component getListCellRendererComponent(JList<? extends Galaxy> list, Galaxy value, int index,
-		// boolean isSelected, boolean cellHasFocus) {
-		// // TODO csak a galaxis neve kellene, hogy megjelenjen!
-		// return null;
-		// }
-		// });
+		galaxiesComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Galaxy) {
+					setText(((Galaxy) value).getName());
+				}
+				return component;
+			}
+		});
+		galaxiesComboBox.addActionListener(e -> {
+			updateSolarSystemsComboBox(us);
+			updateStarComboBox(us);
+			updatePlanetsComboBox(us);
+			updateCometsComboBox(us);
+			updateMoonsComboBox(us);
+			updateMineralsComboBox(us);
+		});
 
 		Dimension buttonPreferredSize = new Dimension(180, 25);
 
@@ -120,12 +148,34 @@ public class Application {
 		galaxiesRightPanel.add(Box.createGlue());
 
 		JPanel galaxiesPanel = new JPanel(new BorderLayout());
+		galaxiesPanel.add(new JLabel("Galaxy: "), BorderLayout.NORTH);
 		galaxiesPanel.add(galaxiesComboBox, BorderLayout.CENTER);
 		galaxiesPanel.add(galaxiesRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(galaxiesPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-		JComboBox<SolarSystem> solarSystemsComboBox = new JComboBox<>(solarSystems);
+		solarSystemsComboBox = new JComboBox<>(solarSystems);
 		solarSystemsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		solarSystemsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof SolarSystem) {
+					setText(((SolarSystem) value).getName());
+				}
+				return component;
+			}
+		});
+		solarSystemsComboBox.addActionListener(e -> {
+			updateStarComboBox(us);
+			updatePlanetsComboBox(us);
+			updateCometsComboBox(us);
+			updateMoonsComboBox(us);
+			updateMineralsComboBox(us);
+		});
 
 		JButton addSolarSystemButton = new JButton("Add solar system");
 		addSolarSystemButton.setPreferredSize(buttonPreferredSize);
@@ -147,16 +197,80 @@ public class Application {
 		solarSystemsRightPanel.add(Box.createGlue());
 
 		JPanel solarSystemsPanel = new JPanel(new BorderLayout());
+		solarSystemsPanel.add(new JLabel("Solar system: "), BorderLayout.NORTH);
 		solarSystemsPanel.add(solarSystemsComboBox, BorderLayout.CENTER);
 		solarSystemsPanel.add(solarSystemsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(solarSystemsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-		JComboBox<Star> starComboBox = new JComboBox<>(new Star[] { star });
+		starComboBox = new JComboBox<>(new Star[] { star });
 		starComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentListerPanel.add(starComboBox);
+		starComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
 
-		JComboBox<Planet> planetsComboBox = new JComboBox<>(planets);
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Star) {
+					Star star = (Star) value;
+					setText(star.getName() + " (" + star.getType() + ")");
+				}
+				return component;
+			}
+		});
+		contentListerPanel.add(starComboBox);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+
+		planetsComboBox = new JComboBox<>(planets);
 		planetsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		planetsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Planet) {
+					Planet planet = (Planet) value;
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(planet.getName());
+					sb.append(" (radius: ");
+					sb.append(planet.getRadius().getValue());
+					sb.append(" ");
+					sb.append(planet.getRadius().getUnit());
+					sb.append(", orbitalPeriod: ");
+					sb.append(planet.getOrbitalPeriod().getValue());
+					sb.append(" ");
+					sb.append(planet.getOrbitalPeriod().getUnit());
+					sb.append(", orbitalSpeed: ");
+					sb.append(planet.getOrbitalSpeed().getValue());
+					sb.append(" ");
+					sb.append(planet.getOrbitalSpeed().getValue());
+					sb.append(", eccentricity: ");
+					sb.append(planet.getEccentricity().getValue());
+					sb.append(" ");
+					sb.append(planet.getEccentricity().getUnit());
+					sb.append(", semiMajorAxis: ");
+					sb.append(planet.getSemiMajorAxis().getValue());
+					sb.append(" ");
+					sb.append(planet.getSemiMajorAxis().getUnit());
+					sb.append(", mass: ");
+					sb.append(planet.getMass().getValue());
+					sb.append(" ");
+					sb.append(planet.getMass().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
+		planetsComboBox.addActionListener(e -> {
+			updateMoonsComboBox(us);
+		});
 
 		JButton addPlanetButton = new JButton("Add planet");
 		addPlanetButton.setPreferredSize(buttonPreferredSize);
@@ -181,9 +295,33 @@ public class Application {
 		planetsPanel.add(planetsComboBox, BorderLayout.CENTER);
 		planetsPanel.add(planetsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(planetsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-		JComboBox<Moon> moonsComboBox = new JComboBox<>(moons);
+		moonsComboBox = new JComboBox<>(moons);
 		moonsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		moonsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Moon) {
+					Moon moon = (Moon) value;
+
+					StringBuilder sb = new StringBuilder();
+					sb.append(moon.getName());
+					sb.append(" (");
+					sb.append(moon.getRadius().getValue());
+					sb.append(" ");
+					sb.append(moon.getRadius().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
 
 		JButton addMoonButton = new JButton("Add moon");
 		addMoonButton.setPreferredSize(buttonPreferredSize);
@@ -208,9 +346,37 @@ public class Application {
 		moonsPanel.add(moonsComboBox, BorderLayout.CENTER);
 		moonsPanel.add(moonsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(moonsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-		JComboBox<Comet> cometsComboBox = new JComboBox<>(comets);
+		cometsComboBox = new JComboBox<>(comets);
 		cometsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		cometsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Comet) {
+					Comet comet = (Comet) value;
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(comet.getName());
+					sb.append(" (");
+					sb.append(comet.getOrbitalPeriod().getValue());
+					sb.append(" ");
+					sb.append(comet.getOrbitalPeriod().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
+		cometsComboBox.addActionListener(e -> {
+			updateMineralsComboBox(us);
+		});
 
 		JButton addCometButton = new JButton("Add comet");
 		addCometButton.setPreferredSize(buttonPreferredSize);
@@ -235,9 +401,34 @@ public class Application {
 		cometsPanel.add(cometsComboBox, BorderLayout.CENTER);
 		cometsPanel.add(cometsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(cometsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-		JComboBox<Mineral> mineralsComboBox = new JComboBox<>(minerals);
+		mineralsComboBox = new JComboBox<>(minerals);
 		mineralsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		mineralsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Mineral) {
+					Mineral mineral = (Mineral) value;
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(mineral.getElementName());
+					sb.append(" (");
+					sb.append(mineral.getQuantity().getValue());
+					sb.append(" ");
+					sb.append(mineral.getQuantity().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
 
 		JButton addMineralButton = new JButton("Add mineral");
 		addMineralButton.setPreferredSize(buttonPreferredSize);
@@ -293,7 +484,9 @@ public class Application {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				try {
-					xqc.close();
+					if (!xqc.isClosed()) {
+						xqc.close();
+					}
 				} catch (XQException ex) {
 					ex.printStackTrace();
 				}
@@ -307,6 +500,99 @@ public class Application {
 			public void windowActivated(WindowEvent e) {
 			}
 		});
+	}
+
+	public static void updateGalaxiesComboBox(UniverseService us) {
+		try {
+			List<Galaxy> galaxies = us.findAllGalaxies();
+			galaxiesComboBox.setModel(new DefaultComboBoxModel<>(galaxies.toArray(new Galaxy[0])));
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateSolarSystemsComboBox(UniverseService us) {
+		try {
+			Object selectedGalaxy = galaxiesComboBox.getSelectedItem();
+			if (selectedGalaxy instanceof Galaxy) {
+				List<SolarSystem> solarSystems = us.findAllSolarSystemsInGalaxy((Galaxy) selectedGalaxy);
+				solarSystemsComboBox.setModel(new DefaultComboBoxModel<>(solarSystems.toArray(new SolarSystem[0])));
+			} else {
+				solarSystemsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateStarComboBox(UniverseService us) {
+		try {
+			Object selectedSolarSystem = solarSystemsComboBox.getModel().getSelectedItem();
+			if (selectedSolarSystem instanceof SolarSystem) {
+				Star star = us.findStarInSolarSystem((SolarSystem) selectedSolarSystem);
+				starComboBox.setModel(new DefaultComboBoxModel<>(new Star[] { star }));
+			} else {
+				starComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updatePlanetsComboBox(UniverseService us) {
+		try {
+			Object selectedSolarSystem = solarSystemsComboBox.getModel().getSelectedItem();
+			if (selectedSolarSystem instanceof SolarSystem) {
+				List<Planet> planets = us.findAllPlanetsInSolarSystem((SolarSystem) selectedSolarSystem);
+				planetsComboBox.setModel(new DefaultComboBoxModel<>(planets.toArray(new Planet[0])));
+			} else {
+				planetsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateCometsComboBox(UniverseService us) {
+		try {
+			Object selectedSolarSystem = solarSystemsComboBox.getModel().getSelectedItem();
+			if (selectedSolarSystem instanceof SolarSystem) {
+				List<Comet> comets = us.findAllCometsInSolarSystem((SolarSystem) selectedSolarSystem);
+				cometsComboBox.setModel(new DefaultComboBoxModel<>(comets.toArray(new Comet[0])));
+			} else {
+				cometsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateMoonsComboBox(UniverseService us) {
+		try {
+			Object selectedPlanet = planetsComboBox.getSelectedItem();
+			if (selectedPlanet instanceof Planet) {
+				List<Moon> moons = us.findAllMoonsAroundPlanet((Planet) selectedPlanet);
+				moonsComboBox.setModel(new DefaultComboBoxModel<>(moons.toArray(new Moon[0])));
+			} else {
+				moonsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateMineralsComboBox(UniverseService us) {
+		try {
+			Object selectedComet = cometsComboBox.getSelectedItem();
+			if (selectedComet instanceof Comet) {
+				List<Mineral> minerals = us.findAllMineralsInComet((Comet) selectedComet);
+				mineralsComboBox.setModel(new DefaultComboBoxModel<>(minerals.toArray(new Mineral[0])));
+			} else {
+				mineralsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
