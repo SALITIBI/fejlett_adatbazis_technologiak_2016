@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <universe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="universe.xsd">
+	xsi:noNamespaceSchemaLocation="universe.xsd">
 	<galaxies>
 		<galaxy name="Milky Way">
 			<solarSystems>
@@ -18,6 +18,25 @@
 								<moon name="Moon">
 									<radius unit="km">1737.1</radius>
 								</moon>
+								<moon name="BigMoon">
+									<radius unit="km">3454.9</radius>
+								</moon>
+							</moons>
+						</planet>
+						<planet name="Mars">
+							<radius unit="km">4545</radius>
+							<orbitalPeriod unit="day">320.256363004</orbitalPeriod>
+							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
+							<eccentricity>0.25</eccentricity>
+							<semiMajorAxis unit="AU">1.099</semiMajorAxis>
+							<mass unit="JupiterMass">2.18</mass>
+							<moons>
+								<moon name="MarsMoon">
+									<radius unit="km">1837.1</radius>
+								</moon>
+								<moon name="MarsBigMoon">
+									<radius unit="km">3554.9</radius>
+								</moon>
 							</moons>
 						</planet>
 					</planets>
@@ -34,6 +53,31 @@
 							</minerals>
 						</comet>
 					</comets>
+				</solarSystem>
+			</solarSystems>
+		</galaxy>
+		<galaxy name="Other Galaxy">
+			<solarSystems>
+				<solarSystem name="Muhahahahaha">
+					<star name="WhiteMassa" type="unary" />
+					<planets>
+						<planet name="ASD-123">
+							<radius unit="km">4545</radius>
+							<orbitalPeriod unit="day">320.256363004</orbitalPeriod>
+							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
+							<eccentricity>0.25</eccentricity>
+							<semiMajorAxis unit="AU">1.099</semiMajorAxis>
+							<mass unit="JupiterMass">2.18</mass>
+							<moons>
+								<moon name="ASD-123-Moon">
+									<radius unit="km">1837.1</radius>
+								</moon>
+								<moon name="ASD-123-BigMoon">
+									<radius unit="km">3554.9</radius>
+								</moon>
+							</moons>
+						</planet>
+					</planets>
 				</solarSystem>
 			</solarSystems>
 		</galaxy>
