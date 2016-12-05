@@ -43,6 +43,8 @@ public interface UniverseService {
 	SolarSystem findSolarSystemByName(String solarSystemName) throws UniverseException;
 	
 	Galaxy findGalaxyByName(String galaxyName) throws UniverseException;
+	
+	List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;
 

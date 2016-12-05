@@ -58,7 +58,7 @@
                     <star name="Wars" type="binary" />
                     <planets>
                         <planet name="E-arth">
-                            <radius unit="km">6371</radius>
+                            <radius unit="km">63710</radius>
                             <orbitalPeriod unit="day">365.256363004</orbitalPeriod>
                             <orbitalSpeed unit="kps">29.78</orbitalSpeed>
                             <eccentricity>0.25</eccentricity>

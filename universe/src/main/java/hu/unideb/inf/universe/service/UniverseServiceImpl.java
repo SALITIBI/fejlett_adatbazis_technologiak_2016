@@ -41,8 +41,8 @@ public class UniverseServiceImpl implements UniverseService {
 			String universeXsdPath = getClass().getClassLoader().getResource("universe.xsd").getPath();
 
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;" 
-					+ " for $doc in db:open($dbName) return validate:xsd($doc, '" + universeXsdPath + "')");
+				"declare variable $dbName external;"
+				+ " for $doc in db:open($dbName) return validate:xsd($doc, '" + universeXsdPath + "')");
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.executeQuery();
 			return true;
@@ -57,8 +57,8 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;" 
-					+ " for $galaxy in db:open($dbName)//galaxies/* return $galaxy");
+				"declare variable $dbName external;"
+				+ " for $galaxy in db:open($dbName)//galaxies/* return $galaxy");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 
@@ -76,15 +76,46 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException {
+		List<SolarSystem> solarSystems = new LinkedList<>();
+		try {
+
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem"
+				+ " let $name := $solarSystem/@name"
+				+ " let $planet := $solarSystem/planets/planet"
+				+ " let $radius := $planet/radius"
+				+ " where $radius <= 6371"
+				+ " group by $name"
+				+ " return element solarSystem {"
+				+ " attribute name {$name},"
+				+ " element planets {$planet} }");
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+
+			while (rs.next()) {
+				SolarSystem solarSystem = JAXBUtil.fromXML(SolarSystem.class, rs.getItemAsString(null));
+				solarSystems.add(solarSystem);
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return solarSystems;
+	}
+
+	@Override
 	public List<SolarSystem> findAllSolarSystemsInGalaxy(Galaxy galaxy) throws UniverseException {
 		List<SolarSystem> solarSystems = new LinkedList<>();
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*"
-					+ " return $solarSystem");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*"
+				+ " return $solarSystem");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), galaxy.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -108,10 +139,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet"
-					+ " return $planet");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet"
+				+ " return $planet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -135,10 +166,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet"
-					+ " return $comet");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet"
+				+ " return $comet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -162,10 +193,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon"
-					+ " return $moon");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon"
+				+ " return $moon");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), planet.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -189,10 +220,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral"
-					+ " return $mineral");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral"
+				+ " return $mineral");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), comet.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -216,10 +247,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]"
-					+ " return $planet");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]"
+				+ " return $planet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -239,13 +270,13 @@ public class UniverseServiceImpl implements UniverseService {
 	@Override
 	public Moon findMoonByName(String moonName) throws UniverseException {
 		Moon moon = null;
-		
+
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]"
-					+ " return $moon");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]"
+				+ " return $moon");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), moonName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -268,10 +299,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]"
-					+ " return $comet");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]"
+				+ " return $comet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -294,10 +325,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star"
-					+ " return $star");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star"
+				+ " return $star");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), solarSystem.getName(), xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -320,10 +351,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression("declare variable $dbName external;"
-					+ " declare variable $cometName external;"
-					+ " declare variable $mineralName external;"
-					+ " for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]"
-					+ " return $mineral");
+				+ " declare variable $cometName external;"
+				+ " declare variable $mineralName external;"
+				+ " for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]"
+				+ " return $mineral");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -347,11 +378,11 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $solarSystemName external;"
-					+ " declare variable $cometName external;"
-					+ " for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]"
-					+ " return $mineral");
+				"declare variable $dbName external;"
+				+ " declare variable $solarSystemName external;"
+				+ " declare variable $cometName external;"
+				+ " for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]"
+				+ " return $mineral");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("solarSystemName"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -375,10 +406,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]"
-					+ " return $solarSystem");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]"
+				+ " return $solarSystem");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -401,10 +432,10 @@ public class UniverseServiceImpl implements UniverseService {
 
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]"
-					+ " return $solarSystem");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]"
+				+ " return $solarSystem");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), galaxyName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -425,10 +456,10 @@ public class UniverseServiceImpl implements UniverseService {
 	public void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException {
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $cometName external;" 
-					+ " declare variable $mineralName external;"
-					+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]");
+				"declare variable $dbName external;"
+				+ " declare variable $cometName external;"
+				+ " declare variable $mineralName external;"
+				+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -444,9 +475,9 @@ public class UniverseServiceImpl implements UniverseService {
 	public void deleteComet(String cometName) throws UniverseException {
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -461,9 +492,9 @@ public class UniverseServiceImpl implements UniverseService {
 	public void deleteMoon(String moonName) throws UniverseException {
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), moonName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -478,9 +509,9 @@ public class UniverseServiceImpl implements UniverseService {
 	public void deletePlanet(String planetName) throws UniverseException {
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -495,9 +526,9 @@ public class UniverseServiceImpl implements UniverseService {
 	public void deleteSolarSystem(String solarSystemName) throws UniverseException {
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -512,9 +543,9 @@ public class UniverseServiceImpl implements UniverseService {
 	public void deleteGalaxy(String galaxyName) throws UniverseException {
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $name external;"
-					+ " delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]");
+				"declare variable $dbName external;"
+				+ " declare variable $name external;"
+				+ " delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("name"), galaxyName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -534,10 +565,10 @@ public class UniverseServiceImpl implements UniverseService {
 			String newPlanet = JAXBUtil.toXMLFragment(planet);
 
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $planetName external;"
-					+ " declare variable $newPlanet external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet");
+				"declare variable $dbName external;"
+				+ " declare variable $planetName external;"
+				+ " declare variable $newPlanet external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("planetName"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -558,10 +589,10 @@ public class UniverseServiceImpl implements UniverseService {
 			String newMoon = JAXBUtil.toXMLFragment(moon);
 
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $moonName external;"
-					+ " declare variable $newMoon external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$moonName] with $newMoon");
+				"declare variable $dbName external;"
+				+ " declare variable $moonName external;"
+				+ " declare variable $newMoon external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$moonName] with $newMoon");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("moonName"), moonName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -582,11 +613,11 @@ public class UniverseServiceImpl implements UniverseService {
 			String newMineral = JAXBUtil.toXMLFragment(mineral);
 
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $cometName external;"
-					+ " declare variable $mineralName external;"
-					+ " declare variable $newMineral external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral");
+				"declare variable $dbName external;"
+				+ " declare variable $cometName external;"
+				+ " declare variable $mineralName external;"
+				+ " declare variable $newMineral external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -608,10 +639,10 @@ public class UniverseServiceImpl implements UniverseService {
 			String newComet = JAXBUtil.toXMLFragment(comet);
 
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $cometName external;"
-					+ " declare variable $newComet external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet");
+				"declare variable $dbName external;"
+				+ " declare variable $cometName external;"
+				+ " declare variable $newComet external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -625,19 +656,19 @@ public class UniverseServiceImpl implements UniverseService {
 
 	@Override
 	public void addPlanetToSolarSystem(String solarSystemName, String planetName, Property radius, Property orbitalPeriod,
-			Property orbitalSpeed, Property eccentricity, Property semiMajorAxis, Property mass) throws UniverseException {
+		Property orbitalSpeed, Property eccentricity, Property semiMajorAxis, Property mass) throws UniverseException {
 		if (findPlanetByName(planetName) == null) {
 			try {
 				Planet planet = new Planet(planetName, new LinkedList<>(), radius, orbitalPeriod, orbitalSpeed, eccentricity, semiMajorAxis,
-						mass);
+					mass);
 
 				String newPlanet = JAXBUtil.toXMLFragment(planet);
 
 				XQPreparedExpression expr = xqc.prepareExpression(
-						"declare variable $dbName external;"
-						+ " declare variable $solarSystemName external;"
-						+ " declare variable $newPlanet external;"
-						+ " insert node ($newPlanet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/planets");
+					"declare variable $dbName external;"
+					+ " declare variable $solarSystemName external;"
+					+ " declare variable $newPlanet external;"
+					+ " insert node ($newPlanet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/planets");
 
 				expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindString(new QName("solarSystemName"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -658,10 +689,10 @@ public class UniverseServiceImpl implements UniverseService {
 				String newMoon = JAXBUtil.toXMLFragment(moon);
 
 				XQPreparedExpression expr = xqc.prepareExpression(
-						"declare variable $dbName external;"
-						+ " declare variable $planetName external;"
-						+ " declare variable $newMoon external;"
-						+ " insert node ($newMoon) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons");
+					"declare variable $dbName external;"
+					+ " declare variable $planetName external;"
+					+ " declare variable $newMoon external;"
+					+ " insert node ($newMoon) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons");
 
 				expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindString(new QName("planetName"), planetName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -682,10 +713,10 @@ public class UniverseServiceImpl implements UniverseService {
 				String newMineral = JAXBUtil.toXMLFragment(mineral);
 
 				XQPreparedExpression expr = xqc.prepareExpression(
-						"declare variable $dbName external;"
-						+ " declare variable $cometName external;"
-						+ " declare variable $newMineral external;"
-						+ " insert node ($newMineral) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals");
+					"declare variable $dbName external;"
+					+ " declare variable $cometName external;"
+					+ " declare variable $newMineral external;"
+					+ " insert node ($newMineral) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals");
 
 				expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -706,10 +737,10 @@ public class UniverseServiceImpl implements UniverseService {
 				String newComet = JAXBUtil.toXMLFragment(comet);
 
 				XQPreparedExpression expr = xqc.prepareExpression(
-						"declare variable $dbName external;"
-						+ " declare variable $solarSystemName external;"
-						+ " declare variable $newComet external;"
-						+ " insert node ($newComet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets");
+					"declare variable $dbName external;"
+					+ " declare variable $solarSystemName external;"
+					+ " declare variable $newComet external;"
+					+ " insert node ($newComet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets");
 
 				expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindString(new QName("solarSystemName"), solarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -724,17 +755,17 @@ public class UniverseServiceImpl implements UniverseService {
 
 	@Override
 	public void addSolarSystemToGalaxy(String galaxyName, String solarSystemName, String starName, String starType)
-			throws UniverseException {
+		throws UniverseException {
 		if (findSolarSystemByName(solarSystemName) == null) {
 			try {
 				Star star = new Star(starName, starType);
 				SolarSystem solarSystem = new SolarSystem(solarSystemName, new LinkedList<>(), new LinkedList<>(), star);
 				String newSolarSystem = JAXBUtil.toXMLFragment(solarSystem);
 				XQPreparedExpression expr = xqc.prepareExpression(
-						"declare variable $dbName external;"
-						+ " declare variable $galaxyName external;"
-						+ " declare variable $newSolarSystem external;"
-						+ " insert node ($newSolarSystem) into db:open($dbName)//galaxies/galaxy[@name=$galaxyName]/solarSystems");
+					"declare variable $dbName external;"
+					+ " declare variable $galaxyName external;"
+					+ " declare variable $newSolarSystem external;"
+					+ " insert node ($newSolarSystem) into db:open($dbName)//galaxies/galaxy[@name=$galaxyName]/solarSystems");
 
 				expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindString(new QName("galaxyName"), galaxyName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -754,9 +785,9 @@ public class UniverseServiceImpl implements UniverseService {
 				Galaxy galaxy = new Galaxy(galaxyName, new LinkedList<>());
 				String newGalaxy = JAXBUtil.toXMLFragment(galaxy);
 				XQPreparedExpression expr = xqc.prepareExpression(
-						"declare variable $dbName external;"
-						+ " declare variable $newGalaxy external;"
-						+ " insert node ($newGalaxy) into db:open($dbName)//galaxies");
+					"declare variable $dbName external;"
+					+ " declare variable $newGalaxy external;"
+					+ " insert node ($newGalaxy) into db:open($dbName)//galaxies");
 
 				expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 				expr.bindDocument(new QName("newGalaxy"), newGalaxy, null, null);
