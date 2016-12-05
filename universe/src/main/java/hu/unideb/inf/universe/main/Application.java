@@ -68,6 +68,7 @@ public class Application {
 		
 		Galaxy[] galaxies = us.findAllGalaxies().toArray(new Galaxy[0]);
 		SolarSystem[] solarSystems = us.findAllSolarSystemsInGalaxy(galaxies[0]).toArray(new SolarSystem[0]);
+		Star star = us.findStarInSolarSystem(solarSystems[0]);
 		Planet[] planets = us.findAllPlanetsInSolarSystem(solarSystems[0]).toArray(new Planet[0]);
 		Moon[] moons = us.findAllMoonsAroundPlanet(planets[0]).toArray(new Moon[0]);
 		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
@@ -88,6 +89,10 @@ public class Application {
 		JComboBox<SolarSystem> solarSystemsComboBox = new JComboBox<>(solarSystems);
 		solarSystemsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentListerPanel.add(solarSystemsComboBox);
+		
+		JComboBox<Star> starComboBox = new JComboBox<>(new Star[] { star } );
+		starComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentListerPanel.add(starComboBox);
 		
 		JComboBox<Planet> planetsComboBox = new JComboBox<>(planets);
 		planetsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
