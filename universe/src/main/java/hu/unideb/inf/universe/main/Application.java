@@ -3,6 +3,7 @@ package hu.unideb.inf.universe.main;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.FlowLayout;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -84,31 +85,86 @@ public class Application {
 //				return null;
 //			}
 //		});
-		contentListerPanel.add(galaxiesComboBox);
+		
+		JPanel galaxiesButtonPanel = new JPanel(new FlowLayout());
+		galaxiesButtonPanel.add(new JButton("Add something"));
+		galaxiesButtonPanel.add(new JButton("Update something"));
+		galaxiesButtonPanel.add(new JButton("Delete something"));
+		
+		JPanel galaxiesPanel = new JPanel(new BorderLayout());
+		galaxiesPanel.add(galaxiesComboBox, BorderLayout.CENTER);
+		galaxiesPanel.add(galaxiesButtonPanel, BorderLayout.EAST);
+		contentListerPanel.add(galaxiesPanel);
 		
 		JComboBox<SolarSystem> solarSystemsComboBox = new JComboBox<>(solarSystems);
 		solarSystemsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentListerPanel.add(solarSystemsComboBox);
+		
+		JPanel solarSystemsButtonPanel = new JPanel(new FlowLayout());
+		solarSystemsButtonPanel.add(new JButton("Add something"));
+		solarSystemsButtonPanel.add(new JButton("Update something"));
+		solarSystemsButtonPanel.add(new JButton("Delete something"));
+		
+		JPanel solarSystemsPanel = new JPanel(new BorderLayout());
+		solarSystemsPanel.add(solarSystemsComboBox, BorderLayout.CENTER);
+		solarSystemsPanel.add(solarSystemsButtonPanel, BorderLayout.EAST);
+		contentListerPanel.add(solarSystemsPanel);
 		
 		JComboBox<Star> starComboBox = new JComboBox<>(new Star[] { star } );
 		starComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentListerPanel.add(starComboBox);
 		
+		
 		JComboBox<Planet> planetsComboBox = new JComboBox<>(planets);
 		planetsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentListerPanel.add(planetsComboBox);
+		
+		JPanel planetsButtonPanel = new JPanel();
+		planetsButtonPanel.add(new JButton("Add something"));
+		planetsButtonPanel.add(new JButton("Update something"));
+		planetsButtonPanel.add(new JButton("Delete something"));
+		
+		JPanel planetsPanel = new JPanel(new BorderLayout());
+		planetsPanel.add(planetsComboBox, BorderLayout.CENTER);
+		planetsPanel.add(planetsButtonPanel, BorderLayout.EAST);
+		contentListerPanel.add(planetsPanel);
 		
 		JComboBox<Moon> moonsComboBox = new JComboBox<>(moons);
 		moonsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentListerPanel.add(moonsComboBox);
+		
+		JPanel moonsButtonPanel = new JPanel();
+		moonsButtonPanel.add(new JButton("Add something"));
+		moonsButtonPanel.add(new JButton("Update something"));
+		moonsButtonPanel.add(new JButton("Delete something"));
+		
+		JPanel moonsPanel = new JPanel(new BorderLayout());
+		moonsPanel.add(moonsComboBox, BorderLayout.CENTER);
+		moonsPanel.add(moonsButtonPanel, BorderLayout.EAST);
+		contentListerPanel.add(moonsPanel);
 		
 		JComboBox<Comet> cometsComboBox = new JComboBox<>(comets);
 		cometsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentListerPanel.add(cometsComboBox);
+		
+		JPanel cometsButtonPanel = new JPanel(new FlowLayout());
+		cometsButtonPanel.add(new JButton("Add something"));
+		cometsButtonPanel.add(new JButton("Update something"));
+		cometsButtonPanel.add(new JButton("Delete something"));
+		
+		JPanel cometsPanel = new JPanel(new BorderLayout());
+		cometsPanel.add(cometsComboBox, BorderLayout.CENTER);
+		cometsPanel.add(cometsButtonPanel, BorderLayout.EAST);
+		contentListerPanel.add(cometsPanel);
 		
 		JComboBox<Mineral> mineralsComboBox = new JComboBox<>(minerals);
 		mineralsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentListerPanel.add(mineralsComboBox);
+		
+		JPanel mineralsButtonPanel = new JPanel(new FlowLayout());
+		mineralsButtonPanel.add(new JButton("Add something"));
+		mineralsButtonPanel.add(new JButton("Update something"));
+		mineralsButtonPanel.add(new JButton("Delete something"));
+		
+		JPanel mineralsPanel = new JPanel(new BorderLayout());
+		mineralsPanel.add(mineralsComboBox, BorderLayout.CENTER);
+		mineralsPanel.add(mineralsButtonPanel, BorderLayout.EAST);
+		contentListerPanel.add(mineralsPanel);
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(menuBar, BorderLayout.NORTH);
