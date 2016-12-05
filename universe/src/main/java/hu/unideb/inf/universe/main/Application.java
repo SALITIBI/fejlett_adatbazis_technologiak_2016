@@ -11,11 +11,13 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -100,14 +102,19 @@ public class Application {
 
 		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		// galaxiesComboBox.setRenderer(new ListCellRenderer<Galaxy>() {
-		// @Override
-		// public Component getListCellRendererComponent(JList<? extends Galaxy> list, Galaxy value, int index,
-		// boolean isSelected, boolean cellHasFocus) {
-		// // TODO csak a galaxis neve kellene, hogy megjelenjen!
-		// return null;
-		// }
-		// });
+		galaxiesComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Galaxy) {
+					setText(((Galaxy) value).getName());
+				}
+				return component;
+			}
+		});
 		galaxiesComboBox.addActionListener(e -> {
 			updateSolarSystemsComboBox(us);
 			updateStarComboBox(us);
@@ -141,6 +148,7 @@ public class Application {
 		galaxiesRightPanel.add(Box.createGlue());
 
 		JPanel galaxiesPanel = new JPanel(new BorderLayout());
+		galaxiesPanel.add(new JLabel("Galaxy: "), BorderLayout.NORTH);
 		galaxiesPanel.add(galaxiesComboBox, BorderLayout.CENTER);
 		galaxiesPanel.add(galaxiesRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(galaxiesPanel);
@@ -148,6 +156,19 @@ public class Application {
 
 		solarSystemsComboBox = new JComboBox<>(solarSystems);
 		solarSystemsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		solarSystemsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof SolarSystem) {
+					setText(((SolarSystem) value).getName());
+				}
+				return component;
+			}
+		});
 		solarSystemsComboBox.addActionListener(e -> {
 			updateStarComboBox(us);
 			updatePlanetsComboBox(us);
@@ -176,6 +197,7 @@ public class Application {
 		solarSystemsRightPanel.add(Box.createGlue());
 
 		JPanel solarSystemsPanel = new JPanel(new BorderLayout());
+		solarSystemsPanel.add(new JLabel("Solar system: "), BorderLayout.NORTH);
 		solarSystemsPanel.add(solarSystemsComboBox, BorderLayout.CENTER);
 		solarSystemsPanel.add(solarSystemsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(solarSystemsPanel);
@@ -183,11 +205,69 @@ public class Application {
 
 		starComboBox = new JComboBox<>(new Star[] { star });
 		starComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		starComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Star) {
+					Star star = (Star) value;
+					setText(star.getName() + " (" + star.getType() + ")");
+				}
+				return component;
+			}
+		});
 		contentListerPanel.add(starComboBox);
 		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		planetsComboBox = new JComboBox<>(planets);
 		planetsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		planetsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Planet) {
+					Planet planet = (Planet) value;
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(planet.getName());
+					sb.append(" (radius: ");
+					sb.append(planet.getRadius().getValue());
+					sb.append(" ");
+					sb.append(planet.getRadius().getUnit());
+					sb.append(", orbitalPeriod: ");
+					sb.append(planet.getOrbitalPeriod().getValue());
+					sb.append(" ");
+					sb.append(planet.getOrbitalPeriod().getUnit());
+					sb.append(", orbitalSpeed: ");
+					sb.append(planet.getOrbitalSpeed().getValue());
+					sb.append(" ");
+					sb.append(planet.getOrbitalSpeed().getValue());
+					sb.append(", eccentricity: ");
+					sb.append(planet.getEccentricity().getValue());
+					sb.append(" ");
+					sb.append(planet.getEccentricity().getUnit());
+					sb.append(", semiMajorAxis: ");
+					sb.append(planet.getSemiMajorAxis().getValue());
+					sb.append(" ");
+					sb.append(planet.getSemiMajorAxis().getUnit());
+					sb.append(", mass: ");
+					sb.append(planet.getMass().getValue());
+					sb.append(" ");
+					sb.append(planet.getMass().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
 		planetsComboBox.addActionListener(e -> {
 			updateMoonsComboBox(us);
 		});
@@ -219,6 +299,29 @@ public class Application {
 
 		moonsComboBox = new JComboBox<>(moons);
 		moonsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		moonsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Moon) {
+					Moon moon = (Moon) value;
+
+					StringBuilder sb = new StringBuilder();
+					sb.append(moon.getName());
+					sb.append(" (");
+					sb.append(moon.getRadius().getValue());
+					sb.append(" ");
+					sb.append(moon.getRadius().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
 
 		JButton addMoonButton = new JButton("Add moon");
 		addMoonButton.setPreferredSize(buttonPreferredSize);
@@ -247,6 +350,30 @@ public class Application {
 
 		cometsComboBox = new JComboBox<>(comets);
 		cometsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		cometsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Comet) {
+					Comet comet = (Comet) value;
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(comet.getName());
+					sb.append(" (");
+					sb.append(comet.getOrbitalPeriod().getValue());
+					sb.append(" ");
+					sb.append(comet.getOrbitalPeriod().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
 		cometsComboBox.addActionListener(e -> {
 			updateMineralsComboBox(us);
 		});
@@ -278,6 +405,30 @@ public class Application {
 
 		mineralsComboBox = new JComboBox<>(minerals);
 		mineralsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		mineralsComboBox.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof Mineral) {
+					Mineral mineral = (Mineral) value;
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(mineral.getElementName());
+					sb.append(" (");
+					sb.append(mineral.getQuantity().getValue());
+					sb.append(" ");
+					sb.append(mineral.getQuantity().getUnit());
+					sb.append(")");
+
+					setText(sb.toString());
+				}
+				return component;
+			}
+		});
 
 		JButton addMineralButton = new JButton("Add mineral");
 		addMineralButton.setPreferredSize(buttonPreferredSize);
