@@ -44,6 +44,8 @@ public interface UniverseService {
 	
 	Galaxy findGalaxyByName(String galaxyName) throws UniverseException;
 	
+	Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween3500And4000() throws UniverseException;
+	
 	List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;

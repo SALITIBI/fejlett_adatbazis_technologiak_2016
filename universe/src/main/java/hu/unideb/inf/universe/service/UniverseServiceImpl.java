@@ -76,6 +76,36 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween3500And4000() throws UniverseException {
+		Double avgRotationSpeed = null;
+		try {
+
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ "let $avg := avg("
+				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet"
+				+ " let $orbSpeed := $planet/orbitalSpeed"
+				+ " let $planetName := $planet/@name"
+				+ " for $moon in $planet/moons/moon"
+				+ " where $moon/radius >= 3500 and $moon/radius <= 4000"
+				+ " group by $planetName"
+				+ " return $orbSpeed"
+				+ ")"
+				+ " return $avg");
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+
+			while (rs.next()) {
+				avgRotationSpeed = Double.parseDouble(rs.getItemAsString(null));
+			}
+		} catch (XQException e) {
+			throw new UniverseException(e);
+		}
+		return avgRotationSpeed;
+	}
+
+	@Override
 	public List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException {
 		List<SolarSystem> solarSystems = new LinkedList<>();
 		try {
@@ -84,7 +114,7 @@ public class UniverseServiceImpl implements UniverseService {
 				"declare variable $dbName external;"
 				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem"
 				+ " let $name := $solarSystem/@name"
-				+ " let $planet := $solarSystem/planets/planet"
+				+ " for $planet in $solarSystem/planets/planet"
 				+ " let $radius := $planet/radius"
 				+ " where $radius <= 6371"
 				+ " group by $name"
