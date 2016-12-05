@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.Box;
@@ -13,12 +15,15 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.xml.xquery.XQConnection;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
@@ -51,10 +56,16 @@ public class Application {
 
 		JMenuItem aboutMenuItem = new JMenuItem("About");
 		aboutMenuItem.addActionListener(e -> {
-			JDialog dialog = new JDialog(frame, true);
+			JPanel dialogPanel = new JPanel();
+			dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
+			dialogPanel.add(new JLabel("Czuczor Gergő"));
+			dialogPanel.add(new JLabel("Kiss Sándor Ádám"));
+			dialogPanel.add(new JLabel("Salagvárdi Tibor"));
+			dialogPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+			JDialog dialog = new JDialog(frame, "About us", true);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			// TODO a fejlesztok neveit itt erdemes lenne felsorolni a korte helyett
-			dialog.add(new JButton("korte"));
+			dialog.add(dialogPanel);
 			dialog.pack();
 			dialog.setVisible(true);
 		});
