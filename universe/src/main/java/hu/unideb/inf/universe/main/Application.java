@@ -20,6 +20,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
@@ -142,6 +144,7 @@ public class Application {
 		galaxiesPanel.add(galaxiesComboBox, BorderLayout.CENTER);
 		galaxiesPanel.add(galaxiesRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(galaxiesPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		solarSystemsComboBox = new JComboBox<>(solarSystems);
 		solarSystemsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -176,10 +179,12 @@ public class Application {
 		solarSystemsPanel.add(solarSystemsComboBox, BorderLayout.CENTER);
 		solarSystemsPanel.add(solarSystemsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(solarSystemsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		starComboBox = new JComboBox<>(new Star[] { star });
 		starComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentListerPanel.add(starComboBox);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		planetsComboBox = new JComboBox<>(planets);
 		planetsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -210,6 +215,7 @@ public class Application {
 		planetsPanel.add(planetsComboBox, BorderLayout.CENTER);
 		planetsPanel.add(planetsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(planetsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		moonsComboBox = new JComboBox<>(moons);
 		moonsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -237,6 +243,7 @@ public class Application {
 		moonsPanel.add(moonsComboBox, BorderLayout.CENTER);
 		moonsPanel.add(moonsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(moonsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		cometsComboBox = new JComboBox<>(comets);
 		cometsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -267,6 +274,7 @@ public class Application {
 		cometsPanel.add(cometsComboBox, BorderLayout.CENTER);
 		cometsPanel.add(cometsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(cometsPanel);
+		contentListerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
 		mineralsComboBox = new JComboBox<>(minerals);
 		mineralsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
