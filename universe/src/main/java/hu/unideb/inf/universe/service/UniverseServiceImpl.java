@@ -42,7 +42,7 @@ public class UniverseServiceImpl implements UniverseService {
 
 			XQPreparedExpression expr = xqc.prepareExpression(
 					"declare variable $dbName external;" 
-					+ " for $doc in db:open() return validate:xsd($doc, '" + universeXsdPath + "')");
+					+ " for $doc in db:open($dbName) return validate:xsd($doc, '" + universeXsdPath + "')");
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.executeQuery();
 			return true;

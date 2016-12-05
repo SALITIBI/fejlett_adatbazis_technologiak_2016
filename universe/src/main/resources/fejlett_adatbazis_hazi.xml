@@ -1,85 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <universe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="universe.xsd">
-	<galaxies>
-		<galaxy name="Milky Way">
-			<solarSystems>
-				<solarSystem name="Solar system">
-					<star name="Sun" type="unary" />
-					<planets>
-						<planet name="Earth">
-							<radius unit="km">6371</radius>
-							<orbitalPeriod unit="day">365.256363004</orbitalPeriod>
-							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
-							<eccentricity>0.25</eccentricity>
-							<semiMajorAxis unit="AU">1.099</semiMajorAxis>
-							<mass unit="JupiterMass">2.18</mass>
-							<moons>
-								<moon name="Moon">
-									<radius unit="km">1737.1</radius>
-								</moon>
-								<moon name="BigMoon">
-									<radius unit="km">3454.9</radius>
-								</moon>
-							</moons>
-						</planet>
-						<planet name="Mars">
-							<radius unit="km">4545</radius>
-							<orbitalPeriod unit="day">320.256363004</orbitalPeriod>
-							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
-							<eccentricity>0.25</eccentricity>
-							<semiMajorAxis unit="AU">1.099</semiMajorAxis>
-							<mass unit="JupiterMass">2.18</mass>
-							<moons>
-								<moon name="MarsMoon">
-									<radius unit="km">1837.1</radius>
-								</moon>
-								<moon name="MarsBigMoon">
-									<radius unit="km">3554.9</radius>
-								</moon>
-							</moons>
-						</planet>
-					</planets>
-					<comets>
-						<comet name="Comet Halley">
-							<orbitalPeriod unit="day">2.2</orbitalPeriod>
-							<minerals>
-								<mineral elementName="Helium">
-									<quantity unit="g">1500</quantity>
-								</mineral>
-								<mineral elementName="Hidrogen">
-									<quantity unit="g">150000000</quantity>
-								</mineral>
-							</minerals>
-						</comet>
-					</comets>
-				</solarSystem>
-			</solarSystems>
-		</galaxy>
-		<galaxy name="Other Galaxy">
-			<solarSystems>
-				<solarSystem name="Muhahahahaha">
-					<star name="WhiteMassa" type="unary" />
-					<planets>
-						<planet name="ASD-123">
-							<radius unit="km">4545</radius>
-							<orbitalPeriod unit="day">320.256363004</orbitalPeriod>
-							<orbitalSpeed unit="kps">29.78</orbitalSpeed>
-							<eccentricity>0.25</eccentricity>
-							<semiMajorAxis unit="AU">1.099</semiMajorAxis>
-							<mass unit="JupiterMass">2.18</mass>
-							<moons>
-								<moon name="ASD-123-Moon">
-									<radius unit="km">1837.1</radius>
-								</moon>
-								<moon name="ASD-123-BigMoon">
-									<radius unit="km">3554.9</radius>
-								</moon>
-							</moons>
-						</planet>
-					</planets>
-				</solarSystem>
-			</solarSystems>
-		</galaxy>
-	</galaxies>
+          xsi:noNamespaceSchemaLocation="universe.xsd">
+    <galaxies>
+        <galaxy name="Milky Way">
+            <solarSystems>
+                <solarSystem name="Solar system">
+                    <star name="Sun" type="unary" />
+                    <planets>
+                        <planet name="Earth">
+                            <radius unit="km">6371</radius>
+                            <orbitalPeriod unit="day">365.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">29.78</orbitalSpeed>
+                            <eccentricity>0.25</eccentricity>
+                            <semiMajorAxis unit="AU">1.099</semiMajorAxis>
+                            <mass unit="JupiterMass">2.18</mass>
+                            <moons>
+                                <moon name="Moon">
+                                    <radius unit="km">1737.1</radius>
+                                </moon>
+                                <moon name="BigMoon">
+                                    <radius unit="km">3454.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                        <planet name="Mars">
+                            <radius unit="km">4545</radius>
+                            <orbitalPeriod unit="day">320.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">29.78</orbitalSpeed>
+                            <eccentricity>0.25</eccentricity>
+                            <semiMajorAxis unit="AU">1.099</semiMajorAxis>
+                            <mass unit="JupiterMass">2.18</mass>
+                            <moons>
+                                <moon name="MarsMoon">
+                                    <radius unit="km">1837.1</radius>
+                                </moon>
+                                <moon name="MarsBigMoon">
+                                    <radius unit="km">3554.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                    </planets>
+                    <comets>
+                        <comet name="Comet Halley">
+                            <orbitalPeriod unit="day">2.2</orbitalPeriod>
+                            <minerals>
+                                <mineral elementName="Helium">
+                                    <quantity unit="g">1500</quantity>
+                                </mineral>
+                                <mineral elementName="Hidrogen">
+                                    <quantity unit="g">150000000</quantity>
+                                </mineral>
+                            </minerals>
+                        </comet>
+                    </comets>
+                </solarSystem>
+                <solarSystem name="Solar system2">
+                    <star name="Wars" type="binary" />
+                    <planets>
+                        <planet name="E-arth">
+                            <radius unit="km">6371</radius>
+                            <orbitalPeriod unit="day">365.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">29.78</orbitalSpeed>
+                            <eccentricity>0.25</eccentricity>
+                            <semiMajorAxis unit="AU">1.099</semiMajorAxis>
+                            <mass unit="JupiterMass">2.18</mass>
+                            <moons>
+                                <moon name="Moonday">
+                                    <radius unit="km">1737.1</radius>
+                                </moon>
+                                <moon name="BigMoonday">
+                                    <radius unit="km">3454.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                        <planet name="Snickers">
+                            <radius unit="km">4545</radius>
+                            <orbitalPeriod unit="day">320.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">29.78</orbitalSpeed>
+                            <eccentricity>0.25</eccentricity>
+                            <semiMajorAxis unit="AU">1.099</semiMajorAxis>
+                            <mass unit="JupiterMass">2.18</mass>
+                            <moons>
+                                <moon name="SnickersMoon">
+                                    <radius unit="km">1837.1</radius>
+                                </moon>
+                                <moon name="SnickersBigMoon">
+                                    <radius unit="km">3554.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                    </planets>
+                    <comets>
+                        <comet name="Comet me bro">
+                            <orbitalPeriod unit="day">2.2</orbitalPeriod>
+                            <minerals>
+                                <mineral elementName="Argon">
+                                    <quantity unit="g">1500</quantity>
+                                </mineral>
+                                <mineral elementName="Gold">
+                                    <quantity unit="g">150000000</quantity>
+                                </mineral>
+                            </minerals>
+                        </comet>
+                    </comets>
+                </solarSystem>
+            </solarSystems>
+        </galaxy>
+        <galaxy name="Other Galaxy">
+            <solarSystems>
+                <solarSystem name="Muhahahahaha">
+                    <star name="WhiteMassa" type="unary" />
+                    <planets>
+                        <planet name="ASD-123">
+                            <radius unit="km">4545</radius>
+                            <orbitalPeriod unit="day">320.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">29.78</orbitalSpeed>
+                            <eccentricity>0.25</eccentricity>
+                            <semiMajorAxis unit="AU">1.099</semiMajorAxis>
+                            <mass unit="JupiterMass">2.18</mass>
+                            <moons>
+                                <moon name="ASD-123-Moon">
+                                    <radius unit="km">1837.1</radius>
+                                </moon>
+                                <moon name="ASD-123-BigMoon">
+                                    <radius unit="km">3554.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                        <planet name="123-ASD">
+                            <radius unit="km">232323</radius>
+                            <orbitalPeriod unit="day">321.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">29000.78</orbitalSpeed>
+                            <eccentricity>0.314159</eccentricity>
+                            <semiMajorAxis unit="AU">1.0999</semiMajorAxis>
+                            <mass unit="JupiterMass">2.118</mass>
+                            <moons>
+                                <moon name="123-ASD-Moon">
+                                    <radius unit="km">137.1</radius>
+                                </moon>
+                                <moon name="123-ASD-BigMoon">
+                                    <radius unit="km">35354.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                        <planet name="Plan-it">
+                            <radius unit="km">9888899</radius>
+                            <orbitalPeriod unit="day">3211.256363004</orbitalPeriod>
+                            <orbitalSpeed unit="kps">290.78</orbitalSpeed>
+                            <eccentricity>0.1123581321</eccentricity>
+                            <semiMajorAxis unit="AU">1.1120999</semiMajorAxis>
+                            <mass unit="JupiterMass">21.118</mass>
+                            <moons>
+                                <moon name="Real-eyes-realize-real-lies">
+                                    <radius unit="km">137.1</radius>
+                                </moon>
+                                <moon name="I-talk-about-a-bough-boat">
+                                    <radius unit="km">35354.9</radius>
+                                </moon>
+                                <moon name="Which-witch-would-watch-which-watch">
+                                    <radius unit="km">35354.9</radius>
+                                </moon>
+                            </moons>
+                        </planet>
+                    </planets>
+                    <comets>
+                        
+                    </comets>
+                </solarSystem>
+            </solarSystems>
+        </galaxy>
+    </galaxies>
 </universe>

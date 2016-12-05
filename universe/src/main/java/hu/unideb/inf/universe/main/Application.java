@@ -49,6 +49,7 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		XQConnection xqc = ConnectionUtil.getConnection("localhost", "1984", "admin", "admin");
 		UniverseService us = new UniverseServiceImpl(xqc, "universe");
+		System.out.println(us.validate());
 
 		JFrame frame = new JFrame("Fejlett XML Technológiák beadandó 2016");
 
