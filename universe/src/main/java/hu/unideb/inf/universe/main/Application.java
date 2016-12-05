@@ -6,9 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -23,6 +25,7 @@ import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
+import hu.unideb.inf.universe.exception.UniverseException;
 import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Mineral;
@@ -34,6 +37,14 @@ import hu.unideb.inf.universe.service.UniverseService;
 import hu.unideb.inf.universe.service.UniverseServiceImpl;
 
 public class Application {
+
+	private static JComboBox<Galaxy> galaxiesComboBox;
+	private static JComboBox<SolarSystem> solarSystemsComboBox;
+	private static JComboBox<Star> starComboBox;
+	private static JComboBox<Planet> planetsComboBox;
+	private static JComboBox<Moon> moonsComboBox;
+	private static JComboBox<Comet> cometsComboBox;
+	private static JComboBox<Mineral> mineralsComboBox;
 
 	public static void main(String[] args) throws Exception {
 		XQConnection xqc = ConnectionUtil.getConnection("localhost", "1984", "admin", "admin");
@@ -84,7 +95,7 @@ public class Application {
 		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
 		Mineral[] minerals = us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]);
 
-		JComboBox<Galaxy> galaxiesComboBox = new JComboBox<>(galaxies);
+		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		// galaxiesComboBox.setRenderer(new ListCellRenderer<Galaxy>() {
 		// @Override
@@ -94,6 +105,14 @@ public class Application {
 		// return null;
 		// }
 		// });
+		galaxiesComboBox.addActionListener(e -> {
+			updateSolarSystemsComboBox(us);
+			updateStarComboBox(us);
+			updatePlanetsComboBox(us);
+			updateCometsComboBox(us);
+			updateMoonsComboBox(us);
+			updateMineralsComboBox(us);
+		});
 
 		Dimension buttonPreferredSize = new Dimension(180, 25);
 
@@ -123,8 +142,15 @@ public class Application {
 		galaxiesPanel.add(galaxiesRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(galaxiesPanel);
 
-		JComboBox<SolarSystem> solarSystemsComboBox = new JComboBox<>(solarSystems);
+		solarSystemsComboBox = new JComboBox<>(solarSystems);
 		solarSystemsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		solarSystemsComboBox.addActionListener(e -> {
+			updateStarComboBox(us);
+			updatePlanetsComboBox(us);
+			updateCometsComboBox(us);
+			updateMoonsComboBox(us);
+			updateMineralsComboBox(us);
+		});
 
 		JButton addSolarSystemButton = new JButton("Add solar system");
 		addSolarSystemButton.setPreferredSize(buttonPreferredSize);
@@ -150,12 +176,15 @@ public class Application {
 		solarSystemsPanel.add(solarSystemsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(solarSystemsPanel);
 
-		JComboBox<Star> starComboBox = new JComboBox<>(new Star[] { star });
+		starComboBox = new JComboBox<>(new Star[] { star });
 		starComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentListerPanel.add(starComboBox);
 
-		JComboBox<Planet> planetsComboBox = new JComboBox<>(planets);
+		planetsComboBox = new JComboBox<>(planets);
 		planetsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		planetsComboBox.addActionListener(e -> {
+			updateMoonsComboBox(us);
+		});
 
 		JButton addPlanetButton = new JButton("Add planet");
 		addPlanetButton.setPreferredSize(buttonPreferredSize);
@@ -181,7 +210,7 @@ public class Application {
 		planetsPanel.add(planetsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(planetsPanel);
 
-		JComboBox<Moon> moonsComboBox = new JComboBox<>(moons);
+		moonsComboBox = new JComboBox<>(moons);
 		moonsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JButton addMoonButton = new JButton("Add moon");
@@ -208,8 +237,11 @@ public class Application {
 		moonsPanel.add(moonsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(moonsPanel);
 
-		JComboBox<Comet> cometsComboBox = new JComboBox<>(comets);
+		cometsComboBox = new JComboBox<>(comets);
 		cometsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		cometsComboBox.addActionListener(e -> {
+			updateMineralsComboBox(us);
+		});
 
 		JButton addCometButton = new JButton("Add comet");
 		addCometButton.setPreferredSize(buttonPreferredSize);
@@ -235,7 +267,7 @@ public class Application {
 		cometsPanel.add(cometsRightPanel, BorderLayout.EAST);
 		contentListerPanel.add(cometsPanel);
 
-		JComboBox<Mineral> mineralsComboBox = new JComboBox<>(minerals);
+		mineralsComboBox = new JComboBox<>(minerals);
 		mineralsComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JButton addMineralButton = new JButton("Add mineral");
@@ -292,7 +324,9 @@ public class Application {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				try {
-					xqc.close();
+					if (!xqc.isClosed()) {
+						xqc.close();
+					}
 				} catch (XQException ex) {
 					ex.printStackTrace();
 				}
@@ -306,6 +340,99 @@ public class Application {
 			public void windowActivated(WindowEvent e) {
 			}
 		});
+	}
+
+	public static void updateGalaxiesComboBox(UniverseService us) {
+		try {
+			List<Galaxy> galaxies = us.findAllGalaxies();
+			galaxiesComboBox.setModel(new DefaultComboBoxModel<>(galaxies.toArray(new Galaxy[0])));
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateSolarSystemsComboBox(UniverseService us) {
+		try {
+			Object selectedGalaxy = galaxiesComboBox.getSelectedItem();
+			if (selectedGalaxy instanceof Galaxy) {
+				List<SolarSystem> solarSystems = us.findAllSolarSystemsInGalaxy((Galaxy) selectedGalaxy);
+				solarSystemsComboBox.setModel(new DefaultComboBoxModel<>(solarSystems.toArray(new SolarSystem[0])));
+			} else {
+				solarSystemsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateStarComboBox(UniverseService us) {
+		try {
+			Object selectedSolarSystem = solarSystemsComboBox.getModel().getSelectedItem();
+			if (selectedSolarSystem instanceof SolarSystem) {
+				Star star = us.findStarInSolarSystem((SolarSystem) selectedSolarSystem);
+				starComboBox.setModel(new DefaultComboBoxModel<>(new Star[] { star }));
+			} else {
+				starComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updatePlanetsComboBox(UniverseService us) {
+		try {
+			Object selectedSolarSystem = solarSystemsComboBox.getModel().getSelectedItem();
+			if (selectedSolarSystem instanceof SolarSystem) {
+				List<Planet> planets = us.findAllPlanetsInSolarSystem((SolarSystem) selectedSolarSystem);
+				planetsComboBox.setModel(new DefaultComboBoxModel<>(planets.toArray(new Planet[0])));
+			} else {
+				planetsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateCometsComboBox(UniverseService us) {
+		try {
+			Object selectedSolarSystem = solarSystemsComboBox.getModel().getSelectedItem();
+			if (selectedSolarSystem instanceof SolarSystem) {
+				List<Comet> comets = us.findAllCometsInSolarSystem((SolarSystem) selectedSolarSystem);
+				cometsComboBox.setModel(new DefaultComboBoxModel<>(comets.toArray(new Comet[0])));
+			} else {
+				cometsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateMoonsComboBox(UniverseService us) {
+		try {
+			Object selectedPlanet = planetsComboBox.getSelectedItem();
+			if (selectedPlanet instanceof Planet) {
+				List<Moon> moons = us.findAllMoonsAroundPlanet((Planet) selectedPlanet);
+				moonsComboBox.setModel(new DefaultComboBoxModel<>(moons.toArray(new Moon[0])));
+			} else {
+				moonsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateMineralsComboBox(UniverseService us) {
+		try {
+			Object selectedComet = cometsComboBox.getSelectedItem();
+			if (selectedComet instanceof Comet) {
+				List<Mineral> minerals = us.findAllMineralsInComet((Comet) selectedComet);
+				mineralsComboBox.setModel(new DefaultComboBoxModel<>(minerals.toArray(new Mineral[0])));
+			} else {
+				mineralsComboBox.setModel(new DefaultComboBoxModel<>());
+			}
+		} catch (UniverseException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
