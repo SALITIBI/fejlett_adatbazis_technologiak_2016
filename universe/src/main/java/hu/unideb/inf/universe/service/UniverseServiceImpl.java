@@ -789,7 +789,6 @@ public class UniverseServiceImpl implements UniverseService {
 		} catch (XQException | JAXBException e) {
 			throw new UniverseException(e);
 		}
-		
 	}
 	
 	@Override
@@ -797,6 +796,34 @@ public class UniverseServiceImpl implements UniverseService {
 		Galaxy galaxy = findGalaxyByName(oldGalaxyName);
 		galaxy.setName(newGalaxyName);
 		updateGalaxy(oldGalaxyName, galaxy);
+	}
+	
+	@Override
+	public void updateSolarSystem(String oldSolarSystemName, SolarSystem newSolarSystem) throws UniverseException {
+		try {
+			String newSolarSystemAsXml = JAXBUtil.toXMLFragment(newSolarSystem);
+			XQPreparedExpression expr = xqc.prepareExpression(
+					"declare variable $dbName external;"
+					+ " declare variable $oldSolarSystemName external;"
+					+ " declare variable $newSolarSystem external;"
+					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem");
+			
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindString(new QName("oldSolarSystemName"), oldSolarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindDocument(new QName("newSolarSystem"), newSolarSystemAsXml, null, null);
+			
+			expr.executeQuery();
+		
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+	}
+	
+	@Override
+	public void updateSolarSystemName(String oldSolarSystemName, String newSolarSystemName) throws UniverseException{
+		SolarSystem solarSystem = findSolarSystemByName(oldSolarSystemName);
+		solarSystem.setName(newSolarSystemName);
+		updateSolarSystem(oldSolarSystemName, solarSystem);
 	}
 	
 	@Override
@@ -943,6 +970,8 @@ public class UniverseServiceImpl implements UniverseService {
 			}
 		}
 	}
+
+	
 	
 	
 }

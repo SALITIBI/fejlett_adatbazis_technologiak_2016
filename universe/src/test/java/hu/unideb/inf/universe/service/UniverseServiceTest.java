@@ -498,4 +498,46 @@ public class UniverseServiceTest extends AbstractTest {
 		Assert.assertEquals(newName, actualGalaxy.getName());
 		
 	}
+	@Test
+	public void testUpdateSolarSyste() throws UniverseException{
+		SolarSystem solarSystem = solarSystems.get(0);
+		String newName = "New Solar System";
+		List<Comet> comets = new LinkedList<>();
+		comets.add(new Comet("New Comet", new Property("day", 433), new LinkedList<>()));
+		List<Planet> planets = new LinkedList<>();
+		Property newEccentricity = new Property(null, 0.5);
+		Property newOrbitalSpeed = new Property("kps",50);
+		Property newOrbitalPeriod = new Property("day",333);
+		Property newSemiMajorAxis = new Property("AU",1.5);
+		Property newMass = new Property("JupiterMass",3.5);
+		Property newRadius = new Property("km",444444);
+		List<Moon> newMoons = new LinkedList<>();
+		planets.add(new Planet("New Planet", newMoons, newRadius, newOrbitalPeriod, newOrbitalSpeed, newEccentricity, newSemiMajorAxis, newMass));
+		SolarSystem newSolarSystem = new SolarSystem(newName, comets, planets, new Star("new Star","binary"));
+		SolarSystem expectedSolarSystem = newSolarSystem;
+		us.updateSolarSystem(solarSystem.getName(), newSolarSystem);
+		
+		SolarSystem actualSolarSystem = us.findSolarSystemByName(newName);
+		
+		Assert.assertNotNull(actualSolarSystem);
+		
+		Assert.assertEquals(expectedSolarSystem, actualSolarSystem);
+		
+
+		
+	}
+	@Test
+	public void testUpdateSolarSystemName() throws UniverseException{
+		SolarSystem solarSystem = solarSystems.get(0);
+		String newName = "New Solar System";
+		
+		us.updateSolarSystemName(solarSystem.getName(), newName);
+		
+		SolarSystem actualSolarSystem = us.findSolarSystemByName(newName);
+		
+		Assert.assertNotNull(actualSolarSystem);
+		
+		Assert.assertEquals(newName, actualSolarSystem.getName());
+		
+	}
 }
