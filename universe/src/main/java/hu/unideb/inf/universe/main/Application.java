@@ -101,9 +101,7 @@ public class Application {
 		Moon[] moons = us.findAllMoonsAroundPlanet(planets[0]).toArray(new Moon[0]);
 		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
 		Mineral[] minerals = us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]);
-		
-		System.out.println(us.avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(137, 138));
-		
+				
 		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		galaxiesComboBox.setRenderer(new DefaultListCellRenderer() {
