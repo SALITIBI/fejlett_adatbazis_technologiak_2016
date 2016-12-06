@@ -76,6 +76,34 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
+	public List<Comet> cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException {
+		List<Comet> comets = new LinkedList<>();
+		try {
+			XQPreparedExpression expr = xqc.prepareExpression(
+				"declare variable $dbName external;"
+				+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet"
+				+ " let $mineralCount := count($comet/minerals/mineral)"
+				+ " let $quantitySum := sum($comet/minerals/mineral/quantity)"
+				+ " for $mineral in $comet/minerals/mineral"
+				+ " where $mineralCount > 1"
+				+ " order by $quantitySum descending"
+				+ " return $comet");
+			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+
+			XQResultSequence rs = expr.executeQuery();
+
+			while (rs.next()) {
+				Comet comet = JAXBUtil.fromXML(Comet.class, rs.getItemAsString(null));
+				comets.add(comet);
+			}
+		} catch (XQException | JAXBException e) {
+			throw new UniverseException(e);
+		}
+
+		return comets;
+	}
+
+	@Override
 	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween3500And4000() throws UniverseException {
 		Double avgRotationSpeed = null;
 		try {
@@ -85,7 +113,6 @@ public class UniverseServiceImpl implements UniverseService {
 				+ "let $avg := avg("
 				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet"
 				+ " let $orbSpeed := $planet/orbitalSpeed"
-				+ " let $planetName := $planet/@name"
 				+ " for $moon in $planet/moons/moon"
 				+ " where $moon/radius >= 3500 and $moon/radius <= 4000"
 				+ " return $orbSpeed"

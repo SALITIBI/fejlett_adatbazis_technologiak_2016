@@ -46,6 +46,8 @@ public interface UniverseService {
 	
 	Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween3500And4000() throws UniverseException;
 	
+	List<Comet> cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException;
+	
 	List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;

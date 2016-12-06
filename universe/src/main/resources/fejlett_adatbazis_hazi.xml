@@ -100,6 +100,9 @@
                                 <mineral elementName="Gold">
                                     <quantity unit="g">150000000</quantity>
                                 </mineral>
+                                <mineral elementName="Gold">
+                                    <quantity unit="g">150000000</quantity>
+                                </mineral>
                             </minerals>
                         </comet>
                     </comets>
@@ -164,7 +167,14 @@
                         </planet>
                     </planets>
                     <comets>
-                        
+                        <comet name="Kometa">
+                            <orbitalPeriod unit="day">2.2</orbitalPeriod>
+                            <minerals>
+                                <mineral elementName="Wasser">
+                                    <quantity unit="g">15000</quantity>
+                                </mineral>
+                            </minerals>
+                        </comet>
                     </comets>
                 </solarSystem>
             </solarSystems>
