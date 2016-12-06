@@ -88,7 +88,6 @@ public class UniverseServiceImpl implements UniverseService {
 				+ " let $planetName := $planet/@name"
 				+ " for $moon in $planet/moons/moon"
 				+ " where $moon/radius >= 3500 and $moon/radius <= 4000"
-				+ " group by $planetName"
 				+ " return $orbSpeed"
 				+ ")"
 				+ " return $avg");

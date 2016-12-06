@@ -53,7 +53,9 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		XQConnection xqc = ConnectionUtil.getConnection("localhost", "1984", "admin", "admin");
 		UniverseService us = new UniverseServiceImpl(xqc, "universe");
-		System.out.println(us.validate());
+		if(!us.validate()) {
+			System.exit(-1);
+		}
 
 		JFrame frame = new JFrame("Fejlett XML Technológiák beadandó 2016");
 
@@ -99,7 +101,7 @@ public class Application {
 		Moon[] moons = us.findAllMoonsAroundPlanet(planets[0]).toArray(new Moon[0]);
 		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
 		Mineral[] minerals = us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]);
-
+		
 		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		galaxiesComboBox.setRenderer(new DefaultListCellRenderer() {
