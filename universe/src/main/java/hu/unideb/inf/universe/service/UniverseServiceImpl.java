@@ -102,24 +102,26 @@ public class UniverseServiceImpl implements UniverseService {
 
 		return comets;
 	}
-
 	@Override
-	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween3500And4000() throws UniverseException {
+	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(double lowerBound,double upperBound) throws UniverseException {
 		Double avgRotationSpeed = null;
 		try {
 
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
+				+ "declare variable $lowerBound external;"
+				+ "declare variable $upperBound external;"
 				+ "let $avg := avg("
 				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet"
 				+ " let $orbSpeed := $planet/orbitalSpeed"
 				+ " for $moon in $planet/moons/moon"
-				+ " where $moon/radius >= 3500 and $moon/radius <= 4000"
+				+ " where $moon/radius >= $lowerBound and $moon/radius <= $upperBound"
 				+ " return $orbSpeed"
 				+ ")"
 				+ " return $avg");
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-
+			expr.bindDouble(new QName("lowerBound"), lowerBound, xqc.createAtomicType(XQItemType.XQBASETYPE_DOUBLE));
+			expr.bindDouble(new QName("upperBound"), upperBound, xqc.createAtomicType(XQItemType.XQBASETYPE_DOUBLE));
 			XQResultSequence rs = expr.executeQuery();
 
 			while (rs.next()) {

@@ -44,7 +44,7 @@ public interface UniverseService {
 	
 	Galaxy findGalaxyByName(String galaxyName) throws UniverseException;
 	
-	Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween3500And4000() throws UniverseException;
+	Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(double lowerBound, double upperBound) throws UniverseException;
 	
 	List<Comet> cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException;
 	
