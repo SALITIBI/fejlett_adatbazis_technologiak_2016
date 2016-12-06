@@ -102,8 +102,9 @@ public class UniverseServiceImpl implements UniverseService {
 
 		return comets;
 	}
+
 	@Override
-	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(double lowerBound,double upperBound) throws UniverseException {
+	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(double lowerBound, double upperBound) throws UniverseException {
 		Double avgRotationSpeed = null;
 		try {
 
@@ -113,9 +114,22 @@ public class UniverseServiceImpl implements UniverseService {
 				+ "declare variable $upperBound external;"
 				+ "let $avg := avg("
 				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet"
-				+ " let $orbSpeed := $planet/orbitalSpeed"
+				+ " let $orbSpeed := "
+				+ " if ($planet/orbitalSpeed/@unit = 'mps') then"
+				+ " $planet/orbitalSpeed * 3.6"
+				+ " else if ($planet/orbitalSpeed/@unit = 'kps') then"
+				+ " $planet/orbitalSpeed * 3600"
+				+ " else"
+				+ " $planet/orbitalSpeed"
 				+ " for $moon in $planet/moons/moon"
-				+ " where $moon/radius >= $lowerBound and $moon/radius <= $upperBound"
+				+ " let $moonRadius := "
+					+ " if ($moon/radius/@unit = 'm') then"
+					+ " $moon/radius / 1000"
+					+ " else if ($moon/radius/@unit = 'SolarRadius') then"
+					+ " $moon/radius * 695700"
+					+ " else"
+					+ " $moon/radius"
+				+ " where $moonRadius >= $lowerBound and $moonRadius <= $upperBound"
 				+ " return $orbSpeed"
 				+ ")"
 				+ " return $avg");
@@ -711,7 +725,7 @@ public class UniverseServiceImpl implements UniverseService {
 			throw new UniverseException(e);
 		}
 	}
-	
+
 	@Override
 	public void updateComet(String oldCometName, Comet newComet) throws UniverseException {
 		try {
@@ -719,10 +733,10 @@ public class UniverseServiceImpl implements UniverseService {
 			String newCometAsXml = JAXBUtil.toXMLFragment(newComet);
 
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $oldCometName external;"
-					+ " declare variable $newComet external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$oldCometName] with $newComet");
+				"declare variable $dbName external;"
+				+ " declare variable $oldCometName external;"
+				+ " declare variable $newComet external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$oldCometName] with $newComet");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("oldCometName"), oldCometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -733,12 +747,12 @@ public class UniverseServiceImpl implements UniverseService {
 			throw new UniverseException(e);
 		}
 	}
-	
+
 	@Override
 	public void updateStarInSolarSystem(String solarSystemName, Star star) throws UniverseException {
 		try {
 			String newStar = JAXBUtil.toXMLFragment(star);
-			
+
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
 				+ " declare variable $solarSystemName external;"
@@ -754,7 +768,7 @@ public class UniverseServiceImpl implements UniverseService {
 			throw new UniverseException(e);
 		}
 	}
-	
+
 	@Override
 	public void updatePlanet(String planetName, Planet planet) throws UniverseException {
 		try {
@@ -780,7 +794,7 @@ public class UniverseServiceImpl implements UniverseService {
 	public void updateMoonForPlanet(String moonName, String planetName, Moon moon) throws UniverseException {
 		try {
 			String newMoon = JAXBUtil.toXMLFragment(moon);
-			
+
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
 				+ " declare variable $planetName external;"
@@ -804,10 +818,10 @@ public class UniverseServiceImpl implements UniverseService {
 		try {
 			String newGalaxy = JAXBUtil.toXMLFragment(galaxy);
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $oldGalaxyName external;"
-					+ " declare variable $newGalaxy external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGalaxy");
+				"declare variable $dbName external;"
+				+ " declare variable $oldGalaxyName external;"
+				+ " declare variable $newGalaxy external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGalaxy");
 
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("oldGalaxyName"), galaxyName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
@@ -818,42 +832,42 @@ public class UniverseServiceImpl implements UniverseService {
 			throw new UniverseException(e);
 		}
 	}
-	
+
 	@Override
 	public void updateGalaxyName(String oldGalaxyName, String newGalaxyName) throws UniverseException {
 		Galaxy galaxy = findGalaxyByName(oldGalaxyName);
 		galaxy.setName(newGalaxyName);
 		updateGalaxy(oldGalaxyName, galaxy);
 	}
-	
+
 	@Override
 	public void updateSolarSystem(String oldSolarSystemName, SolarSystem newSolarSystem) throws UniverseException {
 		try {
 			String newSolarSystemAsXml = JAXBUtil.toXMLFragment(newSolarSystem);
 			XQPreparedExpression expr = xqc.prepareExpression(
-					"declare variable $dbName external;"
-					+ " declare variable $oldSolarSystemName external;"
-					+ " declare variable $newSolarSystem external;"
-					+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem");
-			
+				"declare variable $dbName external;"
+				+ " declare variable $oldSolarSystemName external;"
+				+ " declare variable $newSolarSystem external;"
+				+ " replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem");
+
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("oldSolarSystemName"), oldSolarSystemName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindDocument(new QName("newSolarSystem"), newSolarSystemAsXml, null, null);
-			
+
 			expr.executeQuery();
-		
+
 		} catch (XQException | JAXBException e) {
 			throw new UniverseException(e);
 		}
 	}
-	
+
 	@Override
-	public void updateSolarSystemName(String oldSolarSystemName, String newSolarSystemName) throws UniverseException{
+	public void updateSolarSystemName(String oldSolarSystemName, String newSolarSystemName) throws UniverseException {
 		SolarSystem solarSystem = findSolarSystemByName(oldSolarSystemName);
 		solarSystem.setName(newSolarSystemName);
 		updateSolarSystem(oldSolarSystemName, solarSystem);
 	}
-	
+
 	@Override
 	public void addPlanetToSolarSystem(String solarSystemName, String planetName, Property radius, Property orbitalPeriod,
 		Property orbitalSpeed, Property eccentricity, Property semiMajorAxis, Property mass) throws UniverseException {
@@ -999,7 +1013,4 @@ public class UniverseServiceImpl implements UniverseService {
 		}
 	}
 
-	
-	
-	
 }
