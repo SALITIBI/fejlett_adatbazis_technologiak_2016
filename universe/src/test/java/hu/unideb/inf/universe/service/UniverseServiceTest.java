@@ -563,13 +563,35 @@ public class UniverseServiceTest extends AbstractTest {
 				for (Planet planet : solarSystem.getPlanets()) {
 					boolean containsThatKindOfMoon = false;
 					for (Moon moon : planet.getMoons()) {
-						if (moon.getRadius().getValue() >= lowerBound && moon.getRadius().getValue() <= upperBound) {
+						double radius;
+						if(moon.getRadius().getUnit().equals("m")){
+							radius = moon.getRadius().getValue() / 1000;
+						}else if(moon.getRadius().getUnit().equals("solarRadius")){
+							radius = moon.getRadius().getValue() * 695700;
+						}else{
+							radius = moon.getRadius().getValue();
+						}
+						if (radius >= lowerBound && radius <= upperBound) {
 							containsThatKindOfMoon = true;
 							break;
 						}
 					}
 					if (containsThatKindOfMoon) {
-						orbitalSpeedsOfPlanetsWhichHaveMoonsWithRadiusBetween.add(planet.getOrbitalSpeed().getValue());
+						
+//						if ($planet/orbitalSpeed/@unit = 'mps') then"
+//								+ " $planet/orbitalSpeed * 3.6"
+//								+ " else if ($planet/orbitalSpeed/@unit = 'kps') then"
+//								+ " $planet/orbitalSpeed * 3600"
+//								+ " else"
+						double orbitalSpeed;
+						if(planet.getOrbitalSpeed().getUnit().equals("mps")){
+							orbitalSpeed = planet.getOrbitalSpeed().getValue() * 3.6;
+						}else if(planet.getOrbitalSpeed().getUnit().equals("kps")){
+							orbitalSpeed = planet.getOrbitalSpeed().getValue() * 3600;
+						}else{
+							orbitalSpeed = planet.getOrbitalSpeed().getValue();
+						}
+						orbitalSpeedsOfPlanetsWhichHaveMoonsWithRadiusBetween.add(orbitalSpeed);
 					}
 				}
 			}
@@ -580,5 +602,10 @@ public class UniverseServiceTest extends AbstractTest {
 		}
 		expectedValue = sum / orbitalSpeedsOfPlanetsWhichHaveMoonsWithRadiusBetween.size();
 		Assert.assertEquals(expectedValue, actualValue);
+	}
+	@Test
+	public void testCometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException{
+		List<Comet> actualComets = us.cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc();
+		System.out.println(actualComets);
 	}
 }
