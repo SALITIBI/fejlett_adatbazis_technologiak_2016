@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -429,7 +428,7 @@ public class Application {
 				try {
 					us.deletePlanet(((Planet) planetsComboBox.getSelectedItem()).getName());
 					updatePlanetsComboBox(us);
-				} catch (UniverseException e1) {
+				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -518,7 +517,7 @@ public class Application {
 				try {
 					us.deleteMoon(((Moon) moonsComboBox.getSelectedItem()).getName());
 					updateMoonsComboBox(us);
-				} catch (UniverseException e1) {
+				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
 				}
 
@@ -579,6 +578,46 @@ public class Application {
 		JButton deleteCometButton = new JButton("Delete comet");
 		deleteCometButton.setPreferredSize(buttonPreferredSize);
 
+		addCometButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField cometName = new JTextField();
+				JPanel radiusPanel = new JPanel();
+				radiusPanel.setLayout(new GridLayout(1, 2));
+				JTextField radius = new JTextField();
+				JTextField radiusUnit = new JTextField("km");
+				radiusPanel.add(radius);
+				radiusPanel.add(radiusUnit);
+				final JComponent[] inputs = new JComponent[] { new JLabel("Name of comet:"), cometName, new JLabel("Radius:"),
+						radiusPanel };
+				int result = JOptionPane.showConfirmDialog(null, inputs, "Add a comet", JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+					try {
+						us.addCometToSolarSystem(((SolarSystem) solarSystemsComboBox.getSelectedItem()).getName(), cometName.getText(),
+								new Property(radiusUnit.getText(), Double.parseDouble(radius.getText())));
+						updateCometsComboBox(us);
+
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+
+		deleteCometButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					us.deleteComet(((Comet) cometsComboBox.getSelectedItem()).getName());
+					updateCometsComboBox(us);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
 		JPanel cometsButtonPanel = new JPanel(new FlowLayout());
 		cometsButtonPanel.setPreferredSize(buttonPanelPreferredSize);
 		cometsButtonPanel.add(addCometButton);
@@ -631,6 +670,47 @@ public class Application {
 		JButton deleteMineralButton = new JButton("Delete mineral");
 		deleteMineralButton.setPreferredSize(buttonPreferredSize);
 
+		addMineralButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField mineralName = new JTextField();
+				JPanel quantityPanel = new JPanel();
+				quantityPanel.setLayout(new GridLayout(1, 2));
+				JTextField quantity = new JTextField();
+				JTextField quantityUnit = new JTextField("g");
+				quantityPanel.add(quantity);
+				quantityPanel.add(quantityUnit);
+				final JComponent[] inputs = new JComponent[] { new JLabel("Name of mineral:"), mineralName, new JLabel("Quantity:"),
+						quantityPanel };
+				int result = JOptionPane.showConfirmDialog(null, inputs, "Add a mineral", JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+					try {
+						us.addMineralToComet(((Comet) cometsComboBox.getSelectedItem()).getName(), mineralName.getText(),
+								new Property(quantityUnit.getText(), Double.parseDouble(quantity.getText())));
+						updateMineralsComboBox(us);
+
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		deleteMineralButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					us.deleteMineralOnComet(((Comet)cometsComboBox.getSelectedItem()).getName(), ((Mineral)mineralsComboBox.getSelectedItem()).getElementName());
+					updateMineralsComboBox(us);
+				} catch (UniverseException e1) {
+					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					
+				}
+			}
+		});
+		
 		JPanel mineralsButtonPanel = new JPanel(new FlowLayout());
 		mineralsButtonPanel.setPreferredSize(buttonPanelPreferredSize);
 		mineralsButtonPanel.add(addMineralButton);
