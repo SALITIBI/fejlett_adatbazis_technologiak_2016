@@ -3,7 +3,6 @@ package hu.unideb.inf.universe.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,16 +53,20 @@ public class UniverseServiceTest extends AbstractTest {
 		Assert.assertEquals(expectedPlanet.getRadius().getValue(), actualPlanet.getRadius().getValue(), EPSILON);
 
 		Assert.assertEquals(expectedPlanet.getOrbitalPeriod().getUnit(), actualPlanet.getOrbitalPeriod().getUnit());
-		Assert.assertEquals(expectedPlanet.getOrbitalPeriod().getValue(), actualPlanet.getOrbitalPeriod().getValue(), EPSILON);
+		Assert.assertEquals(expectedPlanet.getOrbitalPeriod().getValue(), actualPlanet.getOrbitalPeriod().getValue(),
+				EPSILON);
 
 		Assert.assertEquals(expectedPlanet.getOrbitalSpeed().getUnit(), actualPlanet.getOrbitalSpeed().getUnit());
-		Assert.assertEquals(expectedPlanet.getOrbitalSpeed().getValue(), actualPlanet.getOrbitalSpeed().getValue(), EPSILON);
+		Assert.assertEquals(expectedPlanet.getOrbitalSpeed().getValue(), actualPlanet.getOrbitalSpeed().getValue(),
+				EPSILON);
 
 		Assert.assertEquals(expectedPlanet.getEccentricity().getUnit(), actualPlanet.getEccentricity().getUnit());
-		Assert.assertEquals(expectedPlanet.getEccentricity().getValue(), actualPlanet.getEccentricity().getValue(), EPSILON);
+		Assert.assertEquals(expectedPlanet.getEccentricity().getValue(), actualPlanet.getEccentricity().getValue(),
+				EPSILON);
 
 		Assert.assertEquals(expectedPlanet.getSemiMajorAxis().getUnit(), actualPlanet.getSemiMajorAxis().getUnit());
-		Assert.assertEquals(expectedPlanet.getSemiMajorAxis().getValue(), actualPlanet.getSemiMajorAxis().getValue(), EPSILON);
+		Assert.assertEquals(expectedPlanet.getSemiMajorAxis().getValue(), actualPlanet.getSemiMajorAxis().getValue(),
+				EPSILON);
 
 		Assert.assertEquals(expectedPlanet.getMass().getUnit(), actualPlanet.getMass().getUnit());
 		Assert.assertEquals(expectedPlanet.getMass().getValue(), actualPlanet.getMass().getValue(), EPSILON);
@@ -90,7 +93,8 @@ public class UniverseServiceTest extends AbstractTest {
 
 		Assert.assertEquals(expectedComet.getName(), actualComet.getName());
 		Assert.assertEquals(expectedComet.getOrbitalPeriod().getUnit(), actualComet.getOrbitalPeriod().getUnit());
-		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(), EPSILON);
+		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(),
+				EPSILON);
 		Assert.assertEquals(expectedComet.getMinerals().size(), actualComet.getMinerals().size());
 	}
 
@@ -128,7 +132,8 @@ public class UniverseServiceTest extends AbstractTest {
 
 		Assert.assertEquals(expectedComet.getName(), actualComet.getName());
 		Assert.assertEquals(expectedComet.getOrbitalPeriod().getUnit(), actualComet.getOrbitalPeriod().getUnit());
-		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(), EPSILON);
+		Assert.assertEquals(expectedComet.getOrbitalPeriod().getValue(), actualComet.getOrbitalPeriod().getValue(),
+				EPSILON);
 		Assert.assertEquals(expectedComet.getMinerals().size(), actualComet.getMinerals().size());
 	}
 
@@ -344,8 +349,8 @@ public class UniverseServiceTest extends AbstractTest {
 		Property semiMajorAxis = new Property("AU", 1.3);
 		Property mass = new Property("JupiterMass", 1.5);
 
-		us.addPlanetToSolarSystem(solarSystem.getName(), planetName, radius, orbitalPeriod, orbitalSpeed, eccentricity, semiMajorAxis,
-				mass);
+		us.addPlanetToSolarSystem(solarSystem.getName(), planetName, radius, orbitalPeriod, orbitalSpeed, eccentricity,
+				semiMajorAxis, mass);
 
 		Planet planet = us.findPlanetByName(planetName);
 
@@ -451,8 +456,8 @@ public class UniverseServiceTest extends AbstractTest {
 		List<Moon> newMoons = new LinkedList<>();
 		newMoons.add(new Moon("ASD Moon", new Property("km", 5343)));
 		newMoons.add(new Moon("ASD2 Moon", new Property("km", 3333)));
-		Planet newPlanet = new Planet(newName, newMoons, newRadius, newOrbitalPeriod, newOrbitalSpeed, newEccentricity, newSemiMajorAxis,
-				newMass);
+		Planet newPlanet = new Planet(newName, newMoons, newRadius, newOrbitalPeriod, newOrbitalSpeed, newEccentricity,
+				newSemiMajorAxis, newMass);
 		us.updatePlanet(planet.getName(), newPlanet);
 
 		Planet actualPlanet = us.findPlanetByName(newName);
@@ -482,7 +487,8 @@ public class UniverseServiceTest extends AbstractTest {
 		Galaxy galaxy = galaxies.get(0);
 		String newName = "New Galaxy";
 		List<SolarSystem> newSolarSystems = new LinkedList<>();
-		newSolarSystems.add(new SolarSystem("Naboo System", new LinkedList<>(), new LinkedList<>(), new Star("Star of Naboo", "multiple")));
+		newSolarSystems.add(new SolarSystem("Naboo System", new LinkedList<>(), new LinkedList<>(),
+				new Star("Star of Naboo", "multiple")));
 		Galaxy newGalaxy = new Galaxy(newName, newSolarSystems);
 		us.updateGalaxy(galaxy.getName(), newGalaxy);
 		Galaxy actualGalaxy = us.findGalaxyByName(newName);
@@ -518,8 +524,8 @@ public class UniverseServiceTest extends AbstractTest {
 		Property newMass = new Property("JupiterMass", 3.5);
 		Property newRadius = new Property("km", 444444);
 		List<Moon> newMoons = new LinkedList<>();
-		planets.add(new Planet("New Planet", newMoons, newRadius, newOrbitalPeriod, newOrbitalSpeed, newEccentricity, newSemiMajorAxis,
-				newMass));
+		planets.add(new Planet("New Planet", newMoons, newRadius, newOrbitalPeriod, newOrbitalSpeed, newEccentricity,
+				newSemiMajorAxis, newMass));
 		SolarSystem newSolarSystem = new SolarSystem(newName, comets, planets, new Star("new Star", "binary"));
 		SolarSystem expectedSolarSystem = newSolarSystem;
 		us.updateSolarSystem(solarSystem.getName(), newSolarSystem);
@@ -551,13 +557,7 @@ public class UniverseServiceTest extends AbstractTest {
 	public void testAvgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween() throws UniverseException {
 		Double lowerBound = new Double(3500);
 		Double upperBound = new Double(4000);
-		Double actualValue = null;
-		try {
-			actualValue = us.avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(lowerBound, upperBound);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Double actualValue = us.avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(lowerBound, upperBound);
 		Double expectedValue;
 		List<Double> orbitalSpeedsOfPlanetsWhichHaveMoonsWithRadiusBetween = new ArrayList<>();
 		for (Galaxy galaxy : galaxies) {
@@ -566,11 +566,11 @@ public class UniverseServiceTest extends AbstractTest {
 					boolean containsThatKindOfMoon = false;
 					for (Moon moon : planet.getMoons()) {
 						double radius;
-						if(moon.getRadius().getUnit().equals("m")){
+						if (moon.getRadius().getUnit().equals("m")) {
 							radius = moon.getRadius().getValue() / 1000;
-						}else if(moon.getRadius().getUnit().equals("solarRadius")){
+						} else if (moon.getRadius().getUnit().equals("solarRadius")) {
 							radius = moon.getRadius().getValue() * 695700;
-						}else{
+						} else {
 							radius = moon.getRadius().getValue();
 						}
 						if (radius >= lowerBound && radius <= upperBound) {
@@ -580,11 +580,11 @@ public class UniverseServiceTest extends AbstractTest {
 					}
 					if (containsThatKindOfMoon) {
 						double orbitalSpeed;
-						if(planet.getOrbitalSpeed().getUnit().equals("mps")){
+						if (planet.getOrbitalSpeed().getUnit().equals("mps")) {
 							orbitalSpeed = planet.getOrbitalSpeed().getValue() * 3.6;
-						}else if(planet.getOrbitalSpeed().getUnit().equals("kps")){
+						} else if (planet.getOrbitalSpeed().getUnit().equals("kps")) {
 							orbitalSpeed = planet.getOrbitalSpeed().getValue() * 3600;
-						}else{
+						} else {
 							orbitalSpeed = planet.getOrbitalSpeed().getValue();
 						}
 						orbitalSpeedsOfPlanetsWhichHaveMoonsWithRadiusBetween.add(orbitalSpeed);
@@ -599,40 +599,31 @@ public class UniverseServiceTest extends AbstractTest {
 		expectedValue = sum / orbitalSpeedsOfPlanetsWhichHaveMoonsWithRadiusBetween.size();
 		Assert.assertEquals(expectedValue, actualValue);
 	}
+
 	@Test
-	public void testCometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException{
+	public void testCometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException {
 		List<Comet> actualComets = us.cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc();
 		List<Comet> expectedComets = new LinkedList<>();
 		for (Galaxy galaxy : galaxies) {
 			for (SolarSystem solarSystem : galaxy.getSolarsystems()) {
 				for (Comet comet : solarSystem.getComets()) {
-					if(comet.getMinerals().size() > 1){
+					if (comet.getMinerals().size() > 1) {
 						expectedComets.add(comet);
 					}
 				}
 			}
 		}
-		Collections.sort(actualComets, new Comparator<Comet>() {
-
-			@Override
-			public int compare(Comet o1, Comet o2) {
-				if(sumOfQuantityOfMinerals(o1) > sumOfQuantityOfMinerals(o2)){
-					return -1;
-				}else if(sumOfQuantityOfMinerals(o1) < sumOfQuantityOfMinerals(o2)){
-					return 1;
-				}else{
-					return 0;
-				}
-			}
-		});
+		Collections.sort(actualComets,
+				(o1, o2) -> Double.compare(sumOfQuantityOfMinerals(o1), sumOfQuantityOfMinerals(o2)));
 	}
-	private double sumOfQuantityOfMinerals(Comet comet){
+
+	private double sumOfQuantityOfMinerals(Comet comet) {
 		double sum = 0;
 		for (Mineral mineral : comet.getMinerals()) {
 			double quantity;
-			if(mineral.getQuantity().getUnit().equals("kg")){
+			if (mineral.getQuantity().getUnit().equals("kg")) {
 				quantity = mineral.getQuantity().getValue() * 1000;
-			}else{
+			} else {
 				quantity = mineral.getQuantity().getValue();
 			}
 			sum += quantity;
