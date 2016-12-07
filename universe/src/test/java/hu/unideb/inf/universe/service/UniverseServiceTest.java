@@ -2,6 +2,8 @@
 package hu.unideb.inf.universe.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -503,7 +505,7 @@ public class UniverseServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testUpdateSolarSyste() throws UniverseException {
+	public void testUpdateSolarSystem() throws UniverseException {
 		SolarSystem solarSystem = solarSystems.get(0);
 		String newName = "New Solar System";
 		List<Comet> comets = new LinkedList<>();
@@ -577,12 +579,6 @@ public class UniverseServiceTest extends AbstractTest {
 						}
 					}
 					if (containsThatKindOfMoon) {
-						
-//						if ($planet/orbitalSpeed/@unit = 'mps') then"
-//								+ " $planet/orbitalSpeed * 3.6"
-//								+ " else if ($planet/orbitalSpeed/@unit = 'kps') then"
-//								+ " $planet/orbitalSpeed * 3600"
-//								+ " else"
 						double orbitalSpeed;
 						if(planet.getOrbitalSpeed().getUnit().equals("mps")){
 							orbitalSpeed = planet.getOrbitalSpeed().getValue() * 3.6;
@@ -606,6 +602,41 @@ public class UniverseServiceTest extends AbstractTest {
 	@Test
 	public void testCometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException{
 		List<Comet> actualComets = us.cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc();
-		System.out.println(actualComets);
+		List<Comet> expectedComets = new LinkedList<>();
+		for (Galaxy galaxy : galaxies) {
+			for (SolarSystem solarSystem : galaxy.getSolarsystems()) {
+				for (Comet comet : solarSystem.getComets()) {
+					if(comet.getMinerals().size() > 1){
+						expectedComets.add(comet);
+					}
+				}
+			}
+		}
+		Collections.sort(actualComets, new Comparator<Comet>() {
+
+			@Override
+			public int compare(Comet o1, Comet o2) {
+				if(sumOfQuantityOfMinerals(o1) > sumOfQuantityOfMinerals(o2)){
+					return -1;
+				}else if(sumOfQuantityOfMinerals(o1) < sumOfQuantityOfMinerals(o2)){
+					return 1;
+				}else{
+					return 0;
+				}
+			}
+		});
+	}
+	private double sumOfQuantityOfMinerals(Comet comet){
+		double sum = 0;
+		for (Mineral mineral : comet.getMinerals()) {
+			double quantity;
+			if(mineral.getQuantity().getUnit().equals("kg")){
+				quantity = mineral.getQuantity().getValue() * 1000;
+			}else{
+				quantity = mineral.getQuantity().getValue();
+			}
+			sum += quantity;
+		}
+		return sum;
 	}
 }
