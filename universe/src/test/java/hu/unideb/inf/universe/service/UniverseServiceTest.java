@@ -614,7 +614,7 @@ public class UniverseServiceTest extends AbstractTest {
 			}
 		}
 		Collections.sort(actualComets,
-				(o1, o2) -> Double.compare(sumOfQuantityOfMinerals(o1), sumOfQuantityOfMinerals(o2)));
+				(o1, o2) -> Double.compare(sumOfQuantityOfMinerals(o2), sumOfQuantityOfMinerals(o1)));
 	}
 
 	private double sumOfQuantityOfMinerals(Comet comet) {
