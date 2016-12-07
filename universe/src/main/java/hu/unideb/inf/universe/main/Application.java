@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
@@ -14,6 +18,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,8 +26,10 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.xml.xquery.XQConnection;
@@ -35,6 +42,7 @@ import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Mineral;
 import hu.unideb.inf.universe.model.Moon;
 import hu.unideb.inf.universe.model.Planet;
+import hu.unideb.inf.universe.model.Property;
 import hu.unideb.inf.universe.model.SolarSystem;
 import hu.unideb.inf.universe.model.Star;
 import hu.unideb.inf.universe.service.UniverseService;
@@ -53,7 +61,7 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		XQConnection xqc = ConnectionUtil.getConnection("localhost", "1984", "admin", "admin");
 		UniverseService us = new UniverseServiceImpl(xqc, "universe");
-		if(!us.validate()) {
+		if (!us.validate()) {
 			System.exit(-1);
 		}
 
@@ -101,7 +109,7 @@ public class Application {
 		Moon[] moons = us.findAllMoonsAroundPlanet(planets[0]).toArray(new Moon[0]);
 		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
 		Mineral[] minerals = us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]);
-				
+
 		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		galaxiesComboBox.setRenderer(new DefaultListCellRenderer() {
@@ -134,6 +142,38 @@ public class Application {
 		updateGalaxyButton.setPreferredSize(buttonPreferredSize);
 		JButton deleteGalaxyButton = new JButton("Delete galaxy");
 		deleteGalaxyButton.setPreferredSize(buttonPreferredSize);
+		addGalaxyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String galaxyName = (String) JOptionPane.showInputDialog(frame, "Name for the new galaxy:\n", "Add a new galaxy",
+						JOptionPane.PLAIN_MESSAGE, null, null, "");
+				if (galaxyName != null && !"".equals(galaxyName)) {
+					try {
+						us.addGalaxyToUniverse(galaxyName);
+						updateGalaxiesComboBox(us);
+					} catch (UniverseException e1) {
+						JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					}
+				} else if ("".equals(galaxyName)) {
+					JOptionPane.showMessageDialog(frame, "The galaxy's name cannot be empty!", "Failed to create Galaxy",
+							JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
+		deleteGalaxyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					us.deleteGalaxy(((Galaxy) galaxiesComboBox.getSelectedItem()).getName());
+				} catch (UniverseException e1) {
+					JOptionPane.showMessageDialog(frame, "The galaxy's name cannot be empty!", "Failed to create Galaxy",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 
 		Dimension buttonPanelPreferredSize = new Dimension(200, 30 * 3);
 
@@ -185,6 +225,43 @@ public class Application {
 		updateSolarSystemButton.setPreferredSize(buttonPreferredSize);
 		JButton deleteSolarSystemButton = new JButton("Delete solar system");
 		deleteSolarSystemButton.setPreferredSize(buttonPreferredSize);
+
+		addSolarSystemButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField solarSystemName = new JTextField();
+				JTextField starName = new JTextField();
+				JTextField starType = new JTextField();
+				final JComponent[] inputs = new JComponent[] { new JLabel("Name of the solar system:"), solarSystemName,
+						new JLabel("Name of the star:"), starName, new JLabel("Type of the star:"), starType };
+				int result = JOptionPane.showConfirmDialog(null, inputs, "Add a solar system", JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+					try {
+						us.addSolarSystemToGalaxy(((Galaxy) galaxiesComboBox.getSelectedItem()).getName(), solarSystemName.getText(),
+								starName.getText(), starType.getText());
+						updateSolarSystemsComboBox(us);
+
+					} catch (UniverseException e1) {
+						JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+
+		deleteSolarSystemButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					us.deleteSolarSystem(((SolarSystem) solarSystemsComboBox.getSelectedItem()).getName());
+					updateSolarSystemsComboBox(us);
+					updateStarComboBox(us);
+				} catch (UniverseException e1) {
+					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
 
 		JPanel solarSystemsButtonPanel = new JPanel(new FlowLayout());
 		solarSystemsButtonPanel.setPreferredSize(buttonPanelPreferredSize);
@@ -281,6 +358,82 @@ public class Application {
 		JButton deletePlanetButton = new JButton("Delete planet");
 		deletePlanetButton.setPreferredSize(buttonPreferredSize);
 
+		addPlanetButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField planetName = new JTextField();
+				JPanel radiusPanel = new JPanel();
+				radiusPanel.setLayout(new GridLayout(1, 2));
+				JTextField radius = new JTextField();
+				JTextField radiusUnit = new JTextField("km");
+				radiusPanel.add(radius);
+				radiusPanel.add(radiusUnit);
+				JPanel orbitalPeriodPanel = new JPanel();
+				orbitalPeriodPanel.setLayout(new GridLayout(1, 2));
+				JTextField orbitalPeriod = new JTextField();
+				JTextField orbitalPeriodUnit = new JTextField("day");
+				orbitalPeriodPanel.setLayout(new GridLayout(1, 2));
+				orbitalPeriodPanel.add(orbitalPeriod);
+				orbitalPeriodPanel.add(orbitalPeriodUnit);
+				JPanel orbitalSpeedPanel = new JPanel();
+				orbitalSpeedPanel.setLayout(new GridLayout(1, 2));
+				JTextField orbitalSpeed = new JTextField();
+				JTextField orbitalSpeedUnit = new JTextField("kps");
+				orbitalSpeedPanel.add(orbitalSpeed);
+				orbitalSpeedPanel.add(orbitalSpeedUnit);
+				JPanel eccentricityPanel = new JPanel();
+				eccentricityPanel.setLayout(new GridLayout(1, 2));
+				JTextField eccentricity = new JTextField();
+				eccentricityPanel.add(eccentricity);
+				JPanel semiMajorAxisPanel = new JPanel();
+				semiMajorAxisPanel.setLayout(new GridLayout(1, 2));
+				JTextField semiMajorAxis = new JTextField();
+				JTextField semiMajorAxisUnit = new JTextField("AU");
+				semiMajorAxisPanel.add(semiMajorAxis);
+				semiMajorAxisPanel.add(semiMajorAxisUnit);
+				JPanel massPanel = new JPanel();
+				massPanel.setLayout(new GridLayout(1, 2));
+				JTextField mass = new JTextField();
+				JTextField massUnit = new JTextField("kg");
+				massPanel.add(mass);
+				massPanel.add(massUnit);
+				final JComponent[] inputs = new JComponent[] { new JLabel("Name of the Planet:"), planetName, new JLabel("Radius:"),
+						radiusPanel, new JLabel("Orbital period:"), orbitalPeriodPanel, new JLabel("Orbital speed:"), orbitalSpeedPanel,
+						new JLabel("Eccentricity:"), eccentricityPanel, new JLabel("Semi-major axis:"), semiMajorAxisPanel,
+						new JLabel("Mass:"), massPanel
+
+				};
+				int result = JOptionPane.showConfirmDialog(null, inputs, "Add a planet", JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+					try {
+						us.addPlanetToSolarSystem(((SolarSystem) solarSystemsComboBox.getSelectedItem()).getName(), planetName.getText(),
+								new Property(radiusUnit.getText(), Double.parseDouble(radius.getText())),
+								new Property(orbitalPeriodUnit.getText(), Double.parseDouble(orbitalPeriod.getText())),
+								new Property(orbitalSpeedUnit.getText(), Double.parseDouble(orbitalSpeed.getText())),
+								new Property(null, Double.parseDouble(eccentricity.getText())),
+								new Property(semiMajorAxisUnit.getText(), Double.parseDouble(semiMajorAxis.getText())),
+								new Property(massUnit.getText(), Double.parseDouble(mass.getText())));
+						updatePlanetsComboBox(us);
+
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		deletePlanetButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					us.deletePlanet(((Planet) planetsComboBox.getSelectedItem()).getName());
+					updatePlanetsComboBox(us);
+				} catch (UniverseException e1) {
+					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		JPanel planetsButtonPanel = new JPanel(new FlowLayout());
 		planetsButtonPanel.setPreferredSize(buttonPanelPreferredSize);
 		planetsButtonPanel.add(addPlanetButton);
@@ -332,6 +485,45 @@ public class Application {
 		JButton deleteMoonButton = new JButton("Delete moon");
 		deleteMoonButton.setPreferredSize(buttonPreferredSize);
 
+		addMoonButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField moonName = new JTextField();
+				JPanel radiusPanel = new JPanel();
+				radiusPanel.setLayout(new GridLayout(1, 2));
+				JTextField radius = new JTextField();
+				JTextField radiusUnit = new JTextField("km");
+				radiusPanel.add(radius);
+				radiusPanel.add(radiusUnit);
+				final JComponent[] inputs = new JComponent[] { new JLabel("Name of moon:"), moonName, new JLabel("Radius:"), radiusPanel };
+				int result = JOptionPane.showConfirmDialog(null, inputs, "Add a moon", JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+					try {
+						us.addMoonToPlanet(((Planet) planetsComboBox.getSelectedItem()).getName(), moonName.getText(),
+								new Property(radiusUnit.getText(), Double.parseDouble(radius.getText())));
+						updateMoonsComboBox(us);
+
+					} catch (UniverseException e1) {
+						JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+
+		deleteMoonButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					us.deleteMoon(((Moon) moonsComboBox.getSelectedItem()).getName());
+					updateMoonsComboBox(us);
+				} catch (UniverseException e1) {
+					JOptionPane.showMessageDialog(frame, e1.getClass().getName(), e1.getMessage(), JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
 		JPanel moonsButtonPanel = new JPanel(new FlowLayout());
 		moonsButtonPanel.setPreferredSize(buttonPanelPreferredSize);
 		moonsButtonPanel.add(addMoonButton);
