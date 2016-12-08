@@ -35,6 +35,7 @@ import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
 
 import hu.unideb.inf.universe.connection.ConnectionUtil;
+import hu.unideb.inf.universe.exception.UniverseException;
 import hu.unideb.inf.universe.model.Comet;
 import hu.unideb.inf.universe.model.Galaxy;
 import hu.unideb.inf.universe.model.Mineral;
@@ -918,7 +919,7 @@ public class Application {
 		try {
 			List<Galaxy> galaxies = us.findAllGalaxies();
 			galaxiesComboBox.setModel(new DefaultComboBoxModel<>(galaxies.toArray(new Galaxy[0])));
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -932,7 +933,7 @@ public class Application {
 			} else {
 				solarSystemsComboBox.setModel(new DefaultComboBoxModel<>());
 			}
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -946,7 +947,7 @@ public class Application {
 			} else {
 				starComboBox.setModel(new DefaultComboBoxModel<>());
 			}
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -960,7 +961,7 @@ public class Application {
 			} else {
 				planetsComboBox.setModel(new DefaultComboBoxModel<>());
 			}
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -974,7 +975,7 @@ public class Application {
 			} else {
 				cometsComboBox.setModel(new DefaultComboBoxModel<>());
 			}
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -988,7 +989,7 @@ public class Application {
 			} else {
 				moonsComboBox.setModel(new DefaultComboBoxModel<>());
 			}
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1002,7 +1003,7 @@ public class Application {
 			} else {
 				mineralsComboBox.setModel(new DefaultComboBoxModel<>());
 			}
-		} catch (Exception e) {
+		} catch (UniverseException e) {
 			e.printStackTrace();
 		}
 	}
