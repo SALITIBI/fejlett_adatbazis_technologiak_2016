@@ -688,12 +688,11 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
-	public void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException {
+	public void updateMineralOnComet(String cometName, String mineralName, Mineral newMineral) throws UniverseException {
 		try {
-			Mineral mineral = findMineralByComet(cometName, mineralName);
-			mineral.setQuantity(newQuantity);
+			
 
-			String newMineral = JAXBUtil.toXMLFragment(mineral);
+			String newMineralAsXML = JAXBUtil.toXMLFragment(newMineral);
 
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
@@ -705,8 +704,7 @@ public class UniverseServiceImpl implements UniverseService {
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("cometName"), cometName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindString(new QName("mineralName"), mineralName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
-			expr.bindDocument(new QName("newMineral"), newMineral, null, null);
-
+			expr.bindDocument(new QName("newMineral"), newMineralAsXML, null,null);
 			expr.executeQuery();
 		} catch (XQException | JAXBException e) {
 			throw new UniverseException(e);

@@ -66,7 +66,7 @@ public interface UniverseService {
 
 	void updateMoonRadius(String moonName, Property newRadius) throws UniverseException;
 
-	void updateMineralOnComet(String cometName, String mineralName, Property newQuantity) throws UniverseException;
+	void updateMineralOnComet(String cometName, String mineralName, Mineral newMineral) throws UniverseException;
 
 	void updateCometOrbitalPeriod(String cometName, Property newOrbitalPeriodProperty) throws UniverseException;
 	

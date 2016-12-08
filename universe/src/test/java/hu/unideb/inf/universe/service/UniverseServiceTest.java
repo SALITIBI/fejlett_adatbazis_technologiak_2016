@@ -263,8 +263,9 @@ public class UniverseServiceTest extends AbstractTest {
 		Mineral mineral = comet.getMinerals().get(0);
 
 		Property newQuantity = new Property("g", 3000.0);
+		Mineral newMineral = new Mineral(mineral.getElementName(), newQuantity);
 
-		us.updateMineralOnComet(comet.getName(), mineral.getElementName(), newQuantity);
+		us.updateMineralOnComet(comet.getName(), mineral.getElementName(), newMineral);
 
 		mineral = us.findMineralByComet(comet.getName(), mineral.getElementName());
 
