@@ -102,12 +102,13 @@ public class Application {
 		contentListerPanel.setLayout(new BoxLayout(contentListerPanel, BoxLayout.Y_AXIS));
 
 		Galaxy[] galaxies = us.findAllGalaxies().toArray(new Galaxy[0]);
-		SolarSystem[] solarSystems = us.findAllSolarSystemsInGalaxy(galaxies[0]).toArray(new SolarSystem[0]);
-		Star star = us.findStarInSolarSystem(solarSystems[0]);
-		Planet[] planets = us.findAllPlanetsInSolarSystem(solarSystems[0]).toArray(new Planet[0]);
-		Moon[] moons = us.findAllMoonsAroundPlanet(planets[0]).toArray(new Moon[0]);
-		Comet[] comets = us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]);
-		Mineral[] minerals = us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]);
+		SolarSystem[] solarSystems = galaxies.length > 0 ? us.findAllSolarSystemsInGalaxy(galaxies[0]).toArray(new SolarSystem[0])
+				: new SolarSystem[0];
+		Star star = solarSystems.length > 0 ? us.findStarInSolarSystem(solarSystems[0]) : null;
+		Planet[] planets = solarSystems.length > 0 ? us.findAllPlanetsInSolarSystem(solarSystems[0]).toArray(new Planet[0]) : new Planet[0];
+		Moon[] moons = planets.length > 0 ? us.findAllMoonsAroundPlanet(planets[0]).toArray(new Moon[0]) : new Moon[0];
+		Comet[] comets = solarSystems.length > 0 ? us.findAllCometsInSolarSystem(solarSystems[0]).toArray(new Comet[0]) : new Comet[0];
+		Mineral[] minerals = comets.length > 0 ? us.findAllMineralsInComet(comets[0]).toArray(new Mineral[0]) : new Mineral[0];
 
 		galaxiesComboBox = new JComboBox<>(galaxies);
 		galaxiesComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
