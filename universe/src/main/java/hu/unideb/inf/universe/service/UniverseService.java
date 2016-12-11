@@ -48,7 +48,7 @@ public interface UniverseService {
 	
 	List<Comet> cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException;
 	
-	List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException;
+	List<SolarSystem> findSmallPlanetsGroupedBySolarSystem(double upperBound) throws UniverseException;
 
 	void deleteMineralOnComet(String cometName, String mineralName) throws UniverseException;
 

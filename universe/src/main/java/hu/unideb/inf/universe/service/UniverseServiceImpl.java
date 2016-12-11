@@ -89,7 +89,6 @@ public class UniverseServiceImpl implements UniverseService {
 					+ " else"
 					+ " $comet/minerals/mineral/quantity"
 					+ ")"
-				+ " for $mineral in $comet/minerals/mineral"
 				+ " where $mineralCount > 1"
 				+ " order by $quantitySum descending"
 				+ " return $comet");
@@ -153,12 +152,13 @@ public class UniverseServiceImpl implements UniverseService {
 	}
 
 	@Override
-	public List<SolarSystem> findSmallPlanetsGroupedBySolarSystem() throws UniverseException {
+	public List<SolarSystem> findSmallPlanetsGroupedBySolarSystem(double upperBound) throws UniverseException {
 		List<SolarSystem> solarSystems = new LinkedList<>();
 		try {
 
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
+				+ "declare variable $upperBound external;"
 				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem"
 				+ " let $name := $solarSystem/@name"
 				+ " for $planet in $solarSystem/planets/planet"
@@ -169,12 +169,13 @@ public class UniverseServiceImpl implements UniverseService {
 				+ " $planet/radius * 695700"
 				+ " else"
 				+ " $planet/radius"
-				+ " where $radius <= 1"
+				+ " where $radius <= $upperBound"
 				+ " group by $name"
 				+ " return element solarSystem {"
 				+ " attribute name {$name},"
 				+ " element planets {$planet} }");
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
+			expr.bindDouble(new QName("upperBound"), upperBound, xqc.createAtomicType(XQItemType.XQBASETYPE_DOUBLE));
 
 			XQResultSequence rs = expr.executeQuery();
 
