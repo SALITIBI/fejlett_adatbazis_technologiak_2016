@@ -78,17 +78,18 @@ public class UniverseServiceImpl implements UniverseService {
 	@Override
 	public List<Comet> cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc() throws UniverseException {
 		List<Comet> comets = new LinkedList<>();
+		
 		try {
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
 				+ " for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet"
 				+ " let $mineralCount := count($comet/minerals/mineral)"
 				+ " let $quantitySum := sum("
-					+ " if($comet/minerals/mineral/quantity/@unit = 'kg') then"
-					+ " $comet/minerals/mineral/quantity * 1000"
-					+ " else"
-					+ " $comet/minerals/mineral/quantity"
-					+ ")"
+				+ " 	if($comet/minerals/mineral/quantity/@unit = 'kg') then"
+				+ " 		$comet/minerals/mineral/quantity * 1000"
+				+ " 	else"
+				+ " 		$comet/minerals/mineral/quantity"
+				+ " )"
 				+ " where $mineralCount > 1"
 				+ " order by $quantitySum descending"
 				+ " return $comet");
@@ -110,32 +111,32 @@ public class UniverseServiceImpl implements UniverseService {
 	@Override
 	public Double avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween(double lowerBound, double upperBound) throws UniverseException {
 		Double avgRotationSpeed = null;
+		
 		try {
-
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
-				+ "declare variable $lowerBound external;"
-				+ "declare variable $upperBound external;"
-				+ "let $avg := avg("
-				+ " for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet"
-				+ " let $orbSpeed := "
-				+ " if ($planet/orbitalSpeed/@unit = 'mps') then"
-				+ " $planet/orbitalSpeed * 3.6"
-				+ " else if ($planet/orbitalSpeed/@unit = 'kps') then"
-				+ " $planet/orbitalSpeed * 3600"
-				+ " else"
-				+ " $planet/orbitalSpeed"
-				+ " for $moon in $planet/moons/moon"
-				+ " let $moonRadius := "
-				+ " if ($moon/radius/@unit = 'm') then"
-				+ " $moon/radius * 0.001"
-				+ " else if ($moon/radius/@unit = 'SolarRadius') then"
-				+ " $moon/radius * 695700"
-				+ " else"
-				+ " $moon/radius"
-				+ " where $moonRadius >= $lowerBound and $moonRadius <= $upperBound"
-				+ " return $orbSpeed"
-				+ ")"
+				+ " declare variable $lowerBound external;"
+				+ " declare variable $upperBound external;"
+				+ " let $avg := avg("
+				+ " 	for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet"
+				+ " 		let $orbSpeed := "
+				+ " 			if ($planet/orbitalSpeed/@unit = 'mps') then"
+				+ " 				$planet/orbitalSpeed * 3.6"
+				+ " 			else if ($planet/orbitalSpeed/@unit = 'kps') then"
+				+ " 				$planet/orbitalSpeed * 3600"
+				+ " 			else"
+				+ " 				$planet/orbitalSpeed"
+				+ " 		for $moon in $planet/moons/moon"
+				+ " 			let $moonRadius := "
+				+ " 				if ($moon/radius/@unit = 'm') then"
+				+ " 					$moon/radius * 0.001"
+				+ "  				else if ($moon/radius/@unit = 'SolarRadius') then"
+				+ " 					$moon/radius * 695700"
+				+ " 				else"
+				+ " 					$moon/radius"
+				+ " 		where $moonRadius >= $lowerBound and $moonRadius <= $upperBound"
+				+ " 		return $orbSpeed"
+				+ " )"
 				+ " return $avg");
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindDouble(new QName("lowerBound"), lowerBound, xqc.createAtomicType(XQItemType.XQBASETYPE_DOUBLE));
@@ -148,6 +149,7 @@ public class UniverseServiceImpl implements UniverseService {
 		} catch (XQException e) {
 			throw new UniverseException(e);
 		}
+		
 		return avgRotationSpeed;
 	}
 
@@ -158,22 +160,23 @@ public class UniverseServiceImpl implements UniverseService {
 
 			XQPreparedExpression expr = xqc.prepareExpression(
 				"declare variable $dbName external;"
-				+ "declare variable $upperBound external;"
+				+ " declare variable $upperBound external;"
 				+ " for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem"
-				+ " let $name := $solarSystem/@name"
-				+ " for $planet in $solarSystem/planets/planet"
-				+ " let $radius := "
-				+ " if ($planet/radius/@unit = 'm') then"
-				+ " $planet/radius * 0.001"
-				+ " else if ($planet/radius/@unit = 'SolarRadius') then"
-				+ " $planet/radius * 695700"
-				+ " else"
-				+ " $planet/radius"
+				+ " 	let $name := $solarSystem/@name"
+				+ " 	for $planet in $solarSystem/planets/planet"
+				+ " 		let $radius := "
+				+ " 			if ($planet/radius/@unit = 'm') then"
+				+ " 				$planet/radius * 0.001"
+				+ " 			else if ($planet/radius/@unit = 'SolarRadius') then"
+				+ " 				$planet/radius * 695700"
+				+ " 			else"
+				+ " 				$planet/radius"
 				+ " where $radius <= $upperBound"
 				+ " group by $name"
 				+ " return element solarSystem {"
-				+ " attribute name {$name},"
-				+ " element planets {$planet} }");
+				+ " 	attribute name {$name},"
+				+ " 	element planets {$planet}"
+				+ " }");
 			expr.bindString(new QName("dbName"), dbName, xqc.createAtomicType(XQItemType.XQBASETYPE_STRING));
 			expr.bindDouble(new QName("upperBound"), upperBound, xqc.createAtomicType(XQItemType.XQBASETYPE_DOUBLE));
 
