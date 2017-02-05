@@ -51,6 +51,7 @@ D:\apache-maven-3.3.9
 ### Az alkalmazás lefordítása
 
 Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki egymás után az alábbi parancsokat:
+
 * ```cd universe-model```
 * ```mvn clean install```
 * ```cd ..\universe```
@@ -59,13 +60,16 @@ Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki
 ### Az alkalmazás elindítása
 
 Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki egymás után az alábbi parancsokat:
+
 * ```cd universe```
 * ```mvn clean package exec:java```
 
-## Választott terület:
+## A választott terület leírása
+
 Az univerzumot alkotó entitásokat, tehát galaxisokat, naprendszereket, üstökösöket, bolygókat valamint holdakat tartalmazó adatbázis lett projektként választva.
 
-## Az adatmodell leírása:
+## Az adatmodell leírása
+
 * Az xml gyökéreleme a "universe", maga az univerzum, mely tartalmazza a "galaxies" elemet. Ezekből kötelezően egy elem található a fában, tehát létezniük kell és nem lehet több belőlük.
 * A "galaxies" elem több "galaxy" elemet tartalmazhat, de ebből már nem kell egynek sem szerepelnie az xml-ben.
 * Egy "galaxy" elem tartalmaz mindig egy "solarSystems" elemet, mely a naprendszereket tartalmazza. Ha létezik "galaxy" elem akkor abban kell szerepelnie egy "solarSystems" elemnek, de ebből is csak egy lehet.
@@ -82,22 +86,24 @@ Az univerzumot alkotó entitásokat, tehát galaxisokat, naprendszereket, üstö
 * A legtöbb elem tartalmaz egy "name" attribútumot, melyeknek megadása legtöbb esetben kötelező, hiszen kulcsként szolgálnak az adatbázisban.
 * Ezeket a megszorításokat bővebben a mellékelt sémában találhatjuk meg, mely a projekt könyvtárszerkezetén belül a /universe/src/main/resources/universe.xsd fájlban található.
 
-### Lekérdezések
+## Lekérdezések
 
-UniverseServiceImpl
+UniverseServiceImpl osztály metódusain belül szereplő lekérdezések
 
 #### findAllGalaxies
+
 Lekérdezi az összes galaxist az adatbázisból.
 
-```
+```xquery
 declare variable $dbName external;
 for $galaxy in db:open($dbName)//galaxies/* return $galaxy
 ```
         
 #### cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc
+
 Lekérdezi az üstökösöket, amelyeken több mint egy ásványi anyag található, a mennyiségek összege alapján csökkenő sorrendbe rendezve.
 
-```        
+```xquery
 declare variable $dbName external;
 for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet
 let $mineralCount := count($comet/minerals/mineral)
@@ -116,7 +122,7 @@ return $comet
 
 Azon bolygók átlagos keringési sebessége, amelyeknek van olyan holdja, aminek a sugara a paraméterekben megadott sugarak között van.
 
-```        
+```xquery
 declare variable $dbName external;
 declare variable $lowerBound external;
 declare variable $upperBound external;
@@ -147,7 +153,7 @@ return $avg
 
 A kis bolygókat kérdezi le naprendszerenként csoportosítva.
 
-```        
+```xquery
 declare variable $dbName external;
 declare variable $upperBound external;
 for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem
@@ -172,7 +178,7 @@ return element solarSystem {
 
 Az összes naprendszert kérdezi le egy galaxisból.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*
@@ -183,7 +189,7 @@ return $solarSystem
 
 Lekérdezi az össze bolygót a naprendszerből.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet
@@ -194,7 +200,7 @@ return $planet
 
 Lekérdezi az összes üstököst egy naprendszerből.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet
@@ -205,7 +211,7 @@ return $comet
 
 Az egy bolygóhoz tartozó holdakat kérdezi le.
 
-```        
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon
@@ -216,7 +222,7 @@ return $moon
 
 Lekérdezi az üstökösön lévő nyersanyagokat.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral
@@ -227,7 +233,7 @@ return $mineral
 
 Neve alapján kérdezi le a bolygót.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
@@ -238,7 +244,7 @@ return $planet
 
 Neve alapján kérdezi le a holdat.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
@@ -249,7 +255,7 @@ return $moon
 
 Neve alapján kérdezi le az üstököst.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
@@ -260,7 +266,7 @@ return $comet
 
 Adott naprendszeren belül kérdezi le a csillagot.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star
@@ -271,7 +277,7 @@ return $star
 
 Lekérdez egy adott ásványi anyagot egy adott üstökösről.
 
-```        
+```xquery
 declare variable $dbName external;
 declare variable $cometName external;
 declare variable $mineralName external;
@@ -283,7 +289,7 @@ return $mineral
 
 Lekérdez egy adott üstököst egy adott naprendszerből.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $solarSystemName external;
 declare variable $cometName external;
@@ -295,7 +301,7 @@ return $mineral
 
 Név alapján kérdezi le a naprendszert.
 
-```        
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
@@ -306,7 +312,7 @@ return $solarSystem
 
 Név alapján kérdezi le a galaxist.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]
@@ -317,7 +323,7 @@ return $solarSystem
 
 Törli az adott ásványi anyagot az adott üstökösről.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $cometName external;
 declare variable $mineralName external;
@@ -328,17 +334,17 @@ delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/c
 
 Törli az adott üstököst.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
 ```
 
-* deleteMoon
+#### deleteMoon
 
 Törli az adott holdat.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
@@ -348,7 +354,7 @@ delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 
 Törli az adott bolygót.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
@@ -358,7 +364,7 @@ delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 
 Törli az adott naprendszert.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
@@ -368,7 +374,7 @@ delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$n
 
 Törli az adott galaxist.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $name external;
 delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]
@@ -378,7 +384,7 @@ delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]
 
 Módosítja az adott bolygó sugarát.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $planetName external;
 declare variable $newPlanet external;
@@ -389,7 +395,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 
 Módosítja az adott hold sugarát.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $moonName external;
 declare variable $newMoon external;
@@ -400,7 +406,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 
 Módosítja az adott nyersanyagot az adott üstökösön.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $cometName external;
 declare variable $mineralName external;
@@ -412,7 +418,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/c
 
 Módosítja az üstökös keringési periódusát.
 
-```       
+```xquery
 declare variable $dbName external;
 declare variable $cometName external;
 declare variable $newComet external;
@@ -423,7 +429,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/c
 
 Módosítja az adott üstököst.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $oldCometName external;
 declare variable $newComet external;
@@ -434,7 +440,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/c
 
 Módosítja a csillagot a naprendszerben.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $solarSystemName external;
 declare variable $newStar external;
@@ -445,7 +451,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$s
 
 Módosítja az adott bolygót.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $planetName external;
 declare variable $newPlanet external;
@@ -456,7 +462,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 
 Módosítja az adott bolygóhoz tartozó holdat.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $planetName external;
 declare variable $moonName external;
@@ -468,7 +474,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 
 Módosítja az adott galaxist.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $oldGalaxyName external;
 declare variable $newGalaxy external;
@@ -479,7 +485,7 @@ replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGa
 
 Módosítja az adott naprendszert.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $oldSolarSystemName external;
 declare variable $newSolarSystem external;
@@ -490,7 +496,7 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$o
 
 Hozzáadja az adott bolygót az adott naprendszerhez.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $solarSystemName external;
 declare variable $newPlanet external;
@@ -501,7 +507,7 @@ insert node ($newPlanet) into db:open($dbName)//galaxies/galaxy/solarSystems/sol
 
 Hozzáadja az adott holdat az adott bolygóhoz.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $planetName external;
 declare variable $newMoon external;
@@ -512,7 +518,7 @@ insert node ($newMoon) into db:open($dbName)//galaxies/galaxy/solarSystems/solar
 
 Hozzáadja az adott ásványi anyagot az adott üstököshöz.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $cometName external;
 declare variable $newMineral external;
@@ -523,7 +529,7 @@ insert node ($newMineral) into db:open($dbName)//galaxies/galaxy/solarSystems/so
 
 Hozzáadja az adott üstököst az adott naprendszerhez.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $solarSystemName external;
 declare variable $newComet external;
@@ -533,7 +539,7 @@ insert node ($newComet) into db:open($dbName)//galaxies/galaxy/solarSystems/sola
 
 Hozzáadja az adott naprendszert az adott galaxishoz.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $galaxyName external;
 declare variable $newSolarSystem external;
@@ -544,7 +550,7 @@ insert node ($newSolarSystem) into db:open($dbName)//galaxies/galaxy[@name=$gala
 
 Hozzáadja a galaxist az univerzumhoz.
 
-```
+```xquery
 declare variable $dbName external;
 declare variable $newGalaxy external;
 insert node ($newGalaxy) into db:open($dbName)//galaxies
