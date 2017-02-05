@@ -280,42 +280,48 @@ return $mineral
 ```
 
 #### findCometBySolarSystem
+
 Lekérdez egy adott üstököst egy adott naprendszerből.
+
 ```
-        declare variable $dbName external;
-        declare variable $solarSystemName external;
-        declare variable $cometName external;
-        for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]
-        return $mineral
+declare variable $dbName external;
+declare variable $solarSystemName external;
+declare variable $cometName external;
+for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]
+return $mineral
 ```
 
 #### findSolarSystemByName
+
 Név alapján kérdezi le a naprendszert.
 
 ```        
-        declare variable $dbName external;
-        declare variable $name external;
-        for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
-        return $solarSystem
+declare variable $dbName external;
+declare variable $name external;
+for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
+return $solarSystem
 ```
 
 #### findGalaxyByName
+
 Név alapján kérdezi le a galaxist.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]
-        return $solarSystem
+declare variable $dbName external;
+declare variable $name external;
+for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]
+return $solarSystem
 ```
 
 #### deleteMineralOnComet
+
 Törli az adott ásványi anyagot az adott üstökösről.
+
 ```
-        declare variable $dbName external;
-        declare variable $cometName external;
-        declare variable $mineralName external;
-        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
+declare variable $dbName external;
+declare variable $cometName external;
+declare variable $mineralName external;
+delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
 ```
 
 #### deleteComet
@@ -323,9 +329,9 @@ Törli az adott ásványi anyagot az adott üstökösről.
 Törli az adott üstököst.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
+declare variable $dbName external;
+declare variable $name external;
+delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
 ```
 
 * deleteMoon
@@ -333,9 +339,9 @@ Törli az adott üstököst.
 Törli az adott holdat.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
+declare variable $dbName external;
+declare variable $name external;
+delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
 ```
 
 #### deletePlanet
@@ -343,9 +349,9 @@ Törli az adott holdat.
 Törli az adott bolygót.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
+declare variable $dbName external;
+declare variable $name external;
+delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
 ```
 
 #### deleteSolarSystem
@@ -353,9 +359,9 @@ Törli az adott bolygót.
 Törli az adott naprendszert.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
+declare variable $dbName external;
+declare variable $name external;
+delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
 ```
 
 #### deleteGalaxy
@@ -363,9 +369,9 @@ Törli az adott naprendszert.
 Törli az adott galaxist.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]
+declare variable $dbName external;
+declare variable $name external;
+delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]
 ```
 
 #### updatePlanetRadius
@@ -384,10 +390,10 @@ replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/
 Módosítja az adott hold sugarát.
 
 ```
-        declare variable $dbName external;
-        declare variable $moonName external;
-        declare variable $newMoon external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$moonName] with $newMoon
+declare variable $dbName external;
+declare variable $moonName external;
+declare variable $newMoon external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$moonName] with $newMoon
 ```
 
 #### updateMineralOnComet
@@ -395,11 +401,11 @@ Módosítja az adott hold sugarát.
 Módosítja az adott nyersanyagot az adott üstökösön.
 
 ```
-        declare variable $dbName external;
-        declare variable $cometName external;
-        declare variable $mineralName external;
-        declare variable $newMineral external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral
+declare variable $dbName external;
+declare variable $cometName external;
+declare variable $mineralName external;
+declare variable $newMineral external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral
 ```
 
 #### updateCometOrbitalPeriod
@@ -407,10 +413,10 @@ Módosítja az adott nyersanyagot az adott üstökösön.
 Módosítja az üstökös keringési periódusát.
 
 ```       
-        declare variable $dbName external;
-        declare variable $cometName external;
-        declare variable $newComet external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet
+declare variable $dbName external;
+declare variable $cometName external;
+declare variable $newComet external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet
 ```
 
 #### updateComet
@@ -418,10 +424,10 @@ Módosítja az üstökös keringési periódusát.
 Módosítja az adott üstököst.
 
 ```
-        declare variable $dbName external;
-        declare variable $oldCometName external;
-        declare variable $newComet external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$oldCometName] with $newComet
+declare variable $dbName external;
+declare variable $oldCometName external;
+declare variable $newComet external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$oldCometName] with $newComet
 ```
 
 #### updateStarInSolarSystem
@@ -429,10 +435,10 @@ Módosítja az adott üstököst.
 Módosítja a csillagot a naprendszerben.
 
 ```
-        declare variable $dbName external;
-        declare variable $solarSystemName external;
-        declare variable $newStar external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/star with $newStar
+declare variable $dbName external;
+declare variable $solarSystemName external;
+declare variable $newStar external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/star with $newStar
 ```
 
 #### updatePlanet
@@ -440,10 +446,10 @@ Módosítja a csillagot a naprendszerben.
 Módosítja az adott bolygót.
 
 ```
-        declare variable $dbName external;
-        declare variable $planetName external;
-        declare variable $newPlanet external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet
+declare variable $dbName external;
+declare variable $planetName external;
+declare variable $newPlanet external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet
 ```
 
 #### updateMoonForPlanet
@@ -451,11 +457,11 @@ Módosítja az adott bolygót.
 Módosítja az adott bolygóhoz tartozó holdat.
 
 ```
-        declare variable $dbName external;
-        declare variable $planetName external;
-        declare variable $moonName external;
-        declare variable $newMoon external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons/moon[@name=$moonName] with $newMoon
+declare variable $dbName external;
+declare variable $planetName external;
+declare variable $moonName external;
+declare variable $newMoon external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons/moon[@name=$moonName] with $newMoon
 ```
 
 #### updateGalaxy
@@ -463,10 +469,10 @@ Módosítja az adott bolygóhoz tartozó holdat.
 Módosítja az adott galaxist.
 
 ```
-        declare variable $dbName external;
-        declare variable $oldGalaxyName external;
-        declare variable $newGalaxy external;
-        replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGalaxy
+declare variable $dbName external;
+declare variable $oldGalaxyName external;
+declare variable $newGalaxy external;
+replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGalaxy
 ```
 
 #### updateSolarSystem
@@ -474,10 +480,10 @@ Módosítja az adott galaxist.
 Módosítja az adott naprendszert.
 
 ```
-        declare variable $dbName external;
-        declare variable $oldSolarSystemName external;
-        declare variable $newSolarSystem external;
-        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem
+declare variable $dbName external;
+declare variable $oldSolarSystemName external;
+declare variable $newSolarSystem external;
+replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem
 ```
 
 #### addPlanetToSolarSystem
