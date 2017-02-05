@@ -113,60 +113,66 @@ return $comet
 ```
 
 #### avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween
+
 Azon bolygók átlagos keringési sebessége, amelyeknek van olyan holdja, aminek a sugara a paraméterekben megadott sugarak között van.
+
 ```        
-        declare variable $dbName external;
-        declare variable $lowerBound external;
-        declare variable $upperBound external;
-        let $avg := avg(
-        for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet
-            let $orbSpeed := 
-                if ($planet/orbitalSpeed/@unit = 'mps') then
-                    $planet/orbitalSpeed * 3.6
-                else if ($planet/orbitalSpeed/@unit = 'kps') then
-                    $planet/orbitalSpeed * 3600
+declare variable $dbName external;
+declare variable $lowerBound external;
+declare variable $upperBound external;
+let $avg := avg(
+for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet
+    let $orbSpeed := 
+        if ($planet/orbitalSpeed/@unit = 'mps') then
+            $planet/orbitalSpeed * 3.6
+        else if ($planet/orbitalSpeed/@unit = 'kps') then
+            $planet/orbitalSpeed * 3600
+        else
+            $planet/orbitalSpeed
+        for $moon in $planet/moons/moon
+            let $moonRadius := 
+                if ($moon/radius/@unit = 'm') then
+                    $moon/radius * 0.001
+                else if ($moon/radius/@unit = 'SolarRadius') then
+                    $moon/radius * 695700
                 else
-                    $planet/orbitalSpeed
-            for $moon in $planet/moons/moon
-                let $moonRadius := 
-                    if ($moon/radius/@unit = 'm') then
-                        $moon/radius * 0.001
-                    else if ($moon/radius/@unit = 'SolarRadius') then
-                        $moon/radius * 695700
-                    else
-                        $moon/radius
-            where $moonRadius >= $lowerBound and $moonRadius <= $upperBound
-            return $orbSpeed
-        )
-        return $avg
+                    $moon/radius
+    where $moonRadius >= $lowerBound and $moonRadius <= $upperBound
+    return $orbSpeed
+)
+return $avg
 ```
 
 #### findSmallPlanetsGroupedBySolarSystem
+
 A kis bolygókat kérdezi le naprendszerenként csoportosítva.
+
 ```        
-        declare variable $dbName external;
-        declare variable $upperBound external;
-        for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem
-        let $name := $solarSystem/@name
-        for $planet in $solarSystem/planets/planet
-            let $radius := 
-                if ($planet/radius/@unit = 'm') then
-                    $planet/radius * 0.001
-                else if ($planet/radius/@unit = 'SolarRadius') then
-                    $planet/radius * 695700
-                else
-                    $planet/radius
-        where $radius <= $upperBound
-        group by $name
-        return element solarSystem {
-        attribute name {$name},
-        element planets {$planet}
-        }
+declare variable $dbName external;
+declare variable $upperBound external;
+for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem
+let $name := $solarSystem/@name
+for $planet in $solarSystem/planets/planet
+    let $radius := 
+        if ($planet/radius/@unit = 'm') then
+            $planet/radius * 0.001
+        else if ($planet/radius/@unit = 'SolarRadius') then
+            $planet/radius * 695700
+        else
+            $planet/radius
+where $radius <= $upperBound
+group by $name
+return element solarSystem {
+    attribute name {$name},
+    element planets {$planet}
+}
 ```
 
 #### findAllSolarSystemsInGalaxy
+
 Az összes naprendszert kérdezi le egy galaxisból.
-```        
+
+```
         declare variable $dbName external;
         declare variable $name external;
         for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*
