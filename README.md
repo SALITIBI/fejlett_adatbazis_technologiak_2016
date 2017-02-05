@@ -95,14 +95,15 @@ http://docs.basex.org/wiki/Validation_Module#XML_Schema_Validation
 
 ### Lekérdezések
 
-UniverseServiceImpl/
-    * findAllGalaxies
+UniverseServiceImpl
+
+* findAllGalaxies
         Lekérdezi az összes galaxist az adatbázisból.
         
         declare variable $dbName external;
         for $galaxy in db:open($dbName)//galaxies/* return $galaxy
         
-    * cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc
+* cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc
         Lekérdezi az üstökösöket, amelyeken több mint egy ásványi anyag található, a mennyiségek összege alapján csökkenő sorrendbe rendezve.
         
         declare variable $dbName external;
@@ -118,7 +119,7 @@ UniverseServiceImpl/
         order by $quantitySum descending
         return $comet
         
-    * avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween
+* avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween
         Azon bolygók átlagos keringési sebessége, amelyeknek van olyan holdja, aminek a sugara a paraméterekben megadott sugarak között van.
         
         declare variable $dbName external;
@@ -146,7 +147,7 @@ UniverseServiceImpl/
         )
         return $avg
         
-    * findSmallPlanetsGroupedBySolarSystem
+* findSmallPlanetsGroupedBySolarSystem
     
         A kis bolygókat kérdezi le naprendszerenként csoportosítva.
         
@@ -169,7 +170,7 @@ UniverseServiceImpl/
         element planets {$planet}
         }
     
-    * findAllSolarSystemsInGalaxy
+* findAllSolarSystemsInGalaxy
     
         Az összes naprendszert kérdezi le egy galaxisból.
         
@@ -178,7 +179,7 @@ UniverseServiceImpl/
         for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*
         return $solarSystem
     
-    * findAllPlanetsInSolarSystem
+* findAllPlanetsInSolarSystem
     
         Lekérdezi az össze bolygót a naprendszerből.
         
@@ -187,7 +188,7 @@ UniverseServiceImpl/
         for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet
         return $planet
     
-    * findAllCometsInSolarSystem
+* findAllCometsInSolarSystem
         
         Lekérdezi az összes üstököst egy naprendszerből.
         
@@ -196,7 +197,7 @@ UniverseServiceImpl/
         for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet
         return $comet
     
-    * findAllMoonsAroundPlanet
+* findAllMoonsAroundPlanet
     
         Az egy bolygóhoz tartozó holdakat kérdezi le.
         
@@ -205,7 +206,7 @@ UniverseServiceImpl/
         for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon
         return $moon
     
-    * findAllMineralsInComet
+* findAllMineralsInComet
     
         Lekérdezi az üstökösön lévő nyersanyagokat.
         
@@ -214,7 +215,7 @@ UniverseServiceImpl/
         for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral
         return $mineral
         
-    * findPlanetByName
+* findPlanetByName
         
         Neve alapján kérdezi le a bolygót.
         
@@ -223,7 +224,7 @@ UniverseServiceImpl/
         for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
         return $planet
         
-    * findMoonByName
+* findMoonByName
         
         Neve alapján kérdezi le a holdat.
         
@@ -232,7 +233,7 @@ UniverseServiceImpl/
         for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
         return $moon
     
-    * findCometByName
+* findCometByName
         
         Neve alapján kérdezi le az üstököst.
         
@@ -241,7 +242,7 @@ UniverseServiceImpl/
         for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
         return $comet
     
-    * findStarInSolarSystem
+* findStarInSolarSystem
         
         Adott naprendszeren belül kérdezi le a csillagot.
     
@@ -250,7 +251,7 @@ UniverseServiceImpl/
         for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star
         return $star
     
-    * findMineralByComet
+* findMineralByComet
         
         Lekérdez egy adott ásványi anyagot egy adott üstökösről.
         
@@ -260,7 +261,7 @@ UniverseServiceImpl/
         for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
         return $mineral
     
-    * findCometBySolarSystem
+* findCometBySolarSystem
         
         Lekérdez egy adott üstököst egy adott naprendszerből.
         
@@ -270,7 +271,7 @@ UniverseServiceImpl/
         for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]
         return $mineral
     
-    * findSolarSystemByName
+* findSolarSystemByName
         
         Név alapján kérdezi le a naprendszert.
         
@@ -279,7 +280,7 @@ UniverseServiceImpl/
         for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
         return $solarSystem
     
-    * findGalaxyByName
+* findGalaxyByName
         
         Név alapján kérdezi le a galaxist.
         
@@ -288,7 +289,7 @@ UniverseServiceImpl/
         for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]
         return $solarSystem
     
-    * deleteMineralOnComet
+* deleteMineralOnComet
     
         Törli az adott ásványi anyagot az adott üstökösről.
         
@@ -297,7 +298,7 @@ UniverseServiceImpl/
         declare variable $mineralName external;
         delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
     
-    * deleteComet
+* deleteComet
     
         Törli az adott üstököst.
         
@@ -305,7 +306,7 @@ UniverseServiceImpl/
         declare variable $name external;
         delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
         
-    * deleteMoon
+* deleteMoon
     
         Törli az adott holdat.
         
@@ -313,7 +314,7 @@ UniverseServiceImpl/
         declare variable $name external;
         delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
     
-    * deletePlanet
+* deletePlanet
     
         Törli az adott bolygót.
         
@@ -321,7 +322,7 @@ UniverseServiceImpl/
         declare variable $name external;
         delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
     
-    * deleteSolarSystem
+* deleteSolarSystem
     
         Törli az adott naprendszert.
         
@@ -329,7 +330,7 @@ UniverseServiceImpl/
         declare variable $name external;
         delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
     
-    * deleteGalaxy
+* deleteGalaxy
         
         Törli az adott galaxist.
         
@@ -337,7 +338,7 @@ UniverseServiceImpl/
         declare variable $name external;
         delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]
     
-    * updatePlanetRadius
+* updatePlanetRadius
     
         Módosítja az adott bolygó sugarát.
         
@@ -346,7 +347,7 @@ UniverseServiceImpl/
         declare variable $newPlanet external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet
     
-    * updateMoonRadius
+* updateMoonRadius
     
         Módosítja az adott hold sugarát.
         
@@ -355,7 +356,7 @@ UniverseServiceImpl/
         declare variable $newMoon external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$moonName] with $newMoon
     
-    * updateMineralOnComet
+* updateMineralOnComet
     
         Módosítja az adott nyersanyagot az adott üstökösön.
         
@@ -365,7 +366,7 @@ UniverseServiceImpl/
         declare variable $newMineral external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral
         
-    * updateCometOrbitalPeriod
+* updateCometOrbitalPeriod
     
         Módosítja az üstökös keringési periódusát.
         
@@ -374,7 +375,7 @@ UniverseServiceImpl/
         declare variable $newComet external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet
     
-    * updateComet
+* updateComet
     
         Módosítja az adott üstököst.
         
@@ -383,7 +384,7 @@ UniverseServiceImpl/
         declare variable $newComet external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$oldCometName] with $newComet
     
-    * updateStarInSolarSystem
+* updateStarInSolarSystem
         
         Módosítja a csillagot a naprendszerben.
         
@@ -392,7 +393,7 @@ UniverseServiceImpl/
         declare variable $newStar external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/star with $newStar
     
-    * updatePlanet
+* updatePlanet
     
         Módosítja az adott bolygót.
         
@@ -401,7 +402,7 @@ UniverseServiceImpl/
         declare variable $newPlanet external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet
     
-    * updateMoonForPlanet
+* updateMoonForPlanet
         
         Módosítja az adott bolygóhoz tartozó holdat.
         
@@ -411,7 +412,7 @@ UniverseServiceImpl/
         declare variable $newMoon external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons/moon[@name=$moonName] with $newMoon
     
-    * updateGalaxy
+* updateGalaxy
     
         Módosítja az adott galaxist.
         
@@ -420,7 +421,7 @@ UniverseServiceImpl/
         declare variable $newGalaxy external;
         replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGalaxy
         
-    * updateSolarSystem
+* updateSolarSystem
     
         Módosítja az adott naprendszert.
         
@@ -429,7 +430,7 @@ UniverseServiceImpl/
         declare variable $newSolarSystem external;
         replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem
     
-    * addPlanetToSolarSystem
+* addPlanetToSolarSystem
     
         Hozzáadja az adott bolygót az adott naprendszerhez.
         
@@ -438,7 +439,7 @@ UniverseServiceImpl/
         declare variable $newPlanet external;
         insert node ($newPlanet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/planets
     
-    * addMoonToPlanet
+* addMoonToPlanet
     
         Hozzáadja az adott holdat az adott bolygóhoz.
         
@@ -447,7 +448,7 @@ UniverseServiceImpl/
         declare variable $newMoon external;
         insert node ($newMoon) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons
     
-    * addMineralToComet
+* addMineralToComet
     
         Hozzáadja az adott ásványi anyagot az adott üstököshöz.
         
@@ -456,7 +457,7 @@ UniverseServiceImpl/
         declare variable $newMineral external;
         insert node ($newMineral) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals
     
-    * addCometToSolarSystem
+* addCometToSolarSystem
     
         Hozzáadja az adott üstököst az adott naprendszerhez.
         
@@ -465,7 +466,7 @@ UniverseServiceImpl/
         declare variable $newComet external;
         insert node ($newComet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets
     
-    * addSolarSystemToGalaxy
+* addSolarSystemToGalaxy
     
         Hozzáadja az adott naprendszert az adott galaxishoz.
         
@@ -474,7 +475,7 @@ UniverseServiceImpl/
         declare variable $newSolarSystem external;
         insert node ($newSolarSystem) into db:open($dbName)//galaxies/galaxy[@name=$galaxyName]/solarSystems
     
-    * addGalaxyToUniverse
+* addGalaxyToUniverse
         
         Hozzáadja a galaxist az univerzumhoz.
         
