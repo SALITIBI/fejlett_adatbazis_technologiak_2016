@@ -20,7 +20,7 @@
 
 #### Az alkalmazás lefordítása
 
-Windows parancssorban navigáljunk el a projekt könyvtárába, majd ajduk ki egymás után az alábbi parancsokat:
+Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki egymás után az alábbi parancsokat:
 * ```cd universe-model```
 * ```mvn clean install```
 * ```cd ..\universe```
@@ -28,11 +28,9 @@ Windows parancssorban navigáljunk el a projekt könyvtárába, majd ajduk ki eg
 
 #### Az alkalmazás elindítása
 
-Windows parancssorban navigáljunk el a projekt könyvtárába, majd ajduk ki egymás után az alábbi parancsokat:
+Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki egymás után az alábbi parancsokat:
 * ```cd universe```
-* ```mvn clean package```
-* ```cd target```
-* ```java -jar universe.jar```
+* ```mvn clean package exec:java```
 
 # Linkek:
 
