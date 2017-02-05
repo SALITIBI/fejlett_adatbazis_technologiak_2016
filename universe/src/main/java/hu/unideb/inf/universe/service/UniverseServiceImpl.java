@@ -694,8 +694,6 @@ public class UniverseServiceImpl implements UniverseService {
 	@Override
 	public void updateMineralOnComet(String cometName, String mineralName, Mineral newMineral) throws UniverseException {
 		try {
-			
-
 			String newMineralAsXML = JAXBUtil.toXMLFragment(newMineral);
 
 			XQPreparedExpression expr = xqc.prepareExpression(

@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
-@XmlAccessorType (XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Galaxy {
 	@XmlAttribute
 	private String name;

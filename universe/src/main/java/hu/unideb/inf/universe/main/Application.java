@@ -107,7 +107,6 @@ public class Application {
 				dialog.add(dialogPanel);
 				dialog.pack();
 				dialog.setVisible(true);
-
 			}
 		});
 		actionsMenu.add(avgOrbitalSpeedItem);
@@ -117,39 +116,35 @@ public class Application {
 		JTextArea output2 = new JTextArea();
 		output2.setEditable(false);
 
-		cometsMoreThanOneMineral.addActionListener(new ActionListener() {
+		cometsMoreThanOneMineral.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				JPanel dialogPanel = new JPanel();
-				dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-				dialogPanel.add(new JLabel("Result:"));
-				dialogPanel.add(output2);
-				JButton queryButton = new JButton("Execute query");
-				dialogPanel.add(queryButton);
-				queryButton.addActionListener((e1) -> {
-					try {
-						List<Comet> comets = us.cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc();
-						output2.setText("");
-						for (Comet comet : comets) {
-							output2.append(comet + "\n");
-						}
-						
-					} catch (Exception e2) {
-						JOptionPane.showMessageDialog(frame, e2.getClass().getName(), e2.getMessage(),
-								JOptionPane.ERROR_MESSAGE);
+			JPanel dialogPanel = new JPanel();
+			dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
+			dialogPanel.add(new JLabel("Result:"));
+			dialogPanel.add(output2);
+			JButton queryButton = new JButton("Execute query");
+			dialogPanel.add(queryButton);
+			queryButton.addActionListener((e1) -> {
+				try {
+					List<Comet> comets = us.cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc();
+					output2.setText("");
+					for (Comet comet : comets) {
+						output2.append(comet + "\n");
 					}
-				});
-				dialogPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+					
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(frame, e2.getClass().getName(), e2.getMessage(),
+							JOptionPane.ERROR_MESSAGE);
+				}
+			});
+			dialogPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-				JDialog dialog = new JDialog(frame, "Query comets that have more than one mineral, in descending order of their quantity.", true);
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.add(dialogPanel);
-				dialog.pack();
-				dialog.setVisible(true);
+			JDialog dialog = new JDialog(frame, "Query comets that have more than one mineral, in descending order of their quantity.", true);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.add(dialogPanel);
+			dialog.pack();
+			dialog.setVisible(true);
 
-			}
 		});
 		actionsMenu.add(cometsMoreThanOneMineral);
 
