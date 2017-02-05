@@ -7,6 +7,36 @@
 
 ### Windows-ra vonatkozó telepítési és használati útmutató
 
+#### Rendszerkövetelmények
+
+##### Alkalmazások
+
+* BaseX 8.6
+* Oracle JDK 8
+* Apache Maven 3.3.9
+
+##### Környezeti változók
+
+* JAVA_HOME
+* M2_HOME
+
+Ezeket a PATH környezeti változóhoz is hozzá kell fűzni az alábbi módon:
+
+%JAVA_HOME%\bin
+%M2_HOME%\bin
+
+Ezek ellenőrzése az alábbi módon történhet:
+
+```
+echo %JAVA_HOME%
+C:\Program Files\Java\jdk1.8.0_121
+```
+
+```
+echo %M2_HOME%
+D:\apache-maven-3.3.9
+```
+
 #### BaseX adatbázisszerver telepítése
 
 * Töltsük le a BaseX 8.6 adatbázisszerver telepítőjét: http://files.basex.org/releases/8.6/BaseX86.exe
