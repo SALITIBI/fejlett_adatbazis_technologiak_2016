@@ -5,17 +5,17 @@
 * Kiss Sándor Ádám
 * Salagvárdi Tibor
 
-### Windows-ra vonatkozó telepítési és használati útmutató
+## Windows-ra vonatkozó telepítési és használati útmutató
 
-#### Rendszerkövetelmények
+### Rendszerkövetelmények
 
-##### Alkalmazások
+#### Alkalmazások
 
 * BaseX 8.6
 * Oracle JDK 8
 * Apache Maven 3.3.9
 
-##### Környezeti változók
+#### Környezeti változók
 
 * JAVA_HOME
 * M2_HOME
@@ -37,7 +37,7 @@ echo %M2_HOME%
 D:\apache-maven-3.3.9
 ```
 
-#### BaseX adatbázisszerver telepítése
+### BaseX adatbázisszerver telepítése
 
 * Töltsük le a BaseX 8.6 adatbázisszerver telepítőjét: http://files.basex.org/releases/8.6/BaseX86.exe
 * Telepítstük fel a letöltött adatbázisszervert.
@@ -48,7 +48,7 @@ D:\apache-maven-3.3.9
 * A BaseX kliensen belül hozzuk létre az adatbázis sémát az alábbi parancs kiadásával: ```CREATE DB universe D:\fejlett_adatbazis_hazi.xml```
 * Zárjuk be a BaseX klienst.
 
-#### Az alkalmazás lefordítása
+### Az alkalmazás lefordítása
 
 Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki egymás után az alábbi parancsokat:
 * ```cd universe-model```
@@ -56,7 +56,7 @@ Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki
 * ```cd ..\universe```
 * ```mvn clean install```
 
-#### Az alkalmazás elindítása
+### Az alkalmazás elindítása
 
 Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki egymás után az alábbi parancsokat:
 * ```cd universe```
