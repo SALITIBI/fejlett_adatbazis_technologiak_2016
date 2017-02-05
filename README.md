@@ -102,7 +102,7 @@ declare variable $dbName external;
 for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet
 let $mineralCount := count($comet/minerals/mineral)
 let $quantitySum := sum(
-if($comet/minerals/mineral/quantity/@unit = 'kg') then
+if ($comet/minerals/mineral/quantity/@unit = 'kg') then
     $comet/minerals/mineral/quantity * 1000
 else
     $comet/minerals/mineral/quantity
@@ -173,94 +173,110 @@ return element solarSystem {
 Az összes naprendszert kérdezi le egy galaxisból.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*
-        return $solarSystem
+declare variable $dbName external;
+declare variable $name external;
+for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*
+return $solarSystem
 ```
 
 #### findAllPlanetsInSolarSystem
+
 Lekérdezi az össze bolygót a naprendszerből.
-```        
-        declare variable $dbName external;
-        declare variable $name external;
-        for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet
-        return $planet
+
+```
+declare variable $dbName external;
+declare variable $name external;
+for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet
+return $planet
 ```
 
 #### findAllCometsInSolarSystem
+
 Lekérdezi az összes üstököst egy naprendszerből.
-```        
-        declare variable $dbName external;
-        declare variable $name external;
-        for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet
-        return $comet
+
+```
+declare variable $dbName external;
+declare variable $name external;
+for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet
+return $comet
 ```
 
 #### findAllMoonsAroundPlanet
+
 Az egy bolygóhoz tartozó holdakat kérdezi le.
+
 ```        
-        declare variable $dbName external;
-        declare variable $name external;
-        for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon
-        return $moon
+declare variable $dbName external;
+declare variable $name external;
+for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon
+return $moon
 ```
 
 #### findAllMineralsInComet
+
 Lekérdezi az üstökösön lévő nyersanyagokat.
-```        
-        declare variable $dbName external;
-        declare variable $name external;
-        for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral
-        return $mineral
+
+```
+declare variable $dbName external;
+declare variable $name external;
+for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral
+return $mineral
 ```
 
 #### findPlanetByName
+
 Neve alapján kérdezi le a bolygót.
-```        
-        declare variable $dbName external;
-        declare variable $name external;
-        for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
-        return $planet
+
+```
+declare variable $dbName external;
+declare variable $name external;
+for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
+return $planet
 ```
 
 #### findMoonByName
+
 Neve alapján kérdezi le a holdat.
 
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
-        return $moon
+declare variable $dbName external;
+declare variable $name external;
+for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
+return $moon
 ```
 
 #### findCometByName
+
 Neve alapján kérdezi le az üstököst.
+
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
-        return $comet
+declare variable $dbName external;
+declare variable $name external;
+for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
+return $comet
 ```
 
 #### findStarInSolarSystem
+
 Adott naprendszeren belül kérdezi le a csillagot.
+
 ```
-        declare variable $dbName external;
-        declare variable $name external;
-        for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star
-        return $star
+declare variable $dbName external;
+declare variable $name external;
+for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star
+return $star
 ```
 
 #### findMineralByComet
+
 Lekérdez egy adott ásványi anyagot egy adott üstökösről.
 
 ```        
-        declare variable $dbName external;
-        declare variable $cometName external;
-        declare variable $mineralName external;
-        for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
-        return $mineral
+declare variable $dbName external;
+declare variable $cometName external;
+declare variable $mineralName external;
+for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
+return $mineral
 ```
 
 #### findCometBySolarSystem
