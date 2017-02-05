@@ -62,9 +62,10 @@ Windows parancssorban navigáljunk el a projekt főkönyvtárába, majd adjuk ki
 * ```cd universe```
 * ```mvn clean package exec:java```
 
-##Választott terület:
+## Választott terület:
 Az univerzumot alkotó entitásokat, tehát galaxisokat, naprendszereket, üstökösöket, bolygókat valamint holdakat tartalmazó adatbázis lett projektként választva.
-##Az adatmodell leírása:
+
+## Az adatmodell leírása:
 * Az xml gyökéreleme a "universe", maga az univerzum, mely tartalmazza a "galaxies" elemet.
 Ezekből kötelezően egy elem található a fában, tehát létezniük kell és nem lehet több belőlük.
 * A "galaxies" elem több "galaxy" elemet tartalmazhat, de ebből már nem kell egynek sem szerepelnie az xml-ben.
@@ -86,7 +87,7 @@ A "moons" elemből bolygónként kötelezően egy darab van és ez tartalmazza a
 * A legtöbb elem tartalmaz egy "name" attribútumot, melyeknek megadása legtöbb esetben kötelező, hiszen kulcsként szolgálnak az adatbázisban.
 * Ezeket a megszorításokat bővebben a mellékelt sémában találhatjuk meg, mely a projekt könyvtárszerkezetén belül a /universe/src/main/resources/universe.xsd fájlban található.
 
-# Linkek:
+## Linkek:
 
 http://docs.basex.org/wiki/XQuery_3.0
 
