@@ -535,6 +535,7 @@ declare variable $solarSystemName external;
 declare variable $newComet external;
 insert node ($newComet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets
 ```
+
 #### addSolarSystemToGalaxy
 
 Hozzáadja az adott naprendszert az adott galaxishoz.
