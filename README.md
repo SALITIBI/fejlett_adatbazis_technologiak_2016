@@ -92,3 +92,391 @@ http://docs.basex.org/wiki/XQuery_3.0
 
 http://docs.basex.org/wiki/Validation_Module#XML_Schema_Validation
 
+### Lekérdezések
+
+UniverseServiceImpl/
+    * findAllGalaxies
+        Lekérdezi az összes galaxist az adatbázisból.
+        
+        declare variable $dbName external;
+        for $galaxy in db:open($dbName)//galaxies/* return $galaxy
+        
+    * cometsThatHaveMoreThanOneMineralOrderedByQuantitySumDesc
+        Lekérdezi az üstökösöket, amelyeken több mint egy ásványi anyag található, a mennyiségek összege alapján csökkenő sorrendbe rendezve.
+        
+        declare variable $dbName external;
+        for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet
+        let $mineralCount := count($comet/minerals/mineral)
+        let $quantitySum := sum(
+        if($comet/minerals/mineral/quantity/@unit = 'kg') then
+            $comet/minerals/mineral/quantity * 1000
+        else
+            $comet/minerals/mineral/quantity
+        )
+        where $mineralCount > 1
+        order by $quantitySum descending
+        return $comet
+        
+    * avgOrbitalSpeedOfPlanetsThatHaveMoonsWithRadiusBetween
+        Azon bolygók átlagos keringési sebessége, amelyeknek van olyan holdja, aminek a sugara a paraméterekben megadott sugarak között van.
+        
+        declare variable $dbName external;
+        declare variable $lowerBound external;
+        declare variable $upperBound external;
+        let $avg := avg(
+        for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet
+            let $orbSpeed := 
+                if ($planet/orbitalSpeed/@unit = 'mps') then
+                    $planet/orbitalSpeed * 3.6
+                else if ($planet/orbitalSpeed/@unit = 'kps') then
+                    $planet/orbitalSpeed * 3600
+                else
+                    $planet/orbitalSpeed
+            for $moon in $planet/moons/moon
+                let $moonRadius := 
+                    if ($moon/radius/@unit = 'm') then
+                        $moon/radius * 0.001
+                    else if ($moon/radius/@unit = 'SolarRadius') then
+                        $moon/radius * 695700
+                    else
+                        $moon/radius
+            where $moonRadius >= $lowerBound and $moonRadius <= $upperBound
+            return $orbSpeed
+        )
+        return $avg
+        
+    * findSmallPlanetsGroupedBySolarSystem
+    
+        A kis bolygókat kérdezi le naprendszerenként csoportosítva.
+        
+        declare variable $dbName external;
+        declare variable $upperBound external;
+        for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem
+        let $name := $solarSystem/@name
+        for $planet in $solarSystem/planets/planet
+            let $radius := 
+                if ($planet/radius/@unit = 'm') then
+                    $planet/radius * 0.001
+                else if ($planet/radius/@unit = 'SolarRadius') then
+                    $planet/radius * 695700
+                else
+                    $planet/radius
+        where $radius <= $upperBound
+        group by $name
+        return element solarSystem {
+        attribute name {$name},
+        element planets {$planet}
+        }
+    
+    * findAllSolarSystemsInGalaxy
+    
+        Az összes naprendszert kérdezi le egy galaxisból.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]/solarSystems/*
+        return $solarSystem
+    
+    * findAllPlanetsInSolarSystem
+    
+        Lekérdezi az össze bolygót a naprendszerből.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/planets/planet
+        return $planet
+    
+    * findAllCometsInSolarSystem
+        
+        Lekérdezi az összes üstököst egy naprendszerből.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/comets/comet
+        return $comet
+    
+    * findAllMoonsAroundPlanet
+    
+        Az egy bolygóhoz tartozó holdakat kérdezi le.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]/moons/moon
+        return $moon
+    
+    * findAllMineralsInComet
+    
+        Lekérdezi az üstökösön lévő nyersanyagokat.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]/minerals/mineral
+        return $mineral
+        
+    * findPlanetByName
+        
+        Neve alapján kérdezi le a bolygót.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $planet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
+        return $planet
+        
+    * findMoonByName
+        
+        Neve alapján kérdezi le a holdat.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $moon in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
+        return $moon
+    
+    * findCometByName
+        
+        Neve alapján kérdezi le az üstököst.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $comet in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
+        return $comet
+    
+    * findStarInSolarSystem
+        
+        Adott naprendszeren belül kérdezi le a csillagot.
+    
+        declare variable $dbName external;
+        declare variable $name external;
+        for $star in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]/star
+        return $star
+    
+    * findMineralByComet
+        
+        Lekérdez egy adott ásványi anyagot egy adott üstökösről.
+        
+        declare variable $dbName external;
+        declare variable $cometName external;
+        declare variable $mineralName external;
+        for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
+        return $mineral
+    
+    * findCometBySolarSystem
+        
+        Lekérdez egy adott üstököst egy adott naprendszerből.
+        
+        declare variable $dbName external;
+        declare variable $solarSystemName external;
+        declare variable $cometName external;
+        for $mineral in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets/comet[@name=$cometName]
+        return $mineral
+    
+    * findSolarSystemByName
+        
+        Név alapján kérdezi le a naprendszert.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $solarSystem in db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
+        return $solarSystem
+    
+    * findGalaxyByName
+        
+        Név alapján kérdezi le a galaxist.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        for $solarSystem in db:open($dbName)//galaxies/galaxy[@name=$name]
+        return $solarSystem
+    
+    * deleteMineralOnComet
+    
+        Törli az adott ásványi anyagot az adott üstökösről.
+        
+        declare variable $dbName external;
+        declare variable $cometName external;
+        declare variable $mineralName external;
+        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName]
+    
+    * deleteComet
+    
+        Törli az adott üstököst.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$name]
+        
+    * deleteMoon
+    
+        Törli az adott holdat.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$name]
+    
+    * deletePlanet
+    
+        Törli az adott bolygót.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$name]
+    
+    * deleteSolarSystem
+    
+        Törli az adott naprendszert.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        delete nodes db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$name]
+    
+    * deleteGalaxy
+        
+        Törli az adott galaxist.
+        
+        declare variable $dbName external;
+        declare variable $name external;
+        delete nodes db:open($dbName)//galaxies/galaxy[@name=$name]
+    
+    * updatePlanetRadius
+    
+        Módosítja az adott bolygó sugarát.
+        
+        declare variable $dbName external;
+        declare variable $planetName external;
+        declare variable $newPlanet external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet
+    
+    * updateMoonRadius
+    
+        Módosítja az adott hold sugarát.
+        
+        declare variable $dbName external;
+        declare variable $moonName external;
+        declare variable $newMoon external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet/moons/moon[@name=$moonName] with $newMoon
+    
+    * updateMineralOnComet
+    
+        Módosítja az adott nyersanyagot az adott üstökösön.
+        
+        declare variable $dbName external;
+        declare variable $cometName external;
+        declare variable $mineralName external;
+        declare variable $newMineral external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals/mineral[@elementName=$mineralName] with $newMineral
+        
+    * updateCometOrbitalPeriod
+    
+        Módosítja az üstökös keringési periódusát.
+        
+        declare variable $dbName external;
+        declare variable $cometName external;
+        declare variable $newComet external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName] with $newComet
+    
+    * updateComet
+    
+        Módosítja az adott üstököst.
+        
+        declare variable $dbName external;
+        declare variable $oldCometName external;
+        declare variable $newComet external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$oldCometName] with $newComet
+    
+    * updateStarInSolarSystem
+        
+        Módosítja a csillagot a naprendszerben.
+        
+        declare variable $dbName external;
+        declare variable $solarSystemName external;
+        declare variable $newStar external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/star with $newStar
+    
+    * updatePlanet
+    
+        Módosítja az adott bolygót.
+        
+        declare variable $dbName external;
+        declare variable $planetName external;
+        declare variable $newPlanet external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName] with $newPlanet
+    
+    * updateMoonForPlanet
+        
+        Módosítja az adott bolygóhoz tartozó holdat.
+        
+        declare variable $dbName external;
+        declare variable $planetName external;
+        declare variable $moonName external;
+        declare variable $newMoon external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons/moon[@name=$moonName] with $newMoon
+    
+    * updateGalaxy
+    
+        Módosítja az adott galaxist.
+        
+        declare variable $dbName external;
+        declare variable $oldGalaxyName external;
+        declare variable $newGalaxy external;
+        replace node db:open($dbName)//galaxies/galaxy[@name=$oldGalaxyName] with $newGalaxy
+        
+    * updateSolarSystem
+    
+        Módosítja az adott naprendszert.
+        
+        declare variable $dbName external;
+        declare variable $oldSolarSystemName external;
+        declare variable $newSolarSystem external;
+        replace node db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$oldSolarSystemName] with $newSolarSystem
+    
+    * addPlanetToSolarSystem
+    
+        Hozzáadja az adott bolygót az adott naprendszerhez.
+        
+        declare variable $dbName external;
+        declare variable $solarSystemName external;
+        declare variable $newPlanet external;
+        insert node ($newPlanet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/planets
+    
+    * addMoonToPlanet
+    
+        Hozzáadja az adott holdat az adott bolygóhoz.
+        
+        declare variable $dbName external;
+        declare variable $planetName external;
+        declare variable $newMoon external;
+        insert node ($newMoon) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/planets/planet[@name=$planetName]/moons
+    
+    * addMineralToComet
+    
+        Hozzáadja az adott ásványi anyagot az adott üstököshöz.
+        
+        declare variable $dbName external;
+        declare variable $cometName external;
+        declare variable $newMineral external;
+        insert node ($newMineral) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem/comets/comet[@name=$cometName]/minerals
+    
+    * addCometToSolarSystem
+    
+        Hozzáadja az adott üstököst az adott naprendszerhez.
+        
+        declare variable $dbName external;
+        declare variable $solarSystemName external;
+        declare variable $newComet external;
+        insert node ($newComet) into db:open($dbName)//galaxies/galaxy/solarSystems/solarSystem[@name=$solarSystemName]/comets
+    
+    * addSolarSystemToGalaxy
+    
+        Hozzáadja az adott naprendszert az adott galaxishoz.
+        
+        declare variable $dbName external;
+        declare variable $galaxyName external;
+        declare variable $newSolarSystem external;
+        insert node ($newSolarSystem) into db:open($dbName)//galaxies/galaxy[@name=$galaxyName]/solarSystems
+    
+    * addGalaxyToUniverse
+        
+        Hozzáadja a galaxist az univerzumhoz.
+        
+        declare variable $dbName external;
+        declare variable $newGalaxy external;
+        insert node ($newGalaxy) into db:open($dbName)//galaxies
