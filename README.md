@@ -87,12 +87,6 @@ A "moons" elemből bolygónként kötelezően egy darab van és ez tartalmazza a
 * A legtöbb elem tartalmaz egy "name" attribútumot, melyeknek megadása legtöbb esetben kötelező, hiszen kulcsként szolgálnak az adatbázisban.
 * Ezeket a megszorításokat bővebben a mellékelt sémában találhatjuk meg, mely a projekt könyvtárszerkezetén belül a /universe/src/main/resources/universe.xsd fájlban található.
 
-## Linkek:
-
-http://docs.basex.org/wiki/XQuery_3.0
-
-http://docs.basex.org/wiki/Validation_Module#XML_Schema_Validation
-
 ### Lekérdezések
 
 UniverseServiceImpl
@@ -482,3 +476,9 @@ UniverseServiceImpl
         declare variable $dbName external;
         declare variable $newGalaxy external;
         insert node ($newGalaxy) into db:open($dbName)//galaxies
+
+## Linkek:
+
+http://docs.basex.org/wiki/XQuery_3.0
+
+http://docs.basex.org/wiki/Validation_Module#XML_Schema_Validation
