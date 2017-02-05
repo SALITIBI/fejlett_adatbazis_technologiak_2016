@@ -22,8 +22,8 @@
 
 Ezeket a PATH környezeti változóhoz is hozzá kell fűzni az alábbi módon:
 
-%JAVA_HOME%\bin
-%M2_HOME%\bin
+* %JAVA_HOME%\bin
+* %M2_HOME%\bin
 
 Ezek ellenőrzése az alábbi módon történhet:
 
